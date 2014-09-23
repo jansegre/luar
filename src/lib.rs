@@ -202,6 +202,18 @@ impl State {
         }
     }
 
+    /// Shorthand for load followed by call_mut
+    #[inline]
+    pub fn eval<L: Loader>(&mut self, source: L) -> Result<(), LuarError> {
+        match self.load(source) {
+            Ok(()) => match LuarError::from_lua(self()) {
+                None => Ok(()),
+                Some(e) => Err(e),
+            },
+            Err(e) => Err(e),
+        }
+    }
+
     // should this be made public?
     #[inline]
     fn push<V: ToLua>(&mut self, val: V) {

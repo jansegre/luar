@@ -1,4 +1,3 @@
-#![feature(overloaded_calls)]
 extern crate luar;
 
 use std::collections::HashMap;
@@ -19,18 +18,12 @@ fn main() {
     // meanwhile this is the norm
     state.insert("foo", table);
 
-    // load the script
-    match state.load(&Path::new("./script.lua")) {
-        Ok(()) => (),
-        Err(e) => fail!(e),
-    }
+    // load and run the script
+    state.eval(&Path::new("./script.lua")).unwrap();
 
-    // run the script
-    state();
-
-    // get its return
-    // either one will do:
+    // get its return either one will do:
     let sum: f64 = state.pop().unwrap();
     //let sum = state.pop::<f64>().unwrap();
+
     println!("Script returned {:0.f}", sum);
 }

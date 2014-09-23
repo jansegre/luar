@@ -1,4 +1,3 @@
-#![feature(overloaded_calls)]
 extern crate luar;
 
 fn main() {
@@ -8,9 +7,6 @@ fn main() {
     state.insert("a", "Hello ");
     state.insert("b", "World!");
 
-    // load some code
-    state.load("print(a .. b)").unwrap();
-
-    // run that code
-    state();
+    // load and run some code
+    state.eval("print(a .. b)").unwrap();
 }
