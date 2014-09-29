@@ -1,5 +1,5 @@
-Luar
-====
+Luar [![Build Status][1]][2]
+============================
 
 A rustic Rust API that embeds the C Lua interpreter.
 
@@ -24,3 +24,6 @@ API
 This API is inspired on the Goddess of the Moon, [Selene](https://github.com/jeremyong/Selene).
 
 There will be some examples, if there isn't feel free to bother me demanding I put examples here.
+
+[1]: https://travis-ci.org/jansegre/luar.svg
+[2]: https://travis-ci.org/jansegre/luar
