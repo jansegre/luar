@@ -461,10 +461,6 @@ impl ToLua for () {
     }
 }
 
-#[test]
-fn test_loader_string() {
-}
-
 impl<V: ToLua> ToLua for Option<V> {
     fn push_to(s: &mut State, val: Option<V>) {
         match val {
