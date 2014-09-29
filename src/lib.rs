@@ -196,39 +196,26 @@ impl State {
     /// Use this to load source code. Possible sources are strings (loaded directly) and paths
     /// (file content is loaded).
     pub fn load<L: Loader>(&mut self, source: L) -> Result<(), LuarError> {
-        match LuarError::from_lua(unsafe { Loader::load_to(self.L, source) }) {
+        match LuarError::from_lua(Loader::load_to(self, source)) {
             None => Ok(()),
             Some(e) => Err(e),
         }
     }
 
-    /// Shorthand for load followed by call_mut
     #[inline]
-    pub fn eval<L: Loader>(&mut self, source: L) -> Result<(), LuarError> {
-        match self.load(source) {
-            Ok(()) => match LuarError::from_lua(self()) {
-                None => Ok(()),
-                Some(e) => Err(e),
-            },
-            Err(e) => Err(e),
-        }
-    }
-
-    // should this be made public?
-    #[inline]
-    fn push<V: ToLua>(&mut self, val: V) {
-        unsafe { ToLua::push_to(self.L, val) }
+    pub fn push<V: ToLua>(&mut self, val: V) {
+        ToLua::push_to(self, val)
     }
 
     #[inline]
-    fn get<V: FromLua>(&mut self, idx: int) -> Option<V> {
-        unsafe { FromLua::get_from(self.L, idx as c_int) }
+    pub fn read<V: FromLua>(&mut self, idx: int) -> Option<V> {
+        FromLua::read_from(self, idx as c_int)
     }
 
     #[inline]
     fn get_global<V: FromLua>(&mut self, var: &str) -> Option<V> {
         unsafe { lua_getglobal(self.L, c_str!(var)); }
-        self.get(-1)
+        self.read(-1)
     }
 
     #[inline]
@@ -245,7 +232,7 @@ impl State {
     #[inline]
     pub fn pop<V: FromLua>(&mut self) -> Option<V> {
         let top = self.top();
-        let opt_val = self.get(top);
+        let opt_val = self.read(top);
         self.remove_top();
         opt_val
     }
@@ -305,11 +292,11 @@ impl State {
         match self.push_line(true) { Ok(()) => (), Err(_) => return (false, status) }
 
         loop {
-            let line: &str = self.get(1).unwrap();
+            let line: &str = self.read(1).unwrap();
             status = self.load_slice(line);
             match status {
                 LUA_ERRSYNTAX => {
-                    match self.get::<&str>(-1) {
+                    match self.read::<&str>(-1) {
                         Some(s) if s.ends_with("<eof>") => self.remove_top(),
                         _ => break,
                     }
@@ -336,11 +323,11 @@ impl State {
             if !ok { break; }
 
             if status == LUA_OK {
-                status = self();
+                status = self.call(0, LUA_MULTRET);
             }
             // report
             if status != LUA_OK && unsafe { lua_isnil(self.L, -1) != 1 } {
-                let msg: &str = match self.get(-1) {
+                let msg: &str = match self.read(-1) {
                     Some(s) => s,
                     None => "(error object is not a string)",
                 };
@@ -355,7 +342,7 @@ impl State {
                     lua_getglobal(self.L, c_str!("print"));
                     lua_insert(self.L, 1);
                     if lua_pcall(self.L, lua_gettop(self.L) - 1, 0, 0) != LUA_OK {
-                        println!("error calling print({:s})", self.get::<&str>(-1).unwrap());
+                        println!("error calling print({:s})", self.read::<&str>(-1).unwrap());
                     }
                 }
             }
@@ -363,40 +350,53 @@ impl State {
         self.set_top(0); // clear stack
         println!("");
     }
+
+    fn call(&mut self, nargs: c_int, nret: c_int) -> c_int {
+        unsafe extern fn traceback(L: *mut lua_State) -> c_int {
+            let msg = lua_tostring(L, 1);
+            if msg.is_not_null() {
+                luaL_traceback(L, L, msg, 1);
+            } else if lua_isnoneornil(L, 1) != 1 { // is there an error object?
+                if luaL_callmeta(L, 1, c_str!("__tostring")) == 0 { // try its 'tostring' metamethod
+                    lua_pushstring(L, c_str!("(no error message)"));
+                }
+            }
+            1
+        }
+        let base = self.top(); // function index
+        self.push(traceback); // push traceback function
+        self.move(base); // put it under chunk and args
+        // TODO: treat SIGINT
+        let status = unsafe { lua_pcall(self.L, nargs, nret, 1) };
+        self.remove(base); // remove traceback function
+        status
+    }
+
+    pub fn eval<L: Loader>(&mut self, source: L) -> Result<(), LuarError> {
+        match self.load(source) {
+            Ok(()) => (),
+            Err(e) => return Err(e),
+        }
+        match LuarError::from_lua(self.call(0, LUA_MULTRET)) {
+            None => Ok(()),
+            Some(e) => Err(e),
+        }
+    }
 }
 
 //impl<'a, V: ToLua> Index<&'a str, Option<V>> for State {
 //    fn index<'a>(&'a self, index: & &str) -> &'a Option<V> {
 //        let cstr = index.to_c_str();
 //        unsafe { lua_getglobal(self.L, cstr.as_ptr()); }
-//        &self.get::<V>(-1)
+//        &self.read::<V>(-1)
 //    }
 //}
 
-impl FnMut<(), c_int> for State {
+impl<L: Loader> FnMut<(L,), Result<(), LuarError>> for State {
+    /// Experimental shorthand for eval
     #[rust_call_abi_hack]
-    fn call_mut(&mut self, _args: ()) -> c_int {
-        //extern fn traceback(L: *mut lua_State) -> c_int {
-        extern fn traceback(state: State) -> c_int {
-            unsafe {
-                let msg = lua_tostring(state.L, 1);
-                if msg.is_not_null() {
-                    luaL_traceback(state.L, state.L, msg, 1);
-                } else if lua_isnoneornil(state.L, 1) != 1 { // is there an error object?
-                    if luaL_callmeta(state.L, 1, c_str!("__tostring")) == 0 { // try its 'tostring' metamethod
-                        lua_pushstring(state.L, c_str!("(no error message)"));
-                    }
-                }
-                1
-            }
-        }
-        let base = self.top(); // function index
-        self.push(traceback); // push traceback function
-        self.move(base); // put it under chunk and args
-        // TODO: treat SIGINT
-        let status = unsafe { lua_pcall(self.L, 0, LUA_MULTRET, base as c_int) };
-        self.remove(base); // remove traceback function
-        status
+    fn call_mut(&mut self, (source,): (L,)) -> Result<(), LuarError> {
+        self.eval(source)
     }
 }
 
@@ -404,59 +404,84 @@ impl Drop for State {
     fn drop(&mut self) { unsafe { lua_close(self.L) } }
 }
 
-trait ToLua {
-    unsafe fn push_to(L: *mut lua_State, val: Self);
+pub trait ToLua {
+    fn push_to(s: &mut State, val: Self);
 }
-trait FromLua {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<Self>;
+pub trait FromLua {
+    fn read_from(s: &mut State, idx: c_int) -> Option<Self>;
 }
-trait Loader {
-    unsafe fn load_to(L: *mut lua_State, source: Self) -> c_int;
+pub trait Loader {
+    fn load_to(s: &mut State, source: Self) -> c_int;
 }
 
 impl<'a> Loader for &'a Path {
-    unsafe fn load_to(L: *mut lua_State, source: &'a Path) -> c_int {
+    fn load_to(s: &mut State, source: &'a Path) -> c_int {
         // TODO: check whether luaL_loadbuffer or lua_load with a Reader is better
         let path = source.to_c_str();
-        luaL_loadfile(L, path.as_ptr())
+        unsafe { luaL_loadfile(s.L, path.as_ptr()) }
     }
 }
+// TODO: test this
 
 impl<'a> Loader for &'a str {
-    unsafe fn load_to(L: *mut lua_State, source: &str) -> c_int {
-        luaL_loadbuffer(L, source.as_ptr() as *const c_char, source.len() as size_t, c_str!("=stdin"))
+    fn load_to(s: &mut State, source: &str) -> c_int {
+        unsafe { luaL_loadbuffer(s.L, source.as_ptr() as *const c_char, source.len() as size_t, c_str!("=stdin")) }
+    }
+}
+#[test]
+fn test_loader_str() {
+    let mut state = State::new();
+
+    state("return 5 + 6").unwrap();
+    assert_eq!(Some(11i), state.pop());
+
+    state("x = 2").unwrap();
+    state("y = 5").unwrap();
+    state("return math.pow(x, y)").unwrap();
+    assert_eq!(Some(32i), state.pop());
+}
+
+impl Loader for String {
+    fn load_to(s: &mut State, source: String) -> c_int {
+        Loader::load_to(s, source.as_slice())
     }
 }
 
-impl<'a> Loader for &'a String {
-    unsafe fn load_to(L: *mut lua_State, source: &'a String) -> c_int {
-        Loader::load_to(L, source.as_slice())
-    }
+#[test]
+fn test_loader_string() {
+    let mut state = State::new();
+
+    state(format!("return {} + {}", 20i, 21i)).unwrap();
+    assert_eq!(Some(41i), state.pop());
 }
 
 impl ToLua for () {
-    unsafe fn push_to(L: *mut lua_State, _: ()) {
-        lua_pushnil(L)
+    fn push_to(s: &mut State, _: ()) {
+        unsafe { lua_pushnil(s.L) }
     }
 }
 
+#[test]
+fn test_loader_string() {
+}
+
 impl<V: ToLua> ToLua for Option<V> {
-    unsafe fn push_to(L: *mut lua_State, val: Option<V>) {
+    fn push_to(s: &mut State, val: Option<V>) {
         match val {
-            Some(p) => ToLua::push_to(L, p),
-            None => ToLua::push_to(L, ()),
+            Some(p) => ToLua::push_to(s, p),
+            None => ToLua::push_to(s, ()),
         }
     }
 }
 
 impl ToLua for bool {
-    unsafe fn push_to(L: *mut lua_State, val: bool) {
-        lua_pushboolean(L, if val { 1 } else { 0 })
+    fn push_to(s: &mut State, val: bool) {
+        unsafe { lua_pushboolean(s.L, if val { 1 } else { 0 }) }
     }
 }
 impl FromLua for bool {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<bool> {
-        match lua_toboolean(L, idx) {
+    fn read_from(s: &mut State, idx: c_int) -> Option<bool> {
+        match unsafe { lua_toboolean(s.L, idx) } {
             0 => Some(false),
             1 => Some(true),
             _ => None,
@@ -465,14 +490,14 @@ impl FromLua for bool {
 }
 
 impl ToLua for f64 {
-    unsafe fn push_to(L: *mut lua_State, val: f64) {
-        lua_pushnumber(L, val as lua_Number)
+    fn push_to(s: &mut State, val: f64) {
+        unsafe { lua_pushnumber(s.L, val as lua_Number) }
     }
 }
 impl FromLua for f64 {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<f64> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<f64> {
         let mut isnum: c_int = 0;
-        let num = lua_tonumberx(L, idx, &mut isnum);
+        let num = unsafe { lua_tonumberx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as f64),
             _ => None,
@@ -481,14 +506,14 @@ impl FromLua for f64 {
 }
 
 impl ToLua for f32 {
-    unsafe fn push_to(L: *mut lua_State, val: f32) {
-        lua_pushnumber(L, val as lua_Number)
+    fn push_to(s: &mut State, val: f32) {
+        unsafe { lua_pushnumber(s.L, val as lua_Number) }
     }
 }
 impl FromLua for f32 {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<f32> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<f32> {
         let mut isnum: c_int = 0;
-        let num = lua_tonumberx(L, idx, &mut isnum);
+        let num = unsafe { lua_tonumberx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as f32),
             _ => None,
@@ -497,14 +522,14 @@ impl FromLua for f32 {
 }
 
 impl ToLua for int {
-    unsafe fn push_to(L: *mut lua_State, val: int) {
-        lua_pushinteger(L, val as lua_Integer)
+    fn push_to(s: &mut State, val: int) {
+        unsafe { lua_pushinteger(s.L, val as lua_Integer) }
     }
 }
 impl FromLua for int {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<int> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<int> {
         let mut isnum: c_int = 0;
-        let num = lua_tointegerx(L, idx, &mut isnum);
+        let num = unsafe { lua_tointegerx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as int),
             _ => None,
@@ -513,14 +538,14 @@ impl FromLua for int {
 }
 
 impl ToLua for i64 {
-    unsafe fn push_to(L: *mut lua_State, val: i64) {
-        lua_pushinteger(L, val as lua_Integer)
+    fn push_to(s: &mut State, val: i64) {
+        unsafe { lua_pushinteger(s.L, val as lua_Integer) }
     }
 }
 impl FromLua for i64 {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<i64> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<i64> {
         let mut isnum: c_int = 0;
-        let num = lua_tointegerx(L, idx, &mut isnum);
+        let num = unsafe { lua_tointegerx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as i64),
             _ => None,
@@ -529,14 +554,14 @@ impl FromLua for i64 {
 }
 
 impl ToLua for i32 {
-    unsafe fn push_to(L: *mut lua_State, val: i32) {
-        lua_pushinteger(L, val as lua_Integer)
+    fn push_to(s: &mut State, val: i32) {
+        unsafe { lua_pushinteger(s.L, val as lua_Integer) }
     }
 }
 impl FromLua for i32 {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<i32> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<i32> {
         let mut isnum: c_int = 0;
-        let num = lua_tointegerx(L, idx, &mut isnum);
+        let num = unsafe { lua_tointegerx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as i32),
             _ => None,
@@ -545,14 +570,14 @@ impl FromLua for i32 {
 }
 
 impl ToLua for uint {
-    unsafe fn push_to(L: *mut lua_State, val: uint) {
-        lua_pushunsigned(L, val as lua_Unsigned)
+    fn push_to(s: &mut State, val: uint) {
+        unsafe { lua_pushunsigned(s.L, val as lua_Unsigned) }
     }
 }
 impl FromLua for uint {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<uint> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<uint> {
         let mut isnum: c_int = 0;
-        let num = lua_tounsignedx(L, idx, &mut isnum);
+        let num = unsafe { lua_tounsignedx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as uint),
             _ => None,
@@ -561,14 +586,14 @@ impl FromLua for uint {
 }
 
 impl ToLua for u32 {
-    unsafe fn push_to(L: *mut lua_State, val: u32) {
-        lua_pushunsigned(L, val as lua_Unsigned)
+    fn push_to(s: &mut State, val: u32) {
+        unsafe { lua_pushunsigned(s.L, val as lua_Unsigned) }
     }
 }
 impl FromLua for u32 {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<u32> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<u32> {
         let mut isnum: c_int = 0;
-        let num = lua_tounsignedx(L, idx, &mut isnum);
+        let num = unsafe { lua_tounsignedx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as u32),
             _ => None,
@@ -577,14 +602,14 @@ impl FromLua for u32 {
 }
 
 impl ToLua for u64 {
-    unsafe fn push_to(L: *mut lua_State, val: u64) {
-        lua_pushunsigned(L, val as lua_Unsigned)
+    fn push_to(s: &mut State, val: u64) {
+        unsafe { lua_pushunsigned(s.L, val as lua_Unsigned) }
     }
 }
 impl FromLua for u64 {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<u64> {
+    fn read_from(s: &mut State, idx: c_int) -> Option<u64> {
         let mut isnum: c_int = 0;
-        let num = lua_tounsignedx(L, idx, &mut isnum);
+        let num = unsafe { lua_tounsignedx(s.L, idx, &mut isnum) };
         match isnum {
             1 => Some(num as u64),
             _ => None,
@@ -593,27 +618,27 @@ impl FromLua for u64 {
 }
 
 impl<'a> ToLua for &'a str {
-    unsafe fn push_to(L: *mut lua_State, val: &str) {
-        lua_pushlstring(L, val.as_ptr() as *const c_char, val.len() as size_t);
+    fn push_to(s: &mut State, val: &str) {
+        unsafe { lua_pushlstring(s.L, val.as_ptr() as *const c_char, val.len() as size_t); }
     }
 }
 impl<'a> FromLua for &'a str {
-    unsafe fn get_from<'a>(L: *mut lua_State, idx: c_int) -> Option<&'a str> {
+    fn read_from<'a>(s: &mut State, idx: c_int) -> Option<&'a str> {
         let mut len: size_t = 0;
-        let ptr = lua_tolstring(L, idx, &mut len);
-        let slice = std::mem::transmute(std::raw::Slice { data: ptr, len: len as uint});
+        let ptr = unsafe { lua_tolstring(s.L, idx, &mut len) };
+        let slice = unsafe { std::mem::transmute(std::raw::Slice { data: ptr, len: len as uint}) };
         from_utf8(slice)
     }
 }
 
 impl ToLua for String {
-    unsafe fn push_to(L: *mut lua_State, val: String) {
-        ToLua::push_to(L, val.as_slice())
+    fn push_to(s: &mut State, val: String) {
+        ToLua::push_to(s, val.as_slice())
     }
 }
 impl FromLua for String {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<String> {
-        match FromLua::get_from(L, idx) {
+    fn read_from(s: &mut State, idx: c_int) -> Option<String> {
+        match FromLua::read_from(s, idx) {
             Some(s) => Some(String::from_str(s)),
             None => None,
         }
@@ -622,35 +647,35 @@ impl FromLua for String {
 
 // handy implementation for copyable types
 impl<'a, V: ToLua + Copy> ToLua for &'a V {
-    unsafe fn push_to(L: *mut lua_State, val: &V) {
-        ToLua::push_to(L, *val);
+    fn push_to(s: &mut State, val: &V) {
+        ToLua::push_to(s, *val);
     }
 }
 
 // this works because the struct State is a *mut lua_State so they can be transmuted
-type Function = extern fn(State) -> c_int;
-impl ToLua for Function {
-    unsafe fn push_to(L: *mut lua_State, val: Function) {
-        lua_pushcclosure(L, std::mem::transmute(Some(val)), 0)
+type CFunction = unsafe extern fn(*mut lua_State) -> c_int;
+impl ToLua for CFunction {
+    fn push_to(s: &mut State, val: CFunction) {
+        unsafe { lua_pushcclosure(s.L, std::mem::transmute(Some(val)), 0) }
     }
 }
-impl FromLua for Function {
-    unsafe fn get_from(L: *mut lua_State, idx: c_int) -> Option<Function> {
-        std::mem::transmute(lua_tocfunction(L, idx))
+impl FromLua for CFunction {
+    fn read_from(s: &mut State, idx: c_int) -> Option<CFunction> {
+        unsafe { std::mem::transmute(lua_tocfunction(s.L, idx)) }
     }
 }
 
 impl<K: ToLua + Hash + Eq + Copy, V: ToLua + Copy> ToLua for HashMap<K, V> {
-    unsafe fn push_to(L: *mut lua_State, val: HashMap<K, V>) {
-        lua_createtable(L, val.len() as c_int, 0);
+    fn push_to(s: &mut State, val: HashMap<K, V>) {
+        unsafe { lua_createtable(s.L, val.len() as c_int, 0) };
         for (key, value) in val.iter() {
-            ToLua::push_to(L, key);
-            ToLua::push_to(L, value);
-            lua_rawset(L, -3);
+            ToLua::push_to(s, key);
+            ToLua::push_to(s, value);
+            unsafe { lua_rawset(s.L, -3) };
         }
     }
 }
-// TODO: impl FromLua for HashMap, in order to get tables
+// TODO: impl FromLua for HashMap, in order to read tables
 
 #[deriving(Show)]
 pub enum LuarError {

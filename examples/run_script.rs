@@ -18,7 +18,7 @@ fn main() {
     // meanwhile this is the norm
     state.insert("foo", table);
 
-    // load and run the script
+    // evaluate a script
     state.eval(&Path::new("./script.lua")).unwrap();
 
     // get its return either one will do:
