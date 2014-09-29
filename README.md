@@ -2,6 +2,7 @@ Luar
 ====
 
 A rustic Rust API that embeds the C Lua interpreter.
+
 Main goals are easily embedding Lua and not requiring it to be installed on the system,
 meaning only listing it as a dependency on Cargo should be enough:
 
