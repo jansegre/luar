@@ -3,7 +3,4 @@
 name = "luar"
 version = "0.0.1"
 authors = ["Jan Segre <jan@segre.in>"]
-#build = "make"
-
-[dependencies.lua-sys]
-git = "https://github.com/jansegre/cargo-lua.git"
+build = "make -f makefile.cargo"
