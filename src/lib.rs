@@ -33,7 +33,21 @@ macro_rules! c_str(
 
 // lua version
 static LUA_VERSION_NUM: c_int = 502;
+
+// lua constants
 static LUA_MINSTACK:    c_int = 20;
+//static LUAI_BITSINT: c_int = 32;
+//static LUAI_BITSINT: c_int = 16;
+//static LUAI_MAXSTACK: c_int;
+//if LUAI_BITSINT >= 32 {
+//    static LUAI_MAXSTACK: c_int = 1_000_000;
+//} else {
+//    static LUAI_MAXSTACK: c_int = 15_000;
+//}
+//static LUAI_MAXSTACK: c_int = if LUAI_BITSINT >= 32 { 1_000_000 } else { 15000 };
+static LUAI_MAXSTACK: c_int = 1_000_000;
+static LUAI_FIRSTPSEUDOIDX: c_int = -LUAI_MAXSTACK - 1000;
+static LUA_REGISTRYINDEX: c_int = LUAI_FIRSTPSEUDOIDX;
 
 // lua prompt
 static LUA_PROMPT:  &'static str = "> ";
@@ -107,6 +121,7 @@ extern {
     fn lua_tounsignedx(L: *mut lua_State, idx: c_int, isnum: *mut c_int) -> lua_Unsigned;
     fn lua_toboolean(L: *mut lua_State, idx: c_int) -> c_int;
     fn lua_tocfunction(L: *mut lua_State, idx: c_int) -> lua_CFunction;
+    fn lua_touserdata(L: *mut lua_State, idx: c_int) -> *mut c_void;
     fn lua_pushnil(L: *mut lua_State);
     fn lua_pushnumber(L: *mut lua_State, n: lua_Number);
     fn lua_pushinteger(L: *mut lua_State, n: lua_Integer);
@@ -115,6 +130,7 @@ extern {
     fn lua_pushcclosure(L: *mut lua_State, fun: lua_CFunction, n: c_int);
     fn lua_pushlstring(L: *mut lua_State, s: *const c_char, l: size_t) -> *const c_char;
     fn lua_pushstring(L: *mut lua_State, s: *const c_char) -> *const c_char;
+    fn lua_pushlightuserdata(L: *mut lua_State, p: *mut c_void);
     //fn lua_pushfstring(L: *mut lua_State, fmt: *const c_char, ...) -> *const c_char;
     fn lua_remove(L: *mut lua_State, idx: c_int);
     fn lua_insert(L: *mut lua_State, idx: c_int);
@@ -151,12 +167,15 @@ unsafe fn lua_isnil(L: *mut lua_State, n: c_int) -> c_int { (lua_type(L, n) == L
 //unsafe fn lua_pushcfunction(L: *mut lua_State, f: lua_CFunction) { lua_pushcclosure(L, f, 0) }
 //#[inline]
 //unsafe fn lua_register(L: *mut lua_State, n: *const c_char, f: lua_CFunction) { lua_pushcfunction(L, f); lua_setglobal(L, n) }
+#[inline]
+unsafe fn lua_upvalueindex(i: c_int) -> c_int { LUA_REGISTRYINDEX - i }
 
 /// Main type of the API, this is an abstraction over Lua's `lua_State`.
+// TODO: consider using std::kinds::marker (http://doc.rust-lang.org/std/kinds/marker/) for
+// properly marking types
 pub struct State {
-    // There is a huge advantage on having solely this field:
-    // being able to transmute back and forth into it.
     L: *mut lua_State,
+    owned: bool,
 }
 
 impl State {
@@ -173,13 +192,18 @@ impl State {
         unsafe {
             match luaL_newstate() {
                 L if L.is_not_null() => {
-                    let mut state = State{ L: L };
+                    let mut state = State{ L: L, owned: true };
                     if with_libs { state.open_libs(); }
                     Ok(state)
                 },
                 _ => Err(MemoryAllocationError),
             }
         }
+    }
+
+    #[inline]
+    fn new_raw_tmp(L: *mut lua_State) -> State {
+        State{ L: L, owned: false }
     }
 
     #[inline]
@@ -208,6 +232,15 @@ impl State {
     }
 
     #[inline]
+    pub fn pop<V: FromLua>(&mut self) -> Option<V> {
+        //let top = self.top();
+        //let opt_val = self.read(top);
+        let opt_val = self.read(-1);
+        self.remove_top();
+        opt_val
+    }
+
+    #[inline]
     pub fn read<V: FromLua>(&mut self, idx: int) -> Option<V> {
         FromLua::read_from(self, idx as c_int)
     }
@@ -225,16 +258,19 @@ impl State {
     }
 
     #[inline]
-    fn move(&mut self, index: int) {
-        unsafe { lua_insert(self.L, index as c_int) }
+    pub fn get<V: FromLua>(&mut self, name: &str) -> Option<V> {
+        unsafe { lua_getglobal(self.L, c_str!(name)); }
+        self.pop()
     }
 
     #[inline]
-    pub fn pop<V: FromLua>(&mut self) -> Option<V> {
-        let top = self.top();
-        let opt_val = self.read(top);
-        self.remove_top();
-        opt_val
+    pub fn get_or<V: FromLua>(&mut self, name: &str, def: V) -> V {
+        self.get(name).unwrap_or(def)
+    }
+
+    #[inline]
+    fn move_to(&mut self, index: int) {
+        unsafe { lua_insert(self.L, index as c_int) }
     }
 
     #[inline]
@@ -308,7 +344,7 @@ impl State {
 
             // add a new line between the two lines:
             self.push("\n");
-            self.move(-2);
+            self.move_to(-2);
             unsafe { lua_concat(self.L, 3); }
         }
 
@@ -352,20 +388,23 @@ impl State {
     }
 
     fn call(&mut self, nargs: c_int, nret: c_int) -> c_int {
-        unsafe extern fn traceback(L: *mut lua_State) -> c_int {
-            let msg = lua_tostring(L, 1);
-            if msg.is_not_null() {
-                luaL_traceback(L, L, msg, 1);
-            } else if lua_isnoneornil(L, 1) != 1 { // is there an error object?
-                if luaL_callmeta(L, 1, c_str!("__tostring")) == 0 { // try its 'tostring' metamethod
-                    lua_pushstring(L, c_str!("(no error message)"));
+        extern fn traceback(L: *mut lua_State) -> c_int {
+            // TODO: use State::new_raw_tmp(L)
+            unsafe {
+                let msg = lua_tostring(L, 1);
+                if msg.is_not_null() {
+                    luaL_traceback(L, L, msg, 1);
+                } else if lua_isnoneornil(L, 1) != 1 { // is there an error object?
+                    if luaL_callmeta(L, 1, c_str!("__tostring")) == 0 { // try its 'tostring' metamethod
+                        lua_pushstring(L, c_str!("(no error message)"));
+                    }
                 }
             }
             1
         }
         let base = self.top(); // function index
         self.push(traceback); // push traceback function
-        self.move(base); // put it under chunk and args
+        self.move_to(base); // put it under chunk and args
         // TODO: treat SIGINT
         let status = unsafe { lua_pcall(self.L, nargs, nret, 1) };
         self.remove(base); // remove traceback function
@@ -401,11 +440,18 @@ impl<L: Loader> FnMut<(L,), Result<(), LuarError>> for State {
 }
 
 impl Drop for State {
-    fn drop(&mut self) { unsafe { lua_close(self.L) } }
+    fn drop(&mut self) {
+        if self.owned {
+            unsafe { lua_close(self.L); }
+            self.L = ptr::null_mut();
+        }
+    }
 }
 
+// TODO: nicer name for these traits
 pub trait ToLua {
     fn push_to(s: &mut State, val: Self);
+    fn push_as_return(s: &mut State, val: Self) -> c_int { ToLua::push_to(s, val); 1 }
 }
 pub trait FromLua {
     fn read_from(s: &mut State, idx: c_int) -> Option<Self>;
@@ -459,16 +505,17 @@ impl ToLua for () {
     fn push_to(s: &mut State, _: ()) {
         unsafe { lua_pushnil(s.L) }
     }
+    fn push_as_return(_s: &mut State, _: ()) -> c_int { 0 }
 }
 
-impl<V: ToLua> ToLua for Option<V> {
-    fn push_to(s: &mut State, val: Option<V>) {
-        match val {
-            Some(p) => ToLua::push_to(s, p),
-            None => ToLua::push_to(s, ()),
-        }
-    }
-}
+//impl<V: ToLua> ToLua for Option<V> {
+//    fn push_to(s: &mut State, val: Option<V>) {
+//        match val {
+//            Some(p) => ToLua::push_to(s, p),
+//            None => ToLua::push_to(s, ()),
+//        }
+//    }
+//}
 
 impl ToLua for bool {
     fn push_to(s: &mut State, val: bool) {
@@ -483,6 +530,18 @@ impl FromLua for bool {
             _ => None,
         }
     }
+}
+#[test]
+fn test_lua_bool() {
+    let mut state = State::new();
+    state.push(true);
+    state.push(true);
+    state.push(false);
+    assert_eq!(state.pop(), Some(false));
+    assert_eq!(state.pop(), Some(true));
+    assert_eq!(state.pop(), Some(true));
+    // caveat: nil is read as false:
+    assert_eq!(state.pop(), Some(false));
 }
 
 impl ToLua for f64 {
@@ -649,16 +708,230 @@ impl<'a, V: ToLua + Copy> ToLua for &'a V {
 }
 
 // this works because the struct State is a *mut lua_State so they can be transmuted
-type CFunction = unsafe extern fn(*mut lua_State) -> c_int;
+type CFunction = extern fn(L: *mut lua_State) -> c_int;
+//type lua_CFunction = Option<extern fn(L: *mut lua_State) -> c_int>;
+//type CFunction = unsafe extern fn(*mut lua_State) -> c_int;
 impl ToLua for CFunction {
     fn push_to(s: &mut State, val: CFunction) {
-        unsafe { lua_pushcclosure(s.L, std::mem::transmute(Some(val)), 0) }
+        unsafe { lua_pushcclosure(s.L, Some(val), 0) }
     }
 }
 impl FromLua for CFunction {
     fn read_from(s: &mut State, idx: c_int) -> Option<CFunction> {
-        unsafe { std::mem::transmute(lua_tocfunction(s.L, idx)) }
+        unsafe { lua_tocfunction(s.L, idx) }
     }
+}
+
+struct Pair { low: *mut c_void, high: *mut c_void }
+macro_rules! push_cl_dispatcher(
+    ($L:expr, $disp:expr, $fun:expr) => (
+        {
+            let pair: Pair = std::mem::transmute($fun);
+            lua_pushlightuserdata($L, pair.low);
+            lua_pushlightuserdata($L, pair.high);
+            lua_pushcclosure($L, Some($disp), 2);
+        }
+    );
+)
+macro_rules! get_dispatched_cl(
+    ($L:expr) => (
+        std::mem::transmute(Pair {
+            low:  lua_touserdata($L, lua_upvalueindex(1)),
+            high: lua_touserdata($L, lua_upvalueindex(2)),
+        })
+    );
+)
+
+//impl<'a, A0: FromLua, A: Tuple1<A0>, R: ToLua> ToLua for &'a Fn<A, R> + 'a {
+//impl<'a, A0: FromLua, A1: FromLua, A: Tuple2<A0, A1>, R: ToLua> ToLua for &'a Fn<A, R> + 'a {
+
+macro_rules! impl_tolua_for_cl(
+    () => (
+        impl<'a, R: ToLua> ToLua for ||: 'a -> R {
+            fn push_to(s: &mut State, val: || -> R) {
+                extern fn dispatch<R: ToLua>(L: *mut lua_State) -> c_int {
+                    let mut s = State::new_raw_tmp(L);
+                    let fun: || -> R = unsafe { get_dispatched_cl!(s.L) };
+                    ToLua::push_as_return(&mut s, fun())
+                }
+                unsafe { push_cl_dispatcher!(s.L, dispatch::<R>, val) }
+            }
+        }
+    );
+    ($($ArgType:ident)+) => (
+        impl<'a, $($ArgType: FromLua),*, R: ToLua> ToLua for |$($ArgType),*|: 'a -> R {
+            fn push_to(s: &mut State, val: |$($ArgType),*| -> R) {
+                extern fn dispatch<$($ArgType: FromLua),*, R: ToLua>(L: *mut lua_State) -> c_int {
+                    let mut s = State::new_raw_tmp(L);
+                    let fun: |$($ArgType),*| -> R = unsafe { get_dispatched_cl!(s.L) };
+                    let mut i = 0i;
+                    let r = fun($(
+                        // it would be awesome if a macro had a counter
+                        match s.read::<$ArgType>({i += 1; i}) { Some(a) => a, None => return 0 }
+                    ),*);
+                    ToLua::push_as_return(&mut s, r)
+                }
+                unsafe { push_cl_dispatcher!(s.L, dispatch::<$($ArgType,)* R>, val) }
+            }
+        }
+    );
+)
+
+// TODO: I suspect there is a 'recursive' approach to simplify these
+impl_tolua_for_cl!()
+impl_tolua_for_cl!(A0)
+impl_tolua_for_cl!(A0 A1)
+impl_tolua_for_cl!(A0 A1 A2)
+impl_tolua_for_cl!(A0 A1 A2 A3)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14)
+impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
+
+macro_rules! push_fn_dispatcher(
+    ($L:expr, $disp:expr, $fun:expr) => (
+        {
+            lua_pushlightuserdata($L, std::mem::transmute($fun));
+            lua_pushcclosure($L, Some($disp), 1);
+        }
+    );
+)
+macro_rules! get_dispatched_fn(
+    ($L:expr) => (
+        std::mem::transmute(lua_touserdata($L, lua_upvalueindex(1)))
+    );
+)
+macro_rules! impl_tolua_for_fn(
+    () => (
+        impl<'a, R: ToLua> ToLua for fn() -> R {
+            fn push_to(s: &mut State, val: fn() -> R) {
+                extern fn dispatch<R: ToLua>(L: *mut lua_State) -> c_int {
+                    let mut s = State::new_raw_tmp(L);
+                    let fun: fn() -> R = unsafe { get_dispatched_fn!(s.L) };
+                    ToLua::push_as_return(&mut s, fun())
+                }
+                unsafe { push_fn_dispatcher!(s.L, dispatch::<R>, val) }
+            }
+        }
+    );
+    ($($ArgType:ident)+) => (
+        impl<'a, $($ArgType: FromLua),*, R: ToLua> ToLua for fn($($ArgType),*) -> R {
+            fn push_to(s: &mut State, val: fn($($ArgType),*) -> R) {
+                extern fn dispatch<$($ArgType: FromLua),*, R: ToLua>(L: *mut lua_State) -> c_int {
+                    let mut s = State::new_raw_tmp(L);
+                    let fun: fn($($ArgType),*) -> R = unsafe { get_dispatched_fn!(s.L) };
+                    let mut i = 0i;
+                    let r = fun($(
+                        // it would be awesome if a macro had a counter
+                        match s.read::<$ArgType>({i += 1; i}) { Some(a) => a, None => return 0 }
+                    ),*);
+                    ToLua::push_as_return(&mut s, r)
+                }
+                unsafe { push_fn_dispatcher!(s.L, dispatch::<$($ArgType,)* R>, val) }
+            }
+        }
+    );
+)
+
+impl_tolua_for_fn!()
+impl_tolua_for_fn!(A0)
+impl_tolua_for_fn!(A0 A1)
+impl_tolua_for_fn!(A0 A1 A2)
+
+#[test]
+fn test_fn0_push_to() {
+    let mut state = State::new();
+    fn my_fun() -> int { 456 }
+    state.insert("my_fun", my_fun);
+    state.eval("x = my_fun()").unwrap();
+    assert_eq!(Some(456i), state.get("x"));
+}
+
+#[test]
+fn test_fn1_push_to() {
+    let mut state = State::new();
+    fn my_fun(x: int) -> int { x + 4 }
+    state.insert("my_fun", my_fun);
+    state.eval("x = my_fun(7)").unwrap();
+    assert_eq!(Some(11i), state.get("x"));
+}
+
+#[test]
+fn test_fn2_push_to() {
+    let mut state = State::new();
+    fn my_fun(x: int, y: int) -> int { x * y + 6 }
+    state.insert("my_fun", my_fun);
+    state.eval("x = my_fun(5, 7)").unwrap();
+    assert_eq!(Some(41i), state.get("x"));
+}
+
+#[test]
+fn test_closure_push_to() {
+    let mut state = State::new();
+    let mut z = 4i;
+    state.insert("my_fun", || { z = 5 } );
+    state.eval("my_fun()").unwrap();
+    assert_eq!(5i, z);
+}
+
+#[test]
+fn test_closure0_push_to() {
+    let mut state = State::new();
+    state.insert("my_fun", || 6i );
+    state.eval("x = my_fun()").unwrap();
+    assert_eq!(Some(6i), state.get("x"));
+}
+
+#[test]
+fn test_closure1_push_to() {
+    let mut state = State::new();
+    let z = 4i;
+    state.insert("my_fun", |x: int| x + z );
+    state.eval("x = my_fun(7)").unwrap();
+    assert_eq!(Some(11i), state.get("x"));
+}
+
+#[test]
+fn test_closure2_push_to() {
+    let mut state = State::new();
+    let mut z = 4;
+    state.insert("my_fun", |x: int, y: int| x * y + z);
+    z = 6;
+    state.eval("x = my_fun(5, 7)").unwrap();
+    assert_eq!(Some(5i * 7 + z), state.get("x"));
+}
+
+#[test]
+fn test_closure_push_to_longer_life() {
+    let z = 5i;
+    let fun = |_: int, _: int| z;
+    {
+        let mut state = State::new();
+        state.insert("my_fun", fun);
+        state.eval("x = my_fun(1, 2)").unwrap();
+        assert_eq!(Some(5i), state.get("x"));
+    }
+}
+
+// The following should not be allowed, it may be hard to impose that though
+#[test]
+fn test_closure_push_to_shorter_life() {
+    let mut state = State::new();
+    {
+        let z = 5i;
+        let fun = |_: int, _: int| z;
+        state.insert("my_fun", fun);
+    }
+    state.eval("x = my_fun(1, 2)").unwrap();
+    assert_eq!(Some(5i), state.get("x"));
 }
 
 impl<K: ToLua + Hash + Eq + Copy, V: ToLua + Copy> ToLua for HashMap<K, V> {
@@ -701,5 +974,28 @@ impl LuarError {
             LUA_ERRFILE   => Some(LoadFileError),
             _             => Some(UnkownError),
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+
+    #[test]
+    fn _state_get_or() {
+        let mut state = ::State::new();
+
+        state.insert("x", 5i);
+        assert_eq!(state.get_or("x", 6i), 5i);
+
+        state.insert("y", ());
+        assert_eq!(state.get_or("y", 7i), 7i);
+
+        state.insert("z", "42");
+        assert_eq!(state.get_or("z", 66i), 42i);
+
+        state.insert("w", "foo");
+        assert_eq!(state.get_or("w", 55i), 55i);
+
+        assert_eq!(state.get_or("n", 77i), 77i);
     }
 }
