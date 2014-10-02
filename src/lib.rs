@@ -544,133 +544,40 @@ fn test_lua_bool() {
     assert_eq!(state.pop(), Some(false));
 }
 
-impl ToLua for f64 {
-    fn push_to(s: &mut State, val: f64) {
-        unsafe { lua_pushnumber(s.L, val as lua_Number) }
-    }
-}
-impl FromLua for f64 {
-    fn read_from(s: &mut State, idx: c_int) -> Option<f64> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tonumberx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as f64),
-            _ => None,
+macro_rules! impl_number(
+    ($t:ty:$lua_type:ident $lua_push:ident:$lua_to:ident) => (
+        impl ToLua for $t {
+            fn push_to(s: &mut State, val: $t) {
+                unsafe { $lua_push(s.L, val as $lua_type) }
+            }
         }
-    }
-}
-
-impl ToLua for f32 {
-    fn push_to(s: &mut State, val: f32) {
-        unsafe { lua_pushnumber(s.L, val as lua_Number) }
-    }
-}
-impl FromLua for f32 {
-    fn read_from(s: &mut State, idx: c_int) -> Option<f32> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tonumberx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as f32),
-            _ => None,
+        impl FromLua for $t {
+            fn read_from(s: &mut State, idx: c_int) -> Option<$t> {
+                let mut isnum: c_int = 0;
+                let num = unsafe { $lua_to(s.L, idx, &mut isnum) };
+                match isnum {
+                    1 => Some(num as $t),
+                    _ => None,
+                }
+            }
         }
-    }
-}
-
-impl ToLua for int {
-    fn push_to(s: &mut State, val: int) {
-        unsafe { lua_pushinteger(s.L, val as lua_Integer) }
-    }
-}
-impl FromLua for int {
-    fn read_from(s: &mut State, idx: c_int) -> Option<int> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tointegerx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as int),
-            _ => None,
-        }
-    }
-}
-
-impl ToLua for i64 {
-    fn push_to(s: &mut State, val: i64) {
-        unsafe { lua_pushinteger(s.L, val as lua_Integer) }
-    }
-}
-impl FromLua for i64 {
-    fn read_from(s: &mut State, idx: c_int) -> Option<i64> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tointegerx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as i64),
-            _ => None,
-        }
-    }
-}
-
-impl ToLua for i32 {
-    fn push_to(s: &mut State, val: i32) {
-        unsafe { lua_pushinteger(s.L, val as lua_Integer) }
-    }
-}
-impl FromLua for i32 {
-    fn read_from(s: &mut State, idx: c_int) -> Option<i32> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tointegerx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as i32),
-            _ => None,
-        }
-    }
-}
-
-impl ToLua for uint {
-    fn push_to(s: &mut State, val: uint) {
-        unsafe { lua_pushunsigned(s.L, val as lua_Unsigned) }
-    }
-}
-impl FromLua for uint {
-    fn read_from(s: &mut State, idx: c_int) -> Option<uint> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tounsignedx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as uint),
-            _ => None,
-        }
-    }
-}
-
-impl ToLua for u32 {
-    fn push_to(s: &mut State, val: u32) {
-        unsafe { lua_pushunsigned(s.L, val as lua_Unsigned) }
-    }
-}
-impl FromLua for u32 {
-    fn read_from(s: &mut State, idx: c_int) -> Option<u32> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tounsignedx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as u32),
-            _ => None,
-        }
-    }
-}
-
-impl ToLua for u64 {
-    fn push_to(s: &mut State, val: u64) {
-        unsafe { lua_pushunsigned(s.L, val as lua_Unsigned) }
-    }
-}
-impl FromLua for u64 {
-    fn read_from(s: &mut State, idx: c_int) -> Option<u64> {
-        let mut isnum: c_int = 0;
-        let num = unsafe { lua_tounsignedx(s.L, idx, &mut isnum) };
-        match isnum {
-            1 => Some(num as u64),
-            _ => None,
-        }
-    }
-}
+    );
+)
+// floats
+impl_number!(f32:lua_Number lua_pushnumber:lua_tonumberx)
+impl_number!(f64:lua_Number lua_pushnumber:lua_tonumberx)
+// ints
+impl_number!(int:lua_Integer lua_pushinteger:lua_tointegerx)
+impl_number!(i8 :lua_Integer lua_pushinteger:lua_tointegerx)
+impl_number!(i16:lua_Integer lua_pushinteger:lua_tointegerx)
+impl_number!(i32:lua_Integer lua_pushinteger:lua_tointegerx)
+impl_number!(i64:lua_Integer lua_pushinteger:lua_tointegerx)
+// uints
+impl_number!(uint:lua_Unsigned lua_pushunsigned:lua_tounsignedx)
+impl_number!(u8  :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
+impl_number!(u16 :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
+impl_number!(u32 :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
+impl_number!(u64 :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
 
 impl<'a> ToLua for &'a str {
     fn push_to(s: &mut State, val: &str) {
