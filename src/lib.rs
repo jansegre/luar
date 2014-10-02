@@ -741,10 +741,6 @@ macro_rules! get_dispatched_cl(
         })
     );
 )
-
-//impl<'a, A0: FromLua, A: Tuple1<A0>, R: ToLua> ToLua for &'a Fn<A, R> + 'a {
-//impl<'a, A0: FromLua, A1: FromLua, A: Tuple2<A0, A1>, R: ToLua> ToLua for &'a Fn<A, R> + 'a {
-
 macro_rules! impl_tolua_for_cl(
     () => (
         impl<'a, R: ToLua> ToLua for ||: 'a -> R {
@@ -776,25 +772,14 @@ macro_rules! impl_tolua_for_cl(
         }
     );
 )
-
-// TODO: I suspect there is a 'recursive' approach to simplify these
-impl_tolua_for_cl!()
-impl_tolua_for_cl!(A0)
-impl_tolua_for_cl!(A0 A1)
-impl_tolua_for_cl!(A0 A1 A2)
-impl_tolua_for_cl!(A0 A1 A2 A3)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14)
-impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
+macro_rules! mult_impl_tolua_for_cl(
+    () => (impl_tolua_for_cl!());
+    ($i:ident $($i_rest:ident)*) => (
+        impl_tolua_for_cl!($i $($i_rest)*)
+        mult_impl_tolua_for_cl!($($i_rest)*)
+    );
+)
+mult_impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
 
 macro_rules! push_fn_dispatcher(
     ($L:expr, $disp:expr, $fun:expr) => (
@@ -840,11 +825,14 @@ macro_rules! impl_tolua_for_fn(
         }
     );
 )
-
-impl_tolua_for_fn!()
-impl_tolua_for_fn!(A0)
-impl_tolua_for_fn!(A0 A1)
-impl_tolua_for_fn!(A0 A1 A2)
+macro_rules! mult_impl_tolua_for_fn(
+    () => (impl_tolua_for_fn!());
+    ($i:ident $($i_rest:ident)*) => (
+        impl_tolua_for_fn!($i $($i_rest)*)
+        mult_impl_tolua_for_fn!($($i_rest)*)
+    );
+)
+mult_impl_tolua_for_fn!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
 
 #[test]
 fn test_fn0_push_to() {
