@@ -630,117 +630,75 @@ impl FromLua for CFunction {
     }
 }
 
-struct Pair { low: *mut c_void, high: *mut c_void }
-macro_rules! push_cl_dispatcher(
-    ($L:expr, $disp:expr, $fun:expr) => (
-        {
-            let pair: Pair = std::mem::transmute($fun);
-            lua_pushlightuserdata($L, pair.low);
-            lua_pushlightuserdata($L, pair.high);
-            lua_pushcclosure($L, Some($disp), 2);
-        }
-    );
-)
-macro_rules! get_dispatched_cl(
-    ($L:expr) => (
-        std::mem::transmute(Pair {
-            low:  lua_touserdata($L, lua_upvalueindex(1)),
-            high: lua_touserdata($L, lua_upvalueindex(2)),
-        })
-    );
-)
 macro_rules! impl_tolua_for_cl(
-    () => (
-        impl<'a, R: ToLua> ToLua for ||: 'a -> R {
-            fn push_to(s: &mut State, val: || -> R) {
-                extern fn dispatch<R: ToLua>(L: *mut lua_State) -> c_int {
+    ($($A:ident)*) => (
+        #[inline]
+        impl<'a, $($A: FromLua,)* R: ToLua> ToLua for |$($A),*|: 'a -> R {
+            fn push_to(s: &mut State, val: |$($A),*| -> R) {
+                #[inline(never)]
+                extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut lua_State) -> c_int {
                     let mut s = State::new_raw_tmp(L);
-                    let fun: || -> R = unsafe { get_dispatched_cl!(s.L) };
-                    ToLua::push_as_return(&mut s, fun())
-                }
-                unsafe { push_cl_dispatcher!(s.L, dispatch::<R>, val) }
-            }
-        }
-    );
-    ($($ArgType:ident)+) => (
-        impl<'a, $($ArgType: FromLua),*, R: ToLua> ToLua for |$($ArgType),*|: 'a -> R {
-            fn push_to(s: &mut State, val: |$($ArgType),*| -> R) {
-                extern fn dispatch<$($ArgType: FromLua),*, R: ToLua>(L: *mut lua_State) -> c_int {
-                    let mut s = State::new_raw_tmp(L);
-                    let fun: |$($ArgType),*| -> R = unsafe { get_dispatched_cl!(s.L) };
-                    let mut i = 0i;
+                    let fun: |$($A),*| -> R = unsafe { std::mem::transmute(
+                            (lua_touserdata(s.L, lua_upvalueindex(1)), lua_touserdata(s.L, lua_upvalueindex(2)))
+                    ) };
+                    // prefix it with _ to supress warnings for when $($A)* is empty
+                    let mut _i = 0i;
                     let r = fun($(
                         // it would be awesome if a macro had a counter
-                        match s.read::<$ArgType>({i += 1; i}) { Some(a) => a, None => return 0 }
+                        match s.read::<$A>({_i += 1; _i}) { Some(a) => a, None => return 0 }
                     ),*);
                     ToLua::push_as_return(&mut s, r)
                 }
-                unsafe { push_cl_dispatcher!(s.L, dispatch::<$($ArgType,)* R>, val) }
+                unsafe {
+                    let (low, high): (*mut c_void, *mut c_void) = std::mem::transmute(val);
+                    lua_pushlightuserdata(s.L, low);
+                    lua_pushlightuserdata(s.L, high);
+                    lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 2);
+                }
             }
         }
     );
 )
-macro_rules! mult_impl_tolua_for_cl(
+// recursive impl_tolua_for_cl!
+macro_rules! rec_impl_tolua_for_cl(
     () => (impl_tolua_for_cl!());
-    ($i:ident $($i_rest:ident)*) => (
-        impl_tolua_for_cl!($i $($i_rest)*)
-        mult_impl_tolua_for_cl!($($i_rest)*)
-    );
+    ($i:ident $($i_rest:ident)*) => (impl_tolua_for_cl!($i $($i_rest)*) rec_impl_tolua_for_cl!($($i_rest)*));
 )
-mult_impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
+rec_impl_tolua_for_cl!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
 
-macro_rules! push_fn_dispatcher(
-    ($L:expr, $disp:expr, $fun:expr) => (
-        {
-            lua_pushlightuserdata($L, std::mem::transmute($fun));
-            lua_pushcclosure($L, Some($disp), 1);
-        }
-    );
-)
-macro_rules! get_dispatched_fn(
-    ($L:expr) => (
-        std::mem::transmute(lua_touserdata($L, lua_upvalueindex(1)))
-    );
-)
 macro_rules! impl_tolua_for_fn(
-    () => (
-        impl<'a, R: ToLua> ToLua for fn() -> R {
-            fn push_to(s: &mut State, val: fn() -> R) {
-                extern fn dispatch<R: ToLua>(L: *mut lua_State) -> c_int {
+    ($($A:ident)*) => (
+        #[inline]
+        impl<'a, $($A: FromLua,)* R: ToLua> ToLua for fn($($A),*) -> R {
+            fn push_to(s: &mut State, val: fn($($A),*) -> R) {
+                #[inline(never)]
+                extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut lua_State) -> c_int {
                     let mut s = State::new_raw_tmp(L);
-                    let fun: fn() -> R = unsafe { get_dispatched_fn!(s.L) };
-                    ToLua::push_as_return(&mut s, fun())
-                }
-                unsafe { push_fn_dispatcher!(s.L, dispatch::<R>, val) }
-            }
-        }
-    );
-    ($($ArgType:ident)+) => (
-        impl<'a, $($ArgType: FromLua),*, R: ToLua> ToLua for fn($($ArgType),*) -> R {
-            fn push_to(s: &mut State, val: fn($($ArgType),*) -> R) {
-                extern fn dispatch<$($ArgType: FromLua),*, R: ToLua>(L: *mut lua_State) -> c_int {
-                    let mut s = State::new_raw_tmp(L);
-                    let fun: fn($($ArgType),*) -> R = unsafe { get_dispatched_fn!(s.L) };
-                    let mut i = 0i;
+                    let fun: fn($($A),*) -> R = unsafe { std::mem::transmute(
+                            lua_touserdata(s.L, lua_upvalueindex(1))
+                    ) };
+                    // prefix it with _ to supress warnings for when $($A)* is empty
+                    let mut _i = 0i;
                     let r = fun($(
                         // it would be awesome if a macro had a counter
-                        match s.read::<$ArgType>({i += 1; i}) { Some(a) => a, None => return 0 }
+                        match s.read::<$A>({_i += 1; _i}) { Some(a) => a, None => return 0 }
                     ),*);
                     ToLua::push_as_return(&mut s, r)
                 }
-                unsafe { push_fn_dispatcher!(s.L, dispatch::<$($ArgType,)* R>, val) }
+                unsafe {
+                    lua_pushlightuserdata(s.L, std::mem::transmute(val));
+                    lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 1);
+                }
             }
         }
     );
 )
-macro_rules! mult_impl_tolua_for_fn(
+// recursive impl_tolua_for_cl!
+macro_rules! rec_impl_tolua_for_fn(
     () => (impl_tolua_for_fn!());
-    ($i:ident $($i_rest:ident)*) => (
-        impl_tolua_for_fn!($i $($i_rest)*)
-        mult_impl_tolua_for_fn!($($i_rest)*)
-    );
+    ($i:ident $($i_rest:ident)*) => (impl_tolua_for_fn!($i $($i_rest)*) rec_impl_tolua_for_fn!($($i_rest)*));
 )
-mult_impl_tolua_for_fn!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
+rec_impl_tolua_for_fn!(A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15)
 
 #[test]
 fn test_fn0_push_to() {
@@ -877,7 +835,7 @@ impl LuarError {
 mod test {
 
     #[test]
-    fn _state_get_or() {
+    fn state_get_or() {
         let mut state = ::State::new();
 
         state.insert("x", 5i);
