@@ -25,6 +25,7 @@ use std::io::{stdio, IoResult};
 //use std::ops::Index;
 use std::ptr;
 use std::str::from_utf8;
+use std::kinds::marker::NoSync;
 use libc::{c_void, c_char, c_int, c_uint, c_double, size_t, ptrdiff_t};
 
 macro_rules! c_str(
@@ -36,16 +37,15 @@ static LUA_VERSION_NUM: c_int = 502;
 
 // lua constants
 static LUA_MINSTACK:    c_int = 20;
-//static LUAI_BITSINT: c_int = 32;
-//static LUAI_BITSINT: c_int = 16;
-//static LUAI_MAXSTACK: c_int;
-//if LUAI_BITSINT >= 32 {
-//    static LUAI_MAXSTACK: c_int = 1_000_000;
-//} else {
-//    static LUAI_MAXSTACK: c_int = 15_000;
-//}
-//static LUAI_MAXSTACK: c_int = if LUAI_BITSINT >= 32 { 1_000_000 } else { 15000 };
-static LUAI_MAXSTACK: c_int = 1_000_000;
+macro_rules! static_ints( ($($var:ident $val:expr;)+) => ( $(static $var: c_int = $val;)* ); )
+#[cfg(target_word_size = "16")]
+static_ints!{
+    LUAI_MAXSTACK 15_000;
+}
+#[not(cfg(target_word_size = "16"))]
+static_ints!{
+    LUAI_MAXSTACK 1_000_000;
+}
 static LUAI_FIRSTPSEUDOIDX: c_int = -LUAI_MAXSTACK - 1000;
 static LUA_REGISTRYINDEX: c_int = LUAI_FIRSTPSEUDOIDX;
 
@@ -176,6 +176,7 @@ unsafe fn lua_upvalueindex(i: c_int) -> c_int { LUA_REGISTRYINDEX - i }
 pub struct State {
     L: *mut lua_State,
     owned: bool,
+    no_sync: NoSync,
 }
 
 impl State {
@@ -192,7 +193,7 @@ impl State {
         unsafe {
             match luaL_newstate() {
                 L if L.is_not_null() => {
-                    let mut state = State{ L: L, owned: true };
+                    let mut state = State{ L: L, owned: true, no_sync: NoSync };
                     if with_libs { state.open_libs(); }
                     Ok(state)
                 },
@@ -203,7 +204,7 @@ impl State {
 
     #[inline]
     fn new_raw_tmp(L: *mut lua_State) -> State {
-        State{ L: L, owned: false }
+        State{ L: L, owned: false, no_sync: NoSync }
     }
 
     #[inline]
