@@ -1,6 +1,6 @@
 LUA_DIR = lua
 
-PLATFROM = generic
+PLATFORM = generic
 ifneq (,$(findstring darwin,$(TARGET)))
 	PLATFORM = macosx
 endif
@@ -12,13 +12,18 @@ ifneq (,$(findstring mingw,$(TARGET)))
 endif
 # TODO: add more platforms if needed
 
-MYCFLAGS = "-fPIC"
+MYCFLAGS = -fPIC
 ifeq ($(DEBUG), true)
-	MYCFLAGS += "-g"
+	MYCFLAGS += -g
 endif
 
 
 .PHONY: all
 all:
-	@make -j $(NUM_JOBS) -C $(LUA_DIR) $(PLATFORM) MYCFLAGS="$(MYCFLAGS)"
+	@rm -f $(OUT_DIR)/liblua.*
+	@make -j $(NUM_JOBS) -C $(LUA_DIR) "MYCFLAGS=$(MYCFLAGS)" ALL=a $(PLATFORM)
 	@cp lua/src/liblua.* $(OUT_DIR)/
+
+.PHONY: clean
+clean:
+	@make -C $(LUA_DIR) clean
