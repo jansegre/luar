@@ -33,11 +33,11 @@ macro_rules! c_str(
 )
 
 // lua version
-static LUA_VERSION_NUM: c_int = 502;
+const LUA_VERSION_NUM: c_int = 502;
 
 // lua constants
-static LUA_MINSTACK:    c_int = 20;
-macro_rules! static_ints( ($($var:ident $val:expr;)+) => ( $(static $var: c_int = $val;)* ); )
+const LUA_MINSTACK:    c_int = 20;
+macro_rules! static_ints( ($($var:ident $val:expr;)+) => ( $(const $var: c_int = $val;)* ); )
 #[cfg(target_word_size = "16")]
 static_ints!{
     LUAI_MAXSTACK 15_000;
@@ -46,49 +46,49 @@ static_ints!{
 static_ints!{
     LUAI_MAXSTACK 1_000_000;
 }
-static LUAI_FIRSTPSEUDOIDX: c_int = -LUAI_MAXSTACK - 1000;
-static LUA_REGISTRYINDEX: c_int = LUAI_FIRSTPSEUDOIDX;
+const LUAI_FIRSTPSEUDOIDX: c_int = -LUAI_MAXSTACK - 1000;
+const LUA_REGISTRYINDEX: c_int = LUAI_FIRSTPSEUDOIDX;
 
 // lua prompt
-static LUA_PROMPT:  &'static str = "> ";
-static LUA_PROMPT2: &'static str = ">> ";
+const LUA_PROMPT:  &'static str = "> ";
+const LUA_PROMPT2: &'static str = ">> ";
 
 // lua error results
-static LUA_MULTRET:   c_int = -1;
-static LUA_OK:        c_int = 0;
-static LUA_YIELD:     c_int = 1;
-static LUA_ERRRUN:    c_int = 2;
-static LUA_ERRSYNTAX: c_int = 3;
-static LUA_ERRMEM:    c_int = 4;
-static LUA_ERRGCMM:   c_int = 5;
-static LUA_ERRERR:    c_int = 6;
-static LUA_ERRFILE:   c_int = 7;
+const LUA_MULTRET:   c_int = -1;
+const LUA_OK:        c_int = 0;
+const LUA_YIELD:     c_int = 1;
+const LUA_ERRRUN:    c_int = 2;
+const LUA_ERRSYNTAX: c_int = 3;
+const LUA_ERRMEM:    c_int = 4;
+const LUA_ERRGCMM:   c_int = 5;
+const LUA_ERRERR:    c_int = 6;
+const LUA_ERRFILE:   c_int = 7;
 
 // lua gc commands
-static LUA_GCSTOP:        c_int =  0;
-static LUA_GCRESTART:     c_int =  1;
-static LUA_GCCOLLECT:     c_int =  2;
-//static LUA_GCCOUNT:       c_int =  3;
-//static LUA_GCCOUNTB:      c_int =  4;
-//static LUA_GCSTEP:        c_int =  5;
-//static LUA_GCSETPAUSE:    c_int =  6;
-//static LUA_GCSETSTEPMUL:  c_int =  7;
-//static LUA_GCSETMAJORINC: c_int =  8;
-//static LUA_GCISRUNNING:   c_int =  9;
-//static LUA_GCGEN:         c_int = 10;
-//static LUA_GCINC:         c_int = 11;
+const LUA_GCSTOP:        c_int =  0;
+const LUA_GCRESTART:     c_int =  1;
+const LUA_GCCOLLECT:     c_int =  2;
+//const LUA_GCCOUNT:       c_int =  3;
+//const LUA_GCCOUNTB:      c_int =  4;
+//const LUA_GCSTEP:        c_int =  5;
+//const LUA_GCSETPAUSE:    c_int =  6;
+//const LUA_GCSETSTEPMUL:  c_int =  7;
+//const LUA_GCSETMAJORINC: c_int =  8;
+//const LUA_GCISRUNNING:   c_int =  9;
+//const LUA_GCGEN:         c_int = 10;
+//const LUA_GCINC:         c_int = 11;
 
 // lua types
-//static LUA_TNONE:          c_int = -1;
-static LUA_TNIL:           c_int = 0;
-//static LUA_TBOOLEAN:       c_int = 1;
-//static LUA_TLIGHTUSERDATA: c_int = 2;
-//static LUA_TNUMBER:        c_int = 3;
-//static LUA_TSTRING:        c_int = 4;
-//static LUA_TTABLE:         c_int = 5;
-//static LUA_TFUNCTION:      c_int = 6;
-//static LUA_TUSERDATA:      c_int = 7;
-//static LUA_TTHREAD:        c_int = 8;
+//const LUA_TNONE:          c_int = -1;
+const LUA_TNIL:           c_int = 0;
+//const LUA_TBOOLEAN:       c_int = 1;
+//const LUA_TLIGHTUSERDATA: c_int = 2;
+//const LUA_TNUMBER:        c_int = 3;
+//const LUA_TSTRING:        c_int = 4;
+//const LUA_TTABLE:         c_int = 5;
+//const LUA_TFUNCTION:      c_int = 6;
+//const LUA_TUSERDATA:      c_int = 7;
+//const LUA_TTHREAD:        c_int = 8;
 
 type lua_State = c_void;
 type lua_Alloc = Option<extern fn(ud: *mut c_void, ptr: *mut c_void, osize: size_t, nsize: size_t) -> *mut c_void>;
