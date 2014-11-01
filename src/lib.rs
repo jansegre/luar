@@ -184,7 +184,7 @@ impl State {
     pub fn new() -> State {
         match State::new_checked(true) {
             Ok(s) => s,
-            Err(e) => fail!(e),
+            Err(e) => panic!(e),
         }
     }
 
