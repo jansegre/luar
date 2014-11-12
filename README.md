@@ -1,7 +1,8 @@
 Luar [![Build Status][1]][2]
 ============================
 
-[Documentation][3]
+[Documentation][3]. THIS LIBRARY IS EXPERIMENTAL AND BARLEY FUNCTIONAL. For something more
+stable refer to [rust-lua](https://github.com/kballard/rust-lua) or [rust-hl-lua](https://github.com/tomaka/rust-hl-lua).
 
 A rustic Rust API that embeds the C Lua interpreter.
 
