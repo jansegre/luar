@@ -1,6 +1,8 @@
 Luar [![Build Status][1]][2]
 ============================
 
+[Documentation][3]
+
 A rustic Rust API that embeds the C Lua interpreter.
 
 Main goals are easily embedding Lua and not requiring it to be installed on the system,
@@ -27,3 +29,4 @@ There will be some examples, if there isn't feel free to bother me demanding I p
 
 [1]: https://travis-ci.org/jansegre/luar.svg
 [2]: https://travis-ci.org/jansegre/luar
+[3]: http://jansegre.com/luar/luar/index.html
