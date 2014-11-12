@@ -18,6 +18,7 @@ TODO: introduction, examples, tests, design choices
 #![allow(non_snake_case)]
 
 extern crate libc;
+extern crate "lua-sys" as raw;
 
 use std::hash::Hash;
 use std::collections::HashMap;
@@ -26,155 +27,17 @@ use std::io::{stdio, IoResult};
 use std::ptr;
 use std::str::from_utf8;
 use std::kinds::marker::NoSync;
-use libc::{c_void, c_char, c_int, c_uint, c_double, size_t, ptrdiff_t};
+use libc::{c_void, c_char, c_int, size_t};
 
 macro_rules! c_str(
     ($t: expr) => ({let t = $t.to_c_str(); t.as_ptr()});
 )
 
-// lua version
-const LUA_VERSION_NUM: c_int = 502;
-
-// lua constants
-const LUA_MINSTACK:    c_int = 20;
-macro_rules! static_ints( ($($var:ident $val:expr;)+) => ( $(const $var: c_int = $val;)* ); )
-#[cfg(target_word_size = "16")]
-static_ints!{
-    LUAI_MAXSTACK 15_000;
-}
-#[not(cfg(target_word_size = "16"))]
-static_ints!{
-    LUAI_MAXSTACK 1_000_000;
-}
-const LUAI_FIRSTPSEUDOIDX: c_int = -LUAI_MAXSTACK - 1000;
-const LUA_REGISTRYINDEX: c_int = LUAI_FIRSTPSEUDOIDX;
-
-// lua prompt
-const LUA_PROMPT:  &'static str = "> ";
-const LUA_PROMPT2: &'static str = ">> ";
-
-// lua error results
-const LUA_MULTRET:   c_int = -1;
-const LUA_OK:        c_int = 0;
-const LUA_YIELD:     c_int = 1;
-const LUA_ERRRUN:    c_int = 2;
-const LUA_ERRSYNTAX: c_int = 3;
-const LUA_ERRMEM:    c_int = 4;
-const LUA_ERRGCMM:   c_int = 5;
-const LUA_ERRERR:    c_int = 6;
-const LUA_ERRFILE:   c_int = 7;
-
-// lua gc commands
-const LUA_GCSTOP:        c_int =  0;
-const LUA_GCRESTART:     c_int =  1;
-const LUA_GCCOLLECT:     c_int =  2;
-//const LUA_GCCOUNT:       c_int =  3;
-//const LUA_GCCOUNTB:      c_int =  4;
-//const LUA_GCSTEP:        c_int =  5;
-//const LUA_GCSETPAUSE:    c_int =  6;
-//const LUA_GCSETSTEPMUL:  c_int =  7;
-//const LUA_GCSETMAJORINC: c_int =  8;
-//const LUA_GCISRUNNING:   c_int =  9;
-//const LUA_GCGEN:         c_int = 10;
-//const LUA_GCINC:         c_int = 11;
-
-// lua types
-//const LUA_TNONE:          c_int = -1;
-const LUA_TNIL:           c_int = 0;
-//const LUA_TBOOLEAN:       c_int = 1;
-//const LUA_TLIGHTUSERDATA: c_int = 2;
-//const LUA_TNUMBER:        c_int = 3;
-//const LUA_TSTRING:        c_int = 4;
-//const LUA_TTABLE:         c_int = 5;
-//const LUA_TFUNCTION:      c_int = 6;
-//const LUA_TUSERDATA:      c_int = 7;
-//const LUA_TTHREAD:        c_int = 8;
-
-type lua_State = c_void;
-type lua_Alloc = Option<extern fn(ud: *mut c_void, ptr: *mut c_void, osize: size_t, nsize: size_t) -> *mut c_void>;
-type lua_Number = c_double;
-type lua_Integer = ptrdiff_t;
-type lua_Unsigned = c_uint;
-type lua_CFunction = Option<extern fn(L: *mut lua_State) -> c_int>;
-
-#[link(name = "lua", kind = "static")]
-extern {
-    fn luaL_newstate() -> *mut lua_State;
-    fn luaL_openlibs(L: *mut lua_State);
-    //fn luaL_loadbuffer(L: *mut lua_State, buff: *const c_char, sz: size_t, name: *const c_char) -> c_int;
-    //fn lua_call(L: *mut lua_State, nargs: c_int, nresults: c_int);
-    fn lua_pcallk(L: *mut lua_State, nargs: c_int, nresults: c_int, errfunc: c_int, ctx: c_int, k: lua_CFunction) -> c_int;
-    fn lua_settop(L: *mut lua_State, idx: c_int);
-    fn lua_close(L: *mut lua_State);
-    fn lua_createtable(L: *mut lua_State, narr: c_int, nrec: c_int);
-    fn luaL_loadfilex(L: *mut lua_State, filename: *const c_char, mode: *const c_char) -> c_int;
-    fn lua_rawset(L: *mut lua_State, idx: c_int);
-    //fn lua_setfield(L: *mut lua_State, idx: c_int, k: *const c_char);
-    //fn lua_tonumberx(L: *mut lua_State, idx: c_int, isnum: *mut c_int) -> lua_Number;
-    fn lua_setglobal(L: *mut lua_State, var: *const c_char);
-    fn luaL_checkversion_(L: *mut lua_State, ver: lua_Number);
-    fn lua_gc(L: *mut lua_State, what: c_int, data: c_int) -> c_int;
-    fn lua_getglobal(L: *mut lua_State, var: *const c_char);
-    fn lua_tolstring(L: *mut lua_State, idx: c_int, len: *mut size_t) -> *const c_char;
-    fn lua_tonumberx(L: *mut lua_State, idx: c_int, isnum: *mut c_int) -> lua_Number;
-    fn lua_tointegerx(L: *mut lua_State, idx: c_int, isnum: *mut c_int) -> lua_Integer;
-    fn lua_tounsignedx(L: *mut lua_State, idx: c_int, isnum: *mut c_int) -> lua_Unsigned;
-    fn lua_toboolean(L: *mut lua_State, idx: c_int) -> c_int;
-    fn lua_tocfunction(L: *mut lua_State, idx: c_int) -> lua_CFunction;
-    fn lua_touserdata(L: *mut lua_State, idx: c_int) -> *mut c_void;
-    fn lua_pushnil(L: *mut lua_State);
-    fn lua_pushnumber(L: *mut lua_State, n: lua_Number);
-    fn lua_pushinteger(L: *mut lua_State, n: lua_Integer);
-    fn lua_pushunsigned(L: *mut lua_State, n: lua_Unsigned);
-    fn lua_pushboolean(L: *mut lua_State, b: c_int);
-    fn lua_pushcclosure(L: *mut lua_State, fun: lua_CFunction, n: c_int);
-    fn lua_pushlstring(L: *mut lua_State, s: *const c_char, l: size_t) -> *const c_char;
-    fn lua_pushstring(L: *mut lua_State, s: *const c_char) -> *const c_char;
-    fn lua_pushlightuserdata(L: *mut lua_State, p: *mut c_void);
-    //fn lua_pushfstring(L: *mut lua_State, fmt: *const c_char, ...) -> *const c_char;
-    fn lua_remove(L: *mut lua_State, idx: c_int);
-    fn lua_insert(L: *mut lua_State, idx: c_int);
-    fn lua_concat(L: *mut lua_State, n: c_int);
-    fn luaL_loadbufferx(L: *mut lua_State, buff: *const c_char, sz: size_t, name: *const c_char, mode: *const c_char) -> c_int;
-    fn luaL_traceback(L: *mut lua_State, L1: *mut lua_State, msg: *const c_char, level: c_int);
-    fn lua_gettop(L: *mut lua_State) -> c_int;
-    fn luaL_checkstack(L: *mut lua_State, sz: c_int, msg: *const c_char);
-    fn lua_type(L: *mut lua_State, idx: c_int) -> c_int;
-    fn luaL_callmeta(L: *mut lua_State, obj: c_int, e: *const c_char) -> c_int;
-}
-
-//#[inline]
-//unsafe fn lua_pop(L: *mut lua_State, n: c_int) { lua_settop(L, -n - 1) }
-//#[inline]
-//unsafe fn lua_newtable(L: *mut lua_State) { lua_createtable(L, 0, 0) }
-#[inline]
-unsafe fn luaL_loadfile(L: *mut lua_State, f: *const c_char) -> c_int { luaL_loadfilex(L, f, ptr::null()) }
-#[inline]
-unsafe fn lua_pcall(L: *mut lua_State, n: c_int, r: c_int, f: c_int) -> c_int { lua_pcallk(L, n, r, f, 0, None) }
-#[inline]
-unsafe fn luaL_checkversion(L: *mut lua_State) { luaL_checkversion_(L, LUA_VERSION_NUM as lua_Number) }
-#[inline]
-unsafe fn lua_tostring(L: *mut lua_State, i: c_int) -> *const c_char { lua_tolstring(L, i, ptr::null_mut()) }
-//#[inline]
-//unsafe fn lua_pushliteral(L: *mut lua_State, s: *const c_char) -> *const c_char { lua_pushlstring(L, s, (size_of??? / size_of<c_char>()) - 1); }
-#[inline]
-unsafe fn luaL_loadbuffer(L: *mut lua_State, s: *const c_char, sz: size_t, n: *const c_char) -> c_int { luaL_loadbufferx(L, s, sz, n, ptr::null()) }
-#[inline]
-unsafe fn lua_isnoneornil(L: *mut lua_State, n: c_int) -> c_int { (lua_type(L, n) <= 0) as c_int }
-#[inline]
-unsafe fn lua_isnil(L: *mut lua_State, n: c_int) -> c_int { (lua_type(L, n) == LUA_TNIL) as c_int }
-//#[inline]
-//unsafe fn lua_pushcfunction(L: *mut lua_State, f: lua_CFunction) { lua_pushcclosure(L, f, 0) }
-//#[inline]
-//unsafe fn lua_register(L: *mut lua_State, n: *const c_char, f: lua_CFunction) { lua_pushcfunction(L, f); lua_setglobal(L, n) }
-#[inline]
-unsafe fn lua_upvalueindex(i: c_int) -> c_int { LUA_REGISTRYINDEX - i }
-
 /// Main type of the API, this is an abstraction over Lua's `lua_State`.
 // TODO: consider using std::kinds::marker (http://doc.rust-lang.org/std/kinds/marker/) for
 // properly marking types
 pub struct State {
-    L: *mut lua_State,
+    L: *mut raw::lua_State,
     owned: bool,
     no_sync: NoSync,
 }
@@ -191,7 +54,7 @@ impl State {
     #[inline]
     pub fn new_checked(with_libs: bool) -> Result<State, LuarError> {
         unsafe {
-            match luaL_newstate() {
+            match raw::luaL_newstate() {
                 L if L.is_not_null() => {
                     let mut state = State{ L: L, owned: true, no_sync: NoSync };
                     if with_libs { state.open_libs(); }
@@ -203,18 +66,18 @@ impl State {
     }
 
     #[inline]
-    fn new_raw_tmp(L: *mut lua_State) -> State {
+    fn new_raw_tmp(L: *mut raw::lua_State) -> State {
         State{ L: L, owned: false, no_sync: NoSync }
     }
 
     #[inline]
     fn open_libs(&mut self) {
         unsafe {
-            luaL_checkversion(self.L);
+            raw::luaL_checkversion(self.L);
             // stop gc during initialization
-            lua_gc(self.L, LUA_GCSTOP, 0);
-            luaL_openlibs(self.L);
-            lua_gc(self.L, LUA_GCRESTART, 0);
+            raw::lua_gc(self.L, raw::LUA_GCSTOP, 0);
+            raw::luaL_openlibs(self.L);
+            raw::lua_gc(self.L, raw::LUA_GCRESTART, 0);
         }
     }
 
@@ -248,19 +111,19 @@ impl State {
 
     #[inline]
     fn get_global<V: FromLua>(&mut self, var: &str) -> Option<V> {
-        unsafe { lua_getglobal(self.L, c_str!(var)); }
+        unsafe { raw::lua_getglobal(self.L, c_str!(var)); }
         self.read(-1)
     }
 
     #[inline]
     pub fn insert<V: ToLua>(&mut self, name: &str, val: V) {
         self.push(val);
-        unsafe { lua_setglobal(self.L, c_str!(name)); }
+        unsafe { raw::lua_setglobal(self.L, c_str!(name)); }
     }
 
     #[inline]
     pub fn get<V: FromLua>(&mut self, name: &str) -> Option<V> {
-        unsafe { lua_getglobal(self.L, c_str!(name)); }
+        unsafe { raw::lua_getglobal(self.L, c_str!(name)); }
         self.pop()
     }
 
@@ -271,32 +134,32 @@ impl State {
 
     #[inline]
     fn move_to(&mut self, index: int) {
-        unsafe { lua_insert(self.L, index as c_int) }
+        unsafe { raw::lua_insert(self.L, index as c_int) }
     }
 
     #[inline]
     fn remove(&mut self, idx: int) {
-        unsafe { lua_remove(self.L, idx as c_int) }
+        unsafe { raw::lua_remove(self.L, idx as c_int) }
     }
 
     #[inline]
     fn top(&mut self) -> int {
-        unsafe { lua_gettop(self.L) as int }
+        unsafe { raw::lua_gettop(self.L) as int }
     }
 
     #[inline]
     fn set_top(&mut self, index: int) {
-        unsafe { lua_settop(self.L, index as c_int) }
+        unsafe { raw::lua_settop(self.L, index as c_int) }
     }
 
     #[inline]
     fn remove_top(&mut self) {
-        unsafe { lua_settop(self.L, -2) }
+        unsafe { raw::lua_settop(self.L, -2) }
     }
 
     fn load_slice(&mut self, slice: &str) -> c_int {
         let cstr = slice.to_c_str();
-        unsafe { luaL_loadbuffer(self.L, cstr.as_ptr(), cstr.len() as size_t, c_str!("=stdin")) }
+        unsafe { raw::luaL_loadbuffer(self.L, cstr.as_ptr(), cstr.len() as size_t, c_str!("=stdin")) }
     }
 
     /// Will print the prompt from lua vars `_PROMPT` or `_PROMPT2` if they're defined
@@ -306,7 +169,7 @@ impl State {
         // print the prompt if defined in lua or the default
         match self.get_global::<&str>(if first { "_PROMPT" } else { "_PROMPT2" }) {
             Some(s) => print!("{:s}", s),
-            None    => print!("{:s}", if first { LUA_PROMPT } else { LUA_PROMPT2 }),
+            None    => print!("{:s}", if first { raw::LUA_PROMPT } else { raw::LUA_PROMPT2 }),
         }
         self.remove_top(); // pop the result from getglobal
         stdio::flush();
@@ -332,7 +195,7 @@ impl State {
             let line: &str = self.read(1).unwrap();
             status = self.load_slice(line);
             match status {
-                LUA_ERRSYNTAX => {
+                raw::LUA_ERRSYNTAX => {
                     match self.read::<&str>(-1) {
                         Some(s) if s.ends_with("<eof>") => self.remove_top(),
                         _ => break,
@@ -346,11 +209,11 @@ impl State {
             // add a new line between the two lines:
             self.push("\n");
             self.move_to(-2);
-            unsafe { lua_concat(self.L, 3); }
+            unsafe { raw::lua_concat(self.L, 3); }
         }
 
         // TODO: save line in history
-        unsafe { lua_remove(self.L, 1); } // remove line
+        unsafe { raw::lua_remove(self.L, 1); } // remove line
         (true, status)
     }
 
@@ -359,11 +222,11 @@ impl State {
             let (ok, mut status) = self.load_line();
             if !ok { break; }
 
-            if status == LUA_OK {
-                status = self.call(0, LUA_MULTRET);
+            if status == raw::LUA_OK {
+                status = self.call(0, raw::LUA_MULTRET);
             }
             // report
-            if status != LUA_OK && unsafe { lua_isnil(self.L, -1) != 1 } {
+            if status != raw::LUA_OK && unsafe { raw::lua_isnil(self.L, -1) != 1 } {
                 let msg: &str = match self.read(-1) {
                     Some(s) => s,
                     None => "(error object is not a string)",
@@ -371,14 +234,14 @@ impl State {
                 println!("{}", msg);
                 self.remove_top();
                 // force a complete garbage collection in case of errors
-                unsafe { lua_gc(self.L, LUA_GCCOLLECT, 0); }
+                unsafe { raw::lua_gc(self.L, raw::LUA_GCCOLLECT, 0); }
             }
-            if status == LUA_OK && self.top() > 0 { // any result to print
+            if status == raw::LUA_OK && self.top() > 0 { // any result to print
                 unsafe {
-                    luaL_checkstack(self.L, LUA_MINSTACK, c_str!("too many results to print"));
-                    lua_getglobal(self.L, c_str!("print"));
-                    lua_insert(self.L, 1);
-                    if lua_pcall(self.L, lua_gettop(self.L) - 1, 0, 0) != LUA_OK {
+                    raw::luaL_checkstack(self.L, raw::LUA_MINSTACK, c_str!("too many results to print"));
+                    raw::lua_getglobal(self.L, c_str!("print"));
+                    raw::lua_insert(self.L, 1);
+                    if raw::lua_pcall(self.L, raw::lua_gettop(self.L) - 1, 0, 0) != raw::LUA_OK {
                         println!("error calling print({:s})", self.read::<&str>(-1).unwrap());
                     }
                 }
@@ -389,15 +252,15 @@ impl State {
     }
 
     fn call(&mut self, nargs: c_int, nret: c_int) -> c_int {
-        extern fn traceback(L: *mut lua_State) -> c_int {
+        extern fn traceback(L: *mut raw::lua_State) -> c_int {
             // TODO: use State::new_raw_tmp(L)
             unsafe {
-                let msg = lua_tostring(L, 1);
+                let msg = raw::lua_tostring(L, 1);
                 if msg.is_not_null() {
-                    luaL_traceback(L, L, msg, 1);
-                } else if lua_isnoneornil(L, 1) != 1 { // is there an error object?
-                    if luaL_callmeta(L, 1, c_str!("__tostring")) == 0 { // try its 'tostring' metamethod
-                        lua_pushstring(L, c_str!("(no error message)"));
+                    raw::luaL_traceback(L, L, msg, 1);
+                } else if raw::lua_isnoneornil(L, 1) != 1 { // is there an error object?
+                    if raw::luaL_callmeta(L, 1, c_str!("__tostring")) == 0 { // try its 'tostring' metamethod
+                        raw::lua_pushstring(L, c_str!("(no error message)"));
                     }
                 }
             }
@@ -407,7 +270,7 @@ impl State {
         self.push(traceback); // push traceback function
         self.move_to(base); // put it under chunk and args
         // TODO: treat SIGINT
-        let status = unsafe { lua_pcall(self.L, nargs, nret, 1) };
+        let status = unsafe { raw::lua_pcall(self.L, nargs, nret, 1) };
         self.remove(base); // remove traceback function
         status
     }
@@ -417,7 +280,7 @@ impl State {
             Ok(()) => (),
             Err(e) => return Err(e),
         }
-        match LuarError::from_lua(self.call(0, LUA_MULTRET)) {
+        match LuarError::from_lua(self.call(0, raw::LUA_MULTRET)) {
             None => Ok(()),
             Some(e) => Err(e),
         }
@@ -434,8 +297,7 @@ impl State {
 
 impl<L: Loader> FnMut<(L,), Result<(), LuarError>> for State {
     /// Experimental shorthand for eval
-    #[rust_call_abi_hack]
-    fn call_mut(&mut self, (source,): (L,)) -> Result<(), LuarError> {
+    extern "rust-call" fn call_mut(&mut self, (source,): (L,)) -> Result<(), LuarError> {
         self.eval(source)
     }
 }
@@ -443,7 +305,7 @@ impl<L: Loader> FnMut<(L,), Result<(), LuarError>> for State {
 impl Drop for State {
     fn drop(&mut self) {
         if self.owned {
-            unsafe { lua_close(self.L); }
+            unsafe { raw::lua_close(self.L); }
             self.L = ptr::null_mut();
         }
     }
@@ -465,14 +327,14 @@ impl<'a> Loader for &'a Path {
     fn load_to(s: &mut State, source: &'a Path) -> c_int {
         // TODO: check whether luaL_loadbuffer or lua_load with a Reader is better
         let path = source.to_c_str();
-        unsafe { luaL_loadfile(s.L, path.as_ptr()) }
+        unsafe { raw::luaL_loadfile(s.L, path.as_ptr()) }
     }
 }
 // TODO: test this
 
 impl<'a> Loader for &'a str {
     fn load_to(s: &mut State, source: &str) -> c_int {
-        unsafe { luaL_loadbuffer(s.L, source.as_ptr() as *const c_char, source.len() as size_t, c_str!("=stdin")) }
+        unsafe { raw::luaL_loadbuffer(s.L, source.as_ptr() as *const c_char, source.len() as size_t, c_str!("=stdin")) }
     }
 }
 #[test]
@@ -504,7 +366,7 @@ fn test_loader_string() {
 
 impl ToLua for () {
     fn push_to(s: &mut State, _: ()) {
-        unsafe { lua_pushnil(s.L) }
+        unsafe { raw::lua_pushnil(s.L) }
     }
     fn push_as_return(_s: &mut State, _: ()) -> c_int { 0 }
 }
@@ -520,12 +382,12 @@ impl ToLua for () {
 
 impl ToLua for bool {
     fn push_to(s: &mut State, val: bool) {
-        unsafe { lua_pushboolean(s.L, if val { 1 } else { 0 }) }
+        unsafe { raw::lua_pushboolean(s.L, if val { 1 } else { 0 }) }
     }
 }
 impl FromLua for bool {
     fn read_from(s: &mut State, idx: c_int) -> Option<bool> {
-        match unsafe { lua_toboolean(s.L, idx) } {
+        match unsafe { raw::lua_toboolean(s.L, idx) } {
             0 => Some(false),
             1 => Some(true),
             _ => None,
@@ -545,17 +407,41 @@ fn test_lua_bool() {
     assert_eq!(state.pop(), Some(false));
 }
 
+//impl<V0: ToLua, V1: ToLua> ToLua for (V0, V1) {
+//    fn push_to(s: &mut State, (v0, v1): (V0, V1)) {
+//        ToLua::push_to(s, v0);
+//        ToLua::push_to(s, v1);
+//    }
+//    fn push_as_return(s: &mut State, val: (V0, V1)) -> c_int { ToLua::push_to(s, val); 2 }
+//}
+//impl<V0: FromLua, V1: FromLua> FromLua for (V0, V1) {
+//    fn read_from(s: &mut State, idx: c_int) -> Option<(V0, V1)> {
+//        let mut i = 0;
+//        let v1 = match FromLua::read_from(s, idx + i) { Some(v) => v, None => return None }; i += 1;
+//        let v0 = match FromLua::read_from(s, idx + i) { Some(v) => v, None => return None };
+//        Some((v0, v1))
+//    }
+//}
+//#[test]
+//fn test_tuple_push_to() {
+//    let mut state = State::new();
+//    state.push((1i, "2"));
+//    let (a, b): (int, &str) = state.pop().unwrap();
+//    assert_eq!(1i, a);
+//    assert_eq!("2", b);
+//}
+
 macro_rules! impl_number(
-    ($t:ty:$lua_type:ident $lua_push:ident:$lua_to:ident) => (
+    ($t:ty|$lua_type:ident $lua_push:ident|$lua_to:ident) => (
         impl ToLua for $t {
             fn push_to(s: &mut State, val: $t) {
-                unsafe { $lua_push(s.L, val as $lua_type) }
+                unsafe { raw::$lua_push(s.L, val as raw::$lua_type) }
             }
         }
         impl FromLua for $t {
             fn read_from(s: &mut State, idx: c_int) -> Option<$t> {
                 let mut isnum: c_int = 0;
-                let num = unsafe { $lua_to(s.L, idx, &mut isnum) };
+                let num = unsafe { raw::$lua_to(s.L, idx, &mut isnum) };
                 match isnum {
                     1 => Some(num as $t),
                     _ => None,
@@ -565,30 +451,30 @@ macro_rules! impl_number(
     );
 )
 // floats
-impl_number!(f32:lua_Number lua_pushnumber:lua_tonumberx)
-impl_number!(f64:lua_Number lua_pushnumber:lua_tonumberx)
+impl_number!(f32|lua_Number lua_pushnumber|lua_tonumberx)
+impl_number!(f64|lua_Number lua_pushnumber|lua_tonumberx)
 // ints
-impl_number!(int:lua_Integer lua_pushinteger:lua_tointegerx)
-impl_number!(i8 :lua_Integer lua_pushinteger:lua_tointegerx)
-impl_number!(i16:lua_Integer lua_pushinteger:lua_tointegerx)
-impl_number!(i32:lua_Integer lua_pushinteger:lua_tointegerx)
-impl_number!(i64:lua_Integer lua_pushinteger:lua_tointegerx)
+impl_number!(int|lua_Integer lua_pushinteger|lua_tointegerx)
+impl_number!(i8 |lua_Integer lua_pushinteger|lua_tointegerx)
+impl_number!(i16|lua_Integer lua_pushinteger|lua_tointegerx)
+impl_number!(i32|lua_Integer lua_pushinteger|lua_tointegerx)
+impl_number!(i64|lua_Integer lua_pushinteger|lua_tointegerx)
 // uints
-impl_number!(uint:lua_Unsigned lua_pushunsigned:lua_tounsignedx)
-impl_number!(u8  :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
-impl_number!(u16 :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
-impl_number!(u32 :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
-impl_number!(u64 :lua_Unsigned lua_pushunsigned:lua_tounsignedx)
+impl_number!(uint|lua_Unsigned lua_pushunsigned|lua_tounsignedx)
+impl_number!(u8  |lua_Unsigned lua_pushunsigned|lua_tounsignedx)
+impl_number!(u16 |lua_Unsigned lua_pushunsigned|lua_tounsignedx)
+impl_number!(u32 |lua_Unsigned lua_pushunsigned|lua_tounsignedx)
+impl_number!(u64 |lua_Unsigned lua_pushunsigned|lua_tounsignedx)
 
 impl<'a> ToLua for &'a str {
     fn push_to(s: &mut State, val: &str) {
-        unsafe { lua_pushlstring(s.L, val.as_ptr() as *const c_char, val.len() as size_t); }
+        unsafe { raw::lua_pushlstring(s.L, val.as_ptr() as *const c_char, val.len() as size_t); }
     }
 }
 impl<'a> FromLua for &'a str {
     fn read_from<'a>(s: &mut State, idx: c_int) -> Option<&'a str> {
         let mut len: size_t = 0;
-        let ptr = unsafe { lua_tolstring(s.L, idx, &mut len) };
+        let ptr = unsafe { raw::lua_tolstring(s.L, idx, &mut len) };
         let slice = unsafe { std::mem::transmute(std::raw::Slice { data: ptr, len: len as uint}) };
         from_utf8(slice)
     }
@@ -616,17 +502,17 @@ impl<'a, V: ToLua + Copy> ToLua for &'a V {
 }
 
 // this works because the struct State is a *mut lua_State so they can be transmuted
-type CFunction = extern fn(L: *mut lua_State) -> c_int;
-//type lua_CFunction = Option<extern fn(L: *mut lua_State) -> c_int>;
-//type CFunction = unsafe extern fn(*mut lua_State) -> c_int;
+type CFunction = extern fn(L: *mut raw::lua_State) -> c_int;
+//type lua_CFunction = Option<extern fn(L: *mut raw::lua_State) -> c_int>;
+//type CFunction = unsafe extern fn(*mut raw::lua_State) -> c_int;
 impl ToLua for CFunction {
     fn push_to(s: &mut State, val: CFunction) {
-        unsafe { lua_pushcclosure(s.L, Some(val), 0) }
+        unsafe { raw::lua_pushcclosure(s.L, Some(val), 0) }
     }
 }
 impl FromLua for CFunction {
     fn read_from(s: &mut State, idx: c_int) -> Option<CFunction> {
-        unsafe { lua_tocfunction(s.L, idx) }
+        unsafe { raw::lua_tocfunction(s.L, idx) }
     }
 }
 
@@ -636,10 +522,10 @@ macro_rules! impl_tolua_for_cl(
         impl<'a, $($A: FromLua,)* R: ToLua> ToLua for |$($A),*|: 'a -> R {
             fn push_to(s: &mut State, val: |$($A),*| -> R) {
                 #[inline(never)]
-                extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut lua_State) -> c_int {
+                extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut raw::lua_State) -> c_int {
                     let mut s = State::new_raw_tmp(L);
                     let fun: |$($A),*| -> R = unsafe { std::mem::transmute(
-                            (lua_touserdata(s.L, lua_upvalueindex(1)), lua_touserdata(s.L, lua_upvalueindex(2)))
+                            (raw::lua_touserdata(s.L, raw::lua_upvalueindex(1)), raw::lua_touserdata(s.L, raw::lua_upvalueindex(2)))
                     ) };
                     // prefix it with _ to supress warnings for when $($A)* is empty
                     let mut _i = 0i;
@@ -651,9 +537,9 @@ macro_rules! impl_tolua_for_cl(
                 }
                 unsafe {
                     let (low, high): (*mut c_void, *mut c_void) = std::mem::transmute(val);
-                    lua_pushlightuserdata(s.L, low);
-                    lua_pushlightuserdata(s.L, high);
-                    lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 2);
+                    raw::lua_pushlightuserdata(s.L, low);
+                    raw::lua_pushlightuserdata(s.L, high);
+                    raw::lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 2);
                 }
             }
         }
@@ -672,10 +558,10 @@ macro_rules! impl_tolua_for_fn(
         impl<'a, $($A: FromLua,)* R: ToLua> ToLua for fn($($A),*) -> R {
             fn push_to(s: &mut State, val: fn($($A),*) -> R) {
                 #[inline(never)]
-                extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut lua_State) -> c_int {
+                extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut raw::lua_State) -> c_int {
                     let mut s = State::new_raw_tmp(L);
                     let fun: fn($($A),*) -> R = unsafe { std::mem::transmute(
-                            lua_touserdata(s.L, lua_upvalueindex(1))
+                            raw::lua_touserdata(s.L, raw::lua_upvalueindex(1))
                     ) };
                     // prefix it with _ to supress warnings for when $($A)* is empty
                     let mut _i = 0i;
@@ -686,8 +572,8 @@ macro_rules! impl_tolua_for_fn(
                     ToLua::push_as_return(&mut s, r)
                 }
                 unsafe {
-                    lua_pushlightuserdata(s.L, std::mem::transmute(val));
-                    lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 1);
+                    raw::lua_pushlightuserdata(s.L, std::mem::transmute(val));
+                    raw::lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 1);
                 }
             }
         }
@@ -790,11 +676,11 @@ fn test_closure_push_to_shorter_life() {
 
 impl<K: ToLua + Hash + Eq + Copy, V: ToLua + Copy> ToLua for HashMap<K, V> {
     fn push_to(s: &mut State, val: HashMap<K, V>) {
-        unsafe { lua_createtable(s.L, val.len() as c_int, 0) };
+        unsafe { raw::lua_createtable(s.L, val.len() as c_int, 0) };
         for (key, value) in val.iter() {
             ToLua::push_to(s, key);
             ToLua::push_to(s, value);
-            unsafe { lua_rawset(s.L, -3) };
+            unsafe { raw::lua_rawset(s.L, -3) };
         }
     }
 }
@@ -818,14 +704,14 @@ impl LuarError {
     /// Returns None in case of success, otherwise returns the proper enum
     fn from_lua(status: c_int) -> Option<LuarError> {
         match status {
-            LUA_OK        => None,
-            LUA_YIELD     => Some(SuspendedError),
-            LUA_ERRRUN    => Some(RuntimeError),
-            LUA_ERRSYNTAX => Some(SyntaxError),
-            LUA_ERRMEM    => Some(MemoryAllocationError),
-            LUA_ERRGCMM   => Some(GcMetamethodError),
-            LUA_ERRERR    => Some(MessageHandlerError),
-            LUA_ERRFILE   => Some(LoadFileError),
+            raw::LUA_OK        => None,
+            raw::LUA_YIELD     => Some(SuspendedError),
+            raw::LUA_ERRRUN    => Some(RuntimeError),
+            raw::LUA_ERRSYNTAX => Some(SyntaxError),
+            raw::LUA_ERRMEM    => Some(MemoryAllocationError),
+            raw::LUA_ERRGCMM   => Some(GcMetamethodError),
+            raw::LUA_ERRERR    => Some(MessageHandlerError),
+            raw::LUA_ERRFILE   => Some(LoadFileError),
             _             => Some(UnkownError),
         }
     }

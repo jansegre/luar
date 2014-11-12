@@ -3,4 +3,7 @@
 name = "luar"
 version = "0.0.1"
 authors = ["Jan Segre <jan@segre.in>"]
-build = "make -f makefile.cargo"
+
+[dependencies.lua-sys]
+path = "lua-sys"
+version = "*"

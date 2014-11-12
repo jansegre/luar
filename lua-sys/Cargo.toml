@@ -1,0 +1,14 @@
+[package]
+
+name = "lua-sys"
+version = "0.0.1"
+authors = ["Jan Segre <jan@segre.in>"]
+links = "lua"
+build = "build.rs"
+
+[lib]
+  name = "lua-sys"
+  path = "lib.rs"
+
+[build-dependencies.pkg-config]
+  git = "https://github.com/alexcrichton/pkg-config-rs"
