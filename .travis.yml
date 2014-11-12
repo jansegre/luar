@@ -1,2 +1,16 @@
 language: rust
-script: cargo test
+script:
+- cargo build --verbose
+- #cargo test --verbose # disabling for now
+- rustdoc --test README.md -L target
+- cargo doc
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  echo '<meta http-equiv=refresh content=0;url=git2/index.html>' > target/doc/index.html &&
+  sudo pip install ghp-import &&
+  ghp-import -n target/doc &&
+  git push -qf https://${TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+env:
+  matrix:
+    secure: VzV03AuijmATeeJB0o0VHNsjRbgm8tI/aR50W39HU4lkmWJStcv/i5IwINHSaLltXc1vX8xp1dncr3/xt5FhbrdtlraeUmI5HakvhDiolvVnAakBM1iws1I8EDi8Olp/6KULAa/iVYdF5Eppp9LLm15ZA2tagAxrvT62LVLtFqg=
