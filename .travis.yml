@@ -10,7 +10,11 @@ after_success: |
   echo '<meta http-equiv=refresh content=0;url=luar/index.html>' > target/doc/index.html &&
   sudo pip install ghp-import &&
   ghp-import -n target/doc &&
-  git push -qf https://${TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+  git push -qf https://${TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages &&
+  rm target/doc/index.html &&
+  mv target/doc . &&
+  (curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh)
 env:
   matrix:
-    secure: VzV03AuijmATeeJB0o0VHNsjRbgm8tI/aR50W39HU4lkmWJStcv/i5IwINHSaLltXc1vX8xp1dncr3/xt5FhbrdtlraeUmI5HakvhDiolvVnAakBM1iws1I8EDi8Olp/6KULAa/iVYdF5Eppp9LLm15ZA2tagAxrvT62LVLtFqg=
+    - secure: VzV03AuijmATeeJB0o0VHNsjRbgm8tI/aR50W39HU4lkmWJStcv/i5IwINHSaLltXc1vX8xp1dncr3/xt5FhbrdtlraeUmI5HakvhDiolvVnAakBM1iws1I8EDi8Olp/6KULAa/iVYdF5Eppp9LLm15ZA2tagAxrvT62LVLtFqg=
+    - secure: EvjCcAcDvVis+rCB3rshIu+1mB5UN7FvF3TYdJ8vc51Q8reNG00qLcgIpQEb3qw2JEWf6sjp1xfWoVryOsa5rBY8R4TmZOeNXwXHPEN6/jga7sAdMA8W55nCjfRRN34yv/aFdYW+rtxWOM/0Vd6/j2Eru8A+8Tc/aSkLQYHGtOE=
