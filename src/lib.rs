@@ -13,7 +13,6 @@ TODO: introduction, examples, tests, design choices
 #![experimental]
 #![feature(link_args)]
 #![feature(macro_rules)]
-#![feature(overloaded_calls)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
@@ -28,6 +27,10 @@ use std::ptr;
 use std::str::from_utf8;
 use std::kinds::marker::NoSync;
 use libc::{c_void, c_char, c_int, size_t};
+
+// lua prompt
+pub const LUA_PROMPT:  &'static str = "> ";
+pub const LUA_PROMPT2: &'static str = ">> ";
 
 macro_rules! c_str(
     ($t: expr) => ({let t = $t.to_c_str(); t.as_ptr()});
@@ -60,7 +63,7 @@ impl State {
                     if with_libs { state.open_libs(); }
                     Ok(state)
                 },
-                _ => Err(MemoryAllocationError),
+                _ => Err(LuarError::MemoryAllocationError),
             }
         }
     }
@@ -168,8 +171,8 @@ impl State {
 
         // print the prompt if defined in lua or the default
         match self.get_global::<&str>(if first { "_PROMPT" } else { "_PROMPT2" }) {
-            Some(s) => print!("{:s}", s),
-            None    => print!("{:s}", if first { raw::LUA_PROMPT } else { raw::LUA_PROMPT2 }),
+            Some(s) => print!("{}", s),
+            None    => print!("{}", if first { LUA_PROMPT } else { LUA_PROMPT2 }),
         }
         self.remove_top(); // pop the result from getglobal
         stdio::flush();
@@ -242,7 +245,7 @@ impl State {
                     raw::lua_getglobal(self.L, c_str!("print"));
                     raw::lua_insert(self.L, 1);
                     if raw::lua_pcall(self.L, raw::lua_gettop(self.L) - 1, 0, 0) != raw::LUA_OK {
-                        println!("error calling print({:s})", self.read::<&str>(-1).unwrap());
+                        println!("error calling print({})", self.read::<&str>(-1).unwrap());
                     }
                 }
             }
@@ -705,14 +708,14 @@ impl LuarError {
     fn from_lua(status: c_int) -> Option<LuarError> {
         match status {
             raw::LUA_OK        => None,
-            raw::LUA_YIELD     => Some(SuspendedError),
-            raw::LUA_ERRRUN    => Some(RuntimeError),
-            raw::LUA_ERRSYNTAX => Some(SyntaxError),
-            raw::LUA_ERRMEM    => Some(MemoryAllocationError),
-            raw::LUA_ERRGCMM   => Some(GcMetamethodError),
-            raw::LUA_ERRERR    => Some(MessageHandlerError),
-            raw::LUA_ERRFILE   => Some(LoadFileError),
-            _             => Some(UnkownError),
+            raw::LUA_YIELD     => Some(LuarError::SuspendedError),
+            raw::LUA_ERRRUN    => Some(LuarError::RuntimeError),
+            raw::LUA_ERRSYNTAX => Some(LuarError::SyntaxError),
+            raw::LUA_ERRMEM    => Some(LuarError::MemoryAllocationError),
+            raw::LUA_ERRGCMM   => Some(LuarError::GcMetamethodError),
+            raw::LUA_ERRERR    => Some(LuarError::MessageHandlerError),
+            raw::LUA_ERRFILE   => Some(LuarError::LoadFileError),
+            _                  => Some(LuarError::UnkownError),
         }
     }
 }
