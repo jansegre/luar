@@ -13,6 +13,7 @@ TODO: introduction, examples, tests, design choices
 #![experimental]
 #![feature(link_args)]
 #![feature(macro_rules)]
+#![feature(unboxed_closures)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
