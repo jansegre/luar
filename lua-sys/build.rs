@@ -1,10 +1,10 @@
 extern crate "pkg-config" as pkg_config;
 
 use std::os;
-use std::io::{mod, fs, Command};
+use std::io::{mod, fs, Command, File};
 use std::io::process::InheritFd;
 
-fn main() {
+fn build_lua() {
     let mut opts = pkg_config::default_options("lua");
     opts.atleast_version = Some("5.2".to_string());
     match pkg_config::find_library_opts("lua", &opts) {
@@ -26,13 +26,14 @@ fn main() {
         cflags.push_str(" -fPIC");
     }
 
-    let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap());
+    let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap()).join("lua");
     let dst = Path::new(os::getenv("OUT_DIR").unwrap());
-    let _ = fs::mkdir(&dst.join("build"), io::USER_DIR);
+    let build = dst.join("build");
+    let _ = fs::mkdir(&build, io::USER_DIR);
 
     let mut cmd = Command::new("cmake");
-    cmd.arg(src.join("lua"))
-       .cwd(&dst.join("build"));
+    cmd.arg(src)
+       .cwd(&build);
     if mingw {
         cmd.arg("-G").arg("Unix Makefiles");
     }
@@ -43,17 +44,58 @@ fn main() {
     run(Command::new("cmake")
                 .arg("--build").arg(".")
                 .arg("--target").arg("install")
-                .cwd(&dst.join("build")));
+                .cwd(&build));
 
-    println!("cargo:rustc-flags=-L {} -l lua:static",
-             dst.join("lib").display());
+    println!("cargo:rustc-flags=-L {} -l lua:static", dst.join("lib").display());
     println!("cargo:root={}", dst.display());
-    //if mingw || target.contains("windows") {
-    //    println!("cargo:rustc-flags=-l winhttp -l rpcrt4 -l ole32 \
-    //                                -l ws2_32 -l bcrypt -l crypt32");
-    //} else if target.contains("apple") {
-    //    println!("cargo:rustc-flags=-l iconv");
-    //}
+}
+
+fn gen_defs() {
+    let mut cflags = os::getenv("CFLAGS").unwrap_or(String::new());
+    let target = os::getenv("TARGET").unwrap();
+    let mingw = target.contains("windows-gnu");
+
+    if target.contains("i686") {
+        cflags.push_str(" -m32");
+    } else if target.as_slice().contains("x86_64") {
+        cflags.push_str(" -m64");
+    }
+    if !target.contains("i686") {
+        cflags.push_str(" -fPIC");
+    }
+
+    let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap()).join("defs");
+    let dst = Path::new(os::getenv("OUT_DIR").unwrap());
+    let build = dst.join("defs");
+    let _ = fs::mkdir(&build, io::USER_DIR);
+
+    let mut cmd = Command::new("cmake");
+    cmd.arg(src)
+       .cwd(&build);
+    if mingw {
+        cmd.arg("-G").arg("Unix Makefiles");
+    }
+    run(cmd.arg(format!("-DCMAKE_C_FLAGS={}", cflags))
+           .arg(format!("-DLUA_INCLUDE_DIR={}", dst.join("include").display()))
+           .cwd(&build));
+    run(Command::new("cmake")
+                .arg("--build").arg(".")
+                .cwd(&build));
+    let mut cmd = Command::new(build.join("rust-lua-defs"));
+    let defs = Path::new(os::getenv("OUT_DIR").unwrap()).join("defs.rs");
+    println!("running: {} > {}", cmd, defs.display());
+    let out = cmd
+        .stderr(InheritFd(2))
+        .output()
+        .unwrap();
+    assert!(out.status.success());
+    let mut f = File::create(&defs).unwrap();
+    f.write(out.output.as_slice()).unwrap();
+}
+
+fn main() {
+    build_lua();
+    gen_defs();
 }
 
 fn run(cmd: &mut Command) {
