@@ -25,5 +25,5 @@ fn main() {
     let sum: f64 = state.pop().unwrap();
     //let sum = state.pop::<f64>().unwrap();
 
-    println!("Script returned {:0.f}", sum);
+    println!("Script returned {:0.}", sum);
 }
