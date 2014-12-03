@@ -1,3 +1,6 @@
+// luaconf.h
+i(LUAL_BUFFERSIZE)
+
 // lua.h
 i(LUA_IDSIZE)
 s(LUA_VERSION_MAJOR)
