@@ -7,8 +7,8 @@ links = "lua"
 build = "build.rs"
 
 [lib]
-  name = "lua-sys"
-  path = "lib.rs"
+name = "lua-sys"
+path = "lib.rs"
 
 [build-dependencies.pkg-config]
-  git = "https://github.com/alexcrichton/pkg-config-rs"
+pkg-config = "~0.1.0"
