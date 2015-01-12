@@ -1,7 +1,9 @@
+#![allow(unstable)]
+
 extern crate "pkg-config" as pkg_config;
 
 use std::os;
-use std::io::{mod, fs, Command, File};
+use std::io::{self, fs, Command, File};
 use std::io::process::InheritFd;
 
 fn build_lua() {

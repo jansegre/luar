@@ -6,18 +6,16 @@
 
 //! This is a declaration of the full API described at [the Lua Reference Manual](http://www.lua.org/manual/5.2/manual.html).
 
-#![feature(macro_rules)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-//use std::ptr;
-extern crate libc;
+#[allow(unstable)] extern crate libc;
 use libc::{c_void, c_char, c_uchar, c_int, c_long, c_ulong, c_double, size_t, ptrdiff_t};
 use std::ptr::{null, null_mut};
 //use std::mem::{size_of, size_of_val};
 
 // code generated from defs/defs.c
-include!(concat!(env!("OUT_DIR"), "/defs.rs"))
+include!(concat!(env!("OUT_DIR"), "/defs.rs"));
 
 pub type lua_Alloc = Option<extern fn(ud: *mut c_void, ptr: *mut c_void, osize: size_t, nsize: size_t) -> *mut c_void>;
 pub type lua_CFunction = Option<extern fn(L: *mut lua_State) -> c_int>;
@@ -30,6 +28,7 @@ pub type lua_Writer = Option<extern fn(L: *mut lua_State, p: *const c_void, sz: 
 pub type lua_Hook = Option<extern fn(L: *mut lua_State, ar: *mut lua_Debug) -> c_void>;
 
 #[repr(C)]
+#[allow(missing_copy_implementations)]
 pub struct lua_Debug {
  pub event: c_int,
  pub name: *const c_char,     /*(n) */
@@ -43,25 +42,26 @@ pub struct lua_Debug {
  pub nparams: c_uchar,        /*(u) number of parameters */
  pub isvararg: c_char,        /*(u) */
  pub istailcall: c_char,      /*(t) */
- pub short_src: [c_char, ..(LUA_IDSIZE as uint)], /*(S) */
+ pub short_src: [c_char; LUA_IDSIZE as usize], /*(S) */
  /* private part */
  //other fields
 }
 
 #[repr(C)]
+#[allow(missing_copy_implementations)]
 pub struct luaL_Reg {
  pub name: *const c_char,
  pub func: lua_CFunction,
 }
 
-//pub type luaL_Buffer = c_void;
 #[repr(C)]
+#[allow(missing_copy_implementations)]
 pub struct luaL_Buffer {
   b: *mut c_char,
   size: size_t,
   n: size_t,
   L: *mut lua_State,
-  initb: [c_char, ..(LUAL_BUFFERSIZE as uint)],
+  initb: [c_char; LUAL_BUFFERSIZE as usize],
 }
 
 extern {
@@ -230,7 +230,7 @@ extern {
 #[inline(always)] pub unsafe fn lua_upvalueindex(i: c_int) -> c_int { LUA_REGISTRYINDEX - i }
 #[inline(always)] pub unsafe fn lua_yield(L: *mut lua_State, n: c_int) -> c_int { lua_yieldk(L, n, 0, None) }
 
-#[inline(always)] pub unsafe fn luaL_addchar(B: *mut luaL_Buffer, c: c_char) { (*B).n < (*B).size || luaL_prepbuffsize(B, 1) != null_mut(); *(*B).b.offset((*B).n as int) = c; (*B).n += 1 }
+#[inline(always)] pub unsafe fn luaL_addchar(B: *mut luaL_Buffer, c: c_char) { (*B).n < (*B).size || luaL_prepbuffsize(B, 1) != null_mut(); *(*B).b.offset((*B).n as isize) = c; (*B).n += 1 }
 #[inline(always)] pub unsafe fn luaL_addsize(B: *mut luaL_Buffer, s: size_t) { (*B).n += s }
 #[inline(always)] pub unsafe fn luaL_argcheck(L: *mut lua_State, cond: c_int, numarg: c_int, extramsg: *const c_char) { cond != 0 || luaL_argerror(L, numarg, extramsg) != 0; }
 #[inline(always)] pub unsafe fn luaL_checkint(L: *mut lua_State, n: c_int) -> c_int { luaL_checkinteger(L, n) as c_int }
