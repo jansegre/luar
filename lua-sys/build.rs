@@ -85,7 +85,7 @@ fn gen_defs() {
                 .cwd(&build));
     let mut cmd = Command::new(build.join("rust-lua-defs"));
     let defs = Path::new(os::getenv("OUT_DIR").unwrap()).join("defs.rs");
-    println!("running: {} > {}", cmd, defs.display());
+    println!("running: {:?} > {}", cmd, defs.display());
     let out = cmd
         .stderr(InheritFd(2))
         .output()
@@ -101,7 +101,7 @@ fn main() {
 }
 
 fn run(cmd: &mut Command) {
-    println!("running: {}", cmd);
+    println!("running: {:?}", cmd);
     assert!(cmd.stdout(InheritFd(1))
                .stderr(InheritFd(2))
                .status()

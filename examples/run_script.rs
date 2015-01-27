@@ -8,14 +8,10 @@ fn main() {
     let mut state = State::new();
 
     let mut table = HashMap::new();
-    for i in range(1i, 6) {
-        //table[i] = i * 2;
+    for i in range(1, 6) {
         table.insert(i, i * 2);
     }
 
-    // this is seemingly hard to implement:
-    //state["foo"] = table;
-    // meanwhile this is the norm
     state.insert("foo", table);
 
     // evaluate a script
