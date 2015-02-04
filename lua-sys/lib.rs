@@ -6,10 +6,11 @@
 
 //! This is a declaration of the full API described at [the Lua Reference Manual](http://www.lua.org/manual/5.2/manual.html).
 
+#![feature(libc)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-#[allow(unstable)] extern crate libc;
+extern crate libc;
 use libc::{c_void, c_char, c_uchar, c_int, c_long, c_ulong, c_double, size_t, ptrdiff_t};
 use std::ptr::{null, null_mut};
 //use std::mem::{size_of, size_of_val};

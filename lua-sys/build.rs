@@ -1,10 +1,10 @@
-#![allow(unstable)]
+#![feature(path, io, os, core)]
 
 extern crate "pkg-config" as pkg_config;
 
 use std::os;
-use std::io::{self, fs, Command, File};
-use std::io::process::InheritFd;
+use std::old_io::{self, fs, Command, File};
+use std::old_io::process::InheritFd;
 
 fn build_lua() {
     let mut opts = pkg_config::default_options("lua");
@@ -31,7 +31,7 @@ fn build_lua() {
     let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap()).join("lua");
     let dst = Path::new(os::getenv("OUT_DIR").unwrap());
     let build = dst.join("build");
-    let _ = fs::mkdir(&build, io::USER_DIR);
+    let _ = fs::mkdir(&build, old_io::USER_DIR);
 
     let mut cmd = Command::new("cmake");
     cmd.arg(src)
@@ -69,7 +69,7 @@ fn gen_defs() {
     let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap()).join("defs");
     let dst = Path::new(os::getenv("OUT_DIR").unwrap());
     let build = dst.join("defs");
-    let _ = fs::mkdir(&build, io::USER_DIR);
+    let _ = fs::mkdir(&build, old_io::USER_DIR);
 
     let mut cmd = Command::new("cmake");
     cmd.arg(src)
@@ -92,7 +92,7 @@ fn gen_defs() {
         .unwrap();
     assert!(out.status.success());
     let mut f = File::create(&defs).unwrap();
-    f.write(out.output.as_slice()).unwrap();
+    f.write_all(out.output.as_slice()).unwrap();
 }
 
 fn main() {

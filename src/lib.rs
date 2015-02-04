@@ -10,12 +10,10 @@ TODO: introduction, examples, tests, design choices
 
 */
 
-#![experimental]
-#![feature(link_args)]
-#![feature(unboxed_closures)]
+#![unstable]
+#![feature(link_args, unboxed_closures, collections, core, libc, io, path)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
-#![allow(unstable)]
 
 extern crate libc;
 extern crate "lua-sys" as raw;
@@ -23,12 +21,13 @@ extern crate "lua-sys" as raw;
 use std::hash::{Hash, Hasher};
 use std::collections::hash_state::HashState;
 use std::collections::HashMap;
-use std::io::{stdio, IoResult};
+use std::old_io::{stdio, IoResult};
 //use std::ops::Index;
 use std::ptr;
 use std::str::from_utf8;
 //use std::marker::NoSync;
-use libc::{c_void, c_char, c_int, size_t};
+//use libc::{c_void, c_char, c_int, size_t};
+use libc::{c_char, c_int, size_t};
 
 // lua prompt
 pub const LUA_PROMPT:  &'static str = "> ";
@@ -40,7 +39,7 @@ macro_rules! c_str {
 }
 
 /// Main type of the API, this is an abstraction over Lua's `lua_State`.
-// TODO: consider using std::kinds::marker (http://doc.rust-lang.org/std/kinds/marker/) for
+// TODO: consider using std::marker (http://doc.rust-lang.org/std/marker/index.html) for
 // properly marking types
 pub struct State {
     L: *mut raw::lua_State,
@@ -300,7 +299,9 @@ impl State {
 //    }
 //}
 
-impl<L: Loader> FnMut<(L,), Result<(), LuarError>> for State {
+impl<L: Loader> FnMut<(L,)> for State {
+    type Output = Result<(), LuarError>;
+
     /// Experimental shorthand for eval
     extern "rust-call" fn call_mut(&mut self, (source,): (L,)) -> Result<(), LuarError> {
         self.eval(source)
@@ -431,7 +432,7 @@ fn test_lua_bool() {
 //fn test_tuple_push_to() {
 //    let mut state = State::new();
 //    state.push((1, "2"));
-//    let (a, b): (isize, &str) = state.pop().unwrap();
+//    let (a, b): (i32, &str) = state.pop().unwrap();
 //    assert_eq!(1, a);
 //    assert_eq!("2", b);
 //}
@@ -523,14 +524,15 @@ impl FromLua for CFunction {
 
 macro_rules! impl_tolua_for_cl {
     ($($A:ident)*) => (
-        #[old_impl_check]
         #[inline]
-        impl<'a, $($A: FromLua,)* R: ToLua, F> ToLua for F where F: FnMut($($A),*) -> R {
-            fn push_to(s: &mut State, val: F) {
+        //#[old_impl_check]
+        //impl<'a, $($A: FromLua,)* R: ToLua, F> ToLua for F where F: FnMut($($A),*) -> R {
+        impl<'a, $($A: FromLua,)* R> ToLua for &'a mut (FnMut($($A),*) -> R + 'a) where R: ToLua{
+            fn push_to(s: &mut State, val: &'a mut (FnMut($($A),*) -> R + 'a)) {
                 #[inline(never)]
                 extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut raw::lua_State) -> c_int {
                     let mut s = State::new_raw_tmp(L);
-                    let fun: Fn($($A),*) -> R = unsafe { std::mem::transmute(
+                    let fun: &mut FnMut($($A),*) -> R = unsafe { std::mem::transmute(
                             (raw::lua_touserdata(s.L, raw::lua_upvalueindex(1)), raw::lua_touserdata(s.L, raw::lua_upvalueindex(2)))
                     ) };
                     // prefix it with _ to supress warnings for when $($A)* is empty
@@ -561,14 +563,18 @@ macro_rules! rec_impl_tolua_for_cl {
 macro_rules! impl_tolua_for_fn {
     ($($A:ident)*) => (
         #[inline]
+        //impl<'a, $($A: FromLua,)* R: ToLua> ToLua for &'a (Fn($($A),*) -> R + 'a) {
         impl<'a, $($A: FromLua,)* R: ToLua> ToLua for fn($($A),*) -> R {
-            fn push_to(s: &mut State, val: fn($($A),*) -> R) {
+            fn push_to(s: &mut State, val: Self) {
                 #[inline(never)]
                 extern fn dispatch<$($A: FromLua,)* R: ToLua>(L: *mut raw::lua_State) -> c_int {
                     let mut s = State::new_raw_tmp(L);
                     let fun: fn($($A),*) -> R = unsafe { std::mem::transmute(
                             raw::lua_touserdata(s.L, raw::lua_upvalueindex(1))
                     ) };
+                    //let fun: fn($($A),*) -> R = unsafe { std::mem::transmute(
+                    //        (raw::lua_touserdata(s.L, raw::lua_upvalueindex(1)), raw::lua_touserdata(s.L, raw::lua_upvalueindex(2)))
+                    //) };
                     // prefix it with _ to supress warnings for when $($A)* is empty
                     let mut _i = 0;
                     let r = fun($(
@@ -580,6 +586,10 @@ macro_rules! impl_tolua_for_fn {
                 unsafe {
                     raw::lua_pushlightuserdata(s.L, std::mem::transmute(val));
                     raw::lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 1);
+                    //let (low, high): (*mut c_void, *mut c_void) = std::mem::transmute(val);
+                    //raw::lua_pushlightuserdata(s.L, low);
+                    //raw::lua_pushlightuserdata(s.L, high);
+                    //raw::lua_pushcclosure(s.L, Some(dispatch::<$($A,)* R>), 2);
                 }
             }
         }
@@ -595,16 +605,17 @@ rec_impl_tolua_for_fn!(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
 #[test]
 fn test_fn0_push_to() {
     let mut state = State::new();
-    fn my_fun() -> isize { 456 }
-    state.insert("my_fun", my_fun);
+    fn my_fun() -> i32 { 456 }
+    state.insert("my_fun", my_fun as fn() -> i32);
     state.eval("x = my_fun()").unwrap();
     assert_eq!(Some(456), state.get("x"));
 }
 
+/*
 #[test]
 fn test_fn1_push_to() {
     let mut state = State::new();
-    fn my_fun(x: isize) -> isize { x + 4 }
+    fn my_fun(x: i32) -> i32 { x + 4 }
     state.insert("my_fun", my_fun);
     state.eval("x = my_fun(7)").unwrap();
     assert_eq!(Some(11), state.get("x"));
@@ -613,7 +624,7 @@ fn test_fn1_push_to() {
 #[test]
 fn test_fn2_push_to() {
     let mut state = State::new();
-    fn my_fun(x: isize, y: isize) -> isize { x * y + 6 }
+    fn my_fun(x: i32, y: i32) -> i32 { x * y + 6 }
     state.insert("my_fun", my_fun);
     state.eval("x = my_fun(5, 7)").unwrap();
     assert_eq!(Some(41), state.get("x"));
@@ -623,7 +634,7 @@ fn test_fn2_push_to() {
 fn test_closure_push_to() {
     let mut state = State::new();
     let mut z = 4;
-    state.insert("my_fun", || { z = 5 } );
+    state.insert("my_fun", &mut |&:| { z = 5 } );
     state.eval("my_fun()").unwrap();
     assert_eq!(5, z);
 }
@@ -640,7 +651,7 @@ fn test_closure0_push_to() {
 fn test_closure1_push_to() {
     let mut state = State::new();
     let z = 4;
-    state.insert("my_fun", |x: isize| x + z );
+    state.insert("my_fun", |x: i32| x + z );
     state.eval("x = my_fun(7)").unwrap();
     assert_eq!(Some(11), state.get("x"));
 }
@@ -649,7 +660,7 @@ fn test_closure1_push_to() {
 fn test_closure2_push_to() {
     let mut state = State::new();
     let mut z = 4;
-    state.insert("my_fun", |x: isize, y: isize| x * y + z);
+    state.insert("my_fun", |x: i32, y: i32| x * y + z);
     z = 6;
     state.eval("x = my_fun(5, 7)").unwrap();
     assert_eq!(Some(5 * 7 + z), state.get("x"));
@@ -658,10 +669,10 @@ fn test_closure2_push_to() {
 #[test]
 fn test_closure_push_to_longer_life() {
     let z = 5;
-    let fun = |_: isize, _: isize| z;
+    let fun = |_: i32, _: i32| z;
     {
         let mut state = State::new();
-        state.insert("my_fun", fun);
+        state.insert("my_fun", &mut fun);
         state.eval("x = my_fun(1, 2)").unwrap();
         assert_eq!(Some(5), state.get("x"));
     }
@@ -673,12 +684,13 @@ fn test_closure_push_to_shorter_life() {
     let mut state = State::new();
     {
         let z = 5;
-        let fun = |_: isize, _: isize| z;
-        state.insert("my_fun", fun);
+        let fun = |_: i32, _: i32| z;
+        state.insert("my_fun", &mut fun);
     }
     state.eval("x = my_fun(1, 2)").unwrap();
     assert_eq!(Some(5), state.get("x"));
 }
+*/
 
 //impl<K, V> ToLua for HashMap<K, V> where K: ToLua + Copy + Eq, V: ToLua + Copy {
 //impl<K: ToLua + Copy + Eq, V: ToLua + Copy> ToLua for HashMap<K, V> {
@@ -699,6 +711,7 @@ impl<K, V, S, H> ToLua for HashMap<K, V, S>
 }
 // TODO: impl FromLua for HashMap, in order to read tables
 
+#[derive(Debug, Copy)]
 pub enum LuarError {
     UnkownError,
     CallError,
@@ -711,8 +724,6 @@ pub enum LuarError {
     NotANumberError,
     SuspendedError,
 }
-
-impl Copy for LuarError {}
 
 impl LuarError {
     /// Returns None in case of success, otherwise returns the proper enum
