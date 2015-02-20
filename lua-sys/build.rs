@@ -1,18 +1,18 @@
 #![feature(path, io, env, core)]
 
-extern crate "pkg-config" as pkg_config;
+//extern crate "pkg-config" as pkg_config;
 
 use std::env;
 use std::old_io::{self, fs, Command, File};
 use std::old_io::process::InheritFd;
 
 fn build_lua() {
-    let mut opts = pkg_config::default_options("lua");
-    opts.atleast_version = Some("5.2".to_string());
-    match pkg_config::find_library_opts("lua", &opts) {
-        Ok(()) => return,
-        Err(..) => {}
-    }
+    //let mut opts = pkg_config::default_options("lua");
+    //opts.atleast_version = Some("5.2".to_string());
+    //match pkg_config::find_library_opts("lua", &opts) {
+    //    Ok(()) => return,
+    //    Err(..) => {}
+    //}
 
     let mut cflags = env::var("CFLAGS").unwrap_or(String::new());
     let target = env::var("TARGET").unwrap();

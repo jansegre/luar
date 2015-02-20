@@ -10,5 +10,5 @@ build = "build.rs"
 name = "lua-sys"
 path = "lib.rs"
 
-[build-dependencies.pkg-config]
-pkg-config = "~0.1.0"
+#[build-dependencies.pkg-config]
+#pkg-config = "~0.1.0"
