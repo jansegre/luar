@@ -1,4 +1,4 @@
-#![allow(unstable)]
+#![feature(core, path)]
 
 extern crate luar;
 

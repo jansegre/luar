@@ -11,7 +11,7 @@ TODO: introduction, examples, tests, design choices
 */
 
 #![unstable]
-#![feature(link_args, unboxed_closures, collections, core, libc, io, path)]
+#![feature(link_args, unboxed_closures, collections, core, libc, io, path, std_misc, hash)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 

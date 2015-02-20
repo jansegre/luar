@@ -1,8 +1,8 @@
-#![feature(path, io, os, core)]
+#![feature(path, io, env, core)]
 
 extern crate "pkg-config" as pkg_config;
 
-use std::os;
+use std::env;
 use std::old_io::{self, fs, Command, File};
 use std::old_io::process::InheritFd;
 
@@ -14,8 +14,8 @@ fn build_lua() {
         Err(..) => {}
     }
 
-    let mut cflags = os::getenv("CFLAGS").unwrap_or(String::new());
-    let target = os::getenv("TARGET").unwrap();
+    let mut cflags = env::var("CFLAGS").unwrap_or(String::new());
+    let target = env::var("TARGET").unwrap();
     let mingw = target.contains("windows-gnu");
     cflags.push_str(" -ffunction-sections -fdata-sections");
 
@@ -28,8 +28,8 @@ fn build_lua() {
         cflags.push_str(" -fPIC");
     }
 
-    let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap()).join("lua");
-    let dst = Path::new(os::getenv("OUT_DIR").unwrap());
+    let src = Path::new(env::var("CARGO_MANIFEST_DIR").unwrap()).join("lua");
+    let dst = Path::new(env::var("OUT_DIR").unwrap());
     let build = dst.join("build");
     let _ = fs::mkdir(&build, old_io::USER_DIR);
 
@@ -53,8 +53,8 @@ fn build_lua() {
 }
 
 fn gen_defs() {
-    let mut cflags = os::getenv("CFLAGS").unwrap_or(String::new());
-    let target = os::getenv("TARGET").unwrap();
+    let mut cflags = env::var("CFLAGS").unwrap_or(String::new());
+    let target = env::var("TARGET").unwrap();
     let mingw = target.contains("windows-gnu");
 
     if target.contains("i686") {
@@ -66,8 +66,8 @@ fn gen_defs() {
         cflags.push_str(" -fPIC");
     }
 
-    let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap()).join("defs");
-    let dst = Path::new(os::getenv("OUT_DIR").unwrap());
+    let src = Path::new(env::var("CARGO_MANIFEST_DIR").unwrap()).join("defs");
+    let dst = Path::new(env::var("OUT_DIR").unwrap());
     let build = dst.join("defs");
     let _ = fs::mkdir(&build, old_io::USER_DIR);
 
@@ -84,7 +84,7 @@ fn gen_defs() {
                 .arg("--build").arg(".")
                 .cwd(&build));
     let mut cmd = Command::new(build.join("rust-lua-defs"));
-    let defs = Path::new(os::getenv("OUT_DIR").unwrap()).join("defs.rs");
+    let defs = Path::new(env::var("OUT_DIR").unwrap()).join("defs.rs");
     println!("running: {:?} > {}", cmd, defs.display());
     let out = cmd
         .stderr(InheritFd(2))
