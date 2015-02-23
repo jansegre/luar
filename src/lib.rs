@@ -11,15 +11,14 @@ TODO: introduction, examples, tests, design choices
 */
 
 #![unstable]
-#![feature(link_args, unboxed_closures, collections, core, libc, io, path, std_misc, hash)]
+#![feature(link_args, unboxed_closures, collections, core, libc, old_io, old_path, std_misc)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
 extern crate libc;
 extern crate "lua-sys" as raw;
 
-use std::hash::{Hash, Hasher};
-use std::collections::hash_state::HashState;
+use std::hash::Hash;
 use std::collections::HashMap;
 use std::old_io::{stdio, IoResult};
 //use std::ops::Index;
@@ -694,13 +693,11 @@ fn test_closure_push_to_shorter_life() {
 
 //impl<K, V> ToLua for HashMap<K, V> where K: ToLua + Copy + Eq, V: ToLua + Copy {
 //impl<K: ToLua + Copy + Eq, V: ToLua + Copy> ToLua for HashMap<K, V> {
-impl<K, V, S, H> ToLua for HashMap<K, V, S>
-    where K: ToLua + Copy + Eq + Hash<H>,
-          V: ToLua + Copy,
-          S: HashState<Hasher=H>,
-          H: Hasher<Output=u64>
+impl<K, V> ToLua for HashMap<K, V>
+    where K: ToLua + Copy + Eq + Hash,
+          V: ToLua + Copy
 {
-    fn push_to(s: &mut State, val: HashMap<K, V, S>) {
+    fn push_to(s: &mut State, val: HashMap<K, V>) {
         unsafe { raw::lua_createtable(s.L, val.len() as c_int, 0) };
         for (key, value) in val.iter() {
             ToLua::push_to(s, key);

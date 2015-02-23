@@ -1,4 +1,4 @@
-#![feature(core, path)]
+#![feature(core, old_path)]
 
 extern crate luar;
 
