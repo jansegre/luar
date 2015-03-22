@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `lua-sys` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, lua-sys">
+
+    <title>lua-sys - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'lua-sys', ty: 'mod', relpath: '../'};</script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>lua-sys</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
+            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-0' href='../src/lua-sys/lib.rs.html#7-252'>[src]</a></span></h1>
+<div class='docblock'><p>This is a declaration of the full API described at <a href="http://www.lua.org/manual/5.2/manual.html">the Lua Reference Manual</a>.</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.luaL_Buffer.html'
+                               title='lua-sys::luaL_Buffer'>luaL_Buffer</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.luaL_Reg.html'
+                               title='lua-sys::luaL_Reg'>luaL_Reg</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.lua_Debug.html'
+                               title='lua-sys::lua_Debug'>lua_Debug</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                </table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUAL_BUFFERSIZE.html'
+                               title='lua-sys::LUAL_BUFFERSIZE'>LUAL_BUFFERSIZE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_AUTHORS.html'
+                               title='lua-sys::LUA_AUTHORS'>LUA_AUTHORS</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_BITLIBNAME.html'
+                               title='lua-sys::LUA_BITLIBNAME'>LUA_BITLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_COLIBNAME.html'
+                               title='lua-sys::LUA_COLIBNAME'>LUA_COLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_COPYRIGHT.html'
+                               title='lua-sys::LUA_COPYRIGHT'>LUA_COPYRIGHT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_DBLIBNAME.html'
+                               title='lua-sys::LUA_DBLIBNAME'>LUA_DBLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_ERRERR.html'
+                               title='lua-sys::LUA_ERRERR'>LUA_ERRERR</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_ERRFILE.html'
+                               title='lua-sys::LUA_ERRFILE'>LUA_ERRFILE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_ERRGCMM.html'
+                               title='lua-sys::LUA_ERRGCMM'>LUA_ERRGCMM</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_ERRMEM.html'
+                               title='lua-sys::LUA_ERRMEM'>LUA_ERRMEM</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_ERRRUN.html'
+                               title='lua-sys::LUA_ERRRUN'>LUA_ERRRUN</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_ERRSYNTAX.html'
+                               title='lua-sys::LUA_ERRSYNTAX'>LUA_ERRSYNTAX</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_FILEHANDLE.html'
+                               title='lua-sys::LUA_FILEHANDLE'>LUA_FILEHANDLE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCCOLLECT.html'
+                               title='lua-sys::LUA_GCCOLLECT'>LUA_GCCOLLECT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCCOUNT.html'
+                               title='lua-sys::LUA_GCCOUNT'>LUA_GCCOUNT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCCOUNTB.html'
+                               title='lua-sys::LUA_GCCOUNTB'>LUA_GCCOUNTB</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCGEN.html'
+                               title='lua-sys::LUA_GCGEN'>LUA_GCGEN</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCINC.html'
+                               title='lua-sys::LUA_GCINC'>LUA_GCINC</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCISRUNNING.html'
+                               title='lua-sys::LUA_GCISRUNNING'>LUA_GCISRUNNING</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCRESTART.html'
+                               title='lua-sys::LUA_GCRESTART'>LUA_GCRESTART</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCSETMAJORINC.html'
+                               title='lua-sys::LUA_GCSETMAJORINC'>LUA_GCSETMAJORINC</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCSETPAUSE.html'
+                               title='lua-sys::LUA_GCSETPAUSE'>LUA_GCSETPAUSE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCSETSTEPMUL.html'
+                               title='lua-sys::LUA_GCSETSTEPMUL'>LUA_GCSETSTEPMUL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCSTEP.html'
+                               title='lua-sys::LUA_GCSTEP'>LUA_GCSTEP</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_GCSTOP.html'
+                               title='lua-sys::LUA_GCSTOP'>LUA_GCSTOP</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_HOOKCALL.html'
+                               title='lua-sys::LUA_HOOKCALL'>LUA_HOOKCALL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_HOOKCOUNT.html'
+                               title='lua-sys::LUA_HOOKCOUNT'>LUA_HOOKCOUNT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_HOOKLINE.html'
+                               title='lua-sys::LUA_HOOKLINE'>LUA_HOOKLINE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_HOOKRET.html'
+                               title='lua-sys::LUA_HOOKRET'>LUA_HOOKRET</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_HOOKTAILCALL.html'
+                               title='lua-sys::LUA_HOOKTAILCALL'>LUA_HOOKTAILCALL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_IDSIZE.html'
+                               title='lua-sys::LUA_IDSIZE'>LUA_IDSIZE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_IOLIBNAME.html'
+                               title='lua-sys::LUA_IOLIBNAME'>LUA_IOLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_LOADLIBNAME.html'
+                               title='lua-sys::LUA_LOADLIBNAME'>LUA_LOADLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_MASKCALL.html'
+                               title='lua-sys::LUA_MASKCALL'>LUA_MASKCALL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_MASKCOUNT.html'
+                               title='lua-sys::LUA_MASKCOUNT'>LUA_MASKCOUNT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_MASKLINE.html'
+                               title='lua-sys::LUA_MASKLINE'>LUA_MASKLINE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_MASKRET.html'
+                               title='lua-sys::LUA_MASKRET'>LUA_MASKRET</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_MATHLIBNAME.html'
+                               title='lua-sys::LUA_MATHLIBNAME'>LUA_MATHLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_MINSTACK.html'
+                               title='lua-sys::LUA_MINSTACK'>LUA_MINSTACK</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_MULTRET.html'
+                               title='lua-sys::LUA_MULTRET'>LUA_MULTRET</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_NOREF.html'
+                               title='lua-sys::LUA_NOREF'>LUA_NOREF</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_NUMTAGS.html'
+                               title='lua-sys::LUA_NUMTAGS'>LUA_NUMTAGS</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OK.html'
+                               title='lua-sys::LUA_OK'>LUA_OK</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPADD.html'
+                               title='lua-sys::LUA_OPADD'>LUA_OPADD</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPDIV.html'
+                               title='lua-sys::LUA_OPDIV'>LUA_OPDIV</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPEQ.html'
+                               title='lua-sys::LUA_OPEQ'>LUA_OPEQ</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPLE.html'
+                               title='lua-sys::LUA_OPLE'>LUA_OPLE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPLT.html'
+                               title='lua-sys::LUA_OPLT'>LUA_OPLT</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPMOD.html'
+                               title='lua-sys::LUA_OPMOD'>LUA_OPMOD</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPMUL.html'
+                               title='lua-sys::LUA_OPMUL'>LUA_OPMUL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPPOW.html'
+                               title='lua-sys::LUA_OPPOW'>LUA_OPPOW</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPSUB.html'
+                               title='lua-sys::LUA_OPSUB'>LUA_OPSUB</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OPUNM.html'
+                               title='lua-sys::LUA_OPUNM'>LUA_OPUNM</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_OSLIBNAME.html'
+                               title='lua-sys::LUA_OSLIBNAME'>LUA_OSLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_REFNIL.html'
+                               title='lua-sys::LUA_REFNIL'>LUA_REFNIL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_REGISTRYINDEX.html'
+                               title='lua-sys::LUA_REGISTRYINDEX'>LUA_REGISTRYINDEX</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_RELEASE.html'
+                               title='lua-sys::LUA_RELEASE'>LUA_RELEASE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_RIDX_GLOBALS.html'
+                               title='lua-sys::LUA_RIDX_GLOBALS'>LUA_RIDX_GLOBALS</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_RIDX_LAST.html'
+                               title='lua-sys::LUA_RIDX_LAST'>LUA_RIDX_LAST</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_RIDX_MAINTHREAD.html'
+                               title='lua-sys::LUA_RIDX_MAINTHREAD'>LUA_RIDX_MAINTHREAD</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_SIGNATURE.html'
+                               title='lua-sys::LUA_SIGNATURE'>LUA_SIGNATURE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_STRLIBNAME.html'
+                               title='lua-sys::LUA_STRLIBNAME'>LUA_STRLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TABLIBNAME.html'
+                               title='lua-sys::LUA_TABLIBNAME'>LUA_TABLIBNAME</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TBOOLEAN.html'
+                               title='lua-sys::LUA_TBOOLEAN'>LUA_TBOOLEAN</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TFUNCTION.html'
+                               title='lua-sys::LUA_TFUNCTION'>LUA_TFUNCTION</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TLIGHTUSERDATA.html'
+                               title='lua-sys::LUA_TLIGHTUSERDATA'>LUA_TLIGHTUSERDATA</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TNIL.html'
+                               title='lua-sys::LUA_TNIL'>LUA_TNIL</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TNONE.html'
+                               title='lua-sys::LUA_TNONE'>LUA_TNONE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TNUMBER.html'
+                               title='lua-sys::LUA_TNUMBER'>LUA_TNUMBER</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TSTRING.html'
+                               title='lua-sys::LUA_TSTRING'>LUA_TSTRING</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TTABLE.html'
+                               title='lua-sys::LUA_TTABLE'>LUA_TTABLE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TTHREAD.html'
+                               title='lua-sys::LUA_TTHREAD'>LUA_TTHREAD</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_TUSERDATA.html'
+                               title='lua-sys::LUA_TUSERDATA'>LUA_TUSERDATA</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_VERSION.html'
+                               title='lua-sys::LUA_VERSION'>LUA_VERSION</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_VERSION_MAJOR.html'
+                               title='lua-sys::LUA_VERSION_MAJOR'>LUA_VERSION_MAJOR</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_VERSION_MINOR.html'
+                               title='lua-sys::LUA_VERSION_MINOR'>LUA_VERSION_MINOR</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_VERSION_NUM.html'
+                               title='lua-sys::LUA_VERSION_NUM'>LUA_VERSION_NUM</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_VERSION_RELEASE.html'
+                               title='lua-sys::LUA_VERSION_RELEASE'>LUA_VERSION_RELEASE</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.LUA_YIELD.html'
+                               title='lua-sys::LUA_YIELD'>LUA_YIELD</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_addchar.html'
+                               title='lua-sys::luaL_addchar'>luaL_addchar</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_addlstring.html'
+                               title='lua-sys::luaL_addlstring'>luaL_addlstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_addsize.html'
+                               title='lua-sys::luaL_addsize'>luaL_addsize</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_addstring.html'
+                               title='lua-sys::luaL_addstring'>luaL_addstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_addvalue.html'
+                               title='lua-sys::luaL_addvalue'>luaL_addvalue</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_argcheck.html'
+                               title='lua-sys::luaL_argcheck'>luaL_argcheck</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_argerror.html'
+                               title='lua-sys::luaL_argerror'>luaL_argerror</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_buffinit.html'
+                               title='lua-sys::luaL_buffinit'>luaL_buffinit</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_buffinitsize.html'
+                               title='lua-sys::luaL_buffinitsize'>luaL_buffinitsize</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_callmeta.html'
+                               title='lua-sys::luaL_callmeta'>luaL_callmeta</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkany.html'
+                               title='lua-sys::luaL_checkany'>luaL_checkany</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkint.html'
+                               title='lua-sys::luaL_checkint'>luaL_checkint</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkinteger.html'
+                               title='lua-sys::luaL_checkinteger'>luaL_checkinteger</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checklong.html'
+                               title='lua-sys::luaL_checklong'>luaL_checklong</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checklstring.html'
+                               title='lua-sys::luaL_checklstring'>luaL_checklstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checknumber.html'
+                               title='lua-sys::luaL_checknumber'>luaL_checknumber</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkoption.html'
+                               title='lua-sys::luaL_checkoption'>luaL_checkoption</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkstack.html'
+                               title='lua-sys::luaL_checkstack'>luaL_checkstack</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkstring.html'
+                               title='lua-sys::luaL_checkstring'>luaL_checkstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checktype.html'
+                               title='lua-sys::luaL_checktype'>luaL_checktype</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkudata.html'
+                               title='lua-sys::luaL_checkudata'>luaL_checkudata</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkunsigned.html'
+                               title='lua-sys::luaL_checkunsigned'>luaL_checkunsigned</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_checkversion.html'
+                               title='lua-sys::luaL_checkversion'>luaL_checkversion</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_dofile.html'
+                               title='lua-sys::luaL_dofile'>luaL_dofile</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_dostring.html'
+                               title='lua-sys::luaL_dostring'>luaL_dostring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_error.html'
+                               title='lua-sys::luaL_error'>luaL_error</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_execresult.html'
+                               title='lua-sys::luaL_execresult'>luaL_execresult</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_fileresult.html'
+                               title='lua-sys::luaL_fileresult'>luaL_fileresult</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_getmetafield.html'
+                               title='lua-sys::luaL_getmetafield'>luaL_getmetafield</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_getmetatable.html'
+                               title='lua-sys::luaL_getmetatable'>luaL_getmetatable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_getsubtable.html'
+                               title='lua-sys::luaL_getsubtable'>luaL_getsubtable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_gsub.html'
+                               title='lua-sys::luaL_gsub'>luaL_gsub</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_len.html'
+                               title='lua-sys::luaL_len'>luaL_len</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_loadbuffer.html'
+                               title='lua-sys::luaL_loadbuffer'>luaL_loadbuffer</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_loadbufferx.html'
+                               title='lua-sys::luaL_loadbufferx'>luaL_loadbufferx</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_loadfile.html'
+                               title='lua-sys::luaL_loadfile'>luaL_loadfile</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_loadfilex.html'
+                               title='lua-sys::luaL_loadfilex'>luaL_loadfilex</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_loadstring.html'
+                               title='lua-sys::luaL_loadstring'>luaL_loadstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_newmetatable.html'
+                               title='lua-sys::luaL_newmetatable'>luaL_newmetatable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_newstate.html'
+                               title='lua-sys::luaL_newstate'>luaL_newstate</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_openlibs.html'
+                               title='lua-sys::luaL_openlibs'>luaL_openlibs</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_optint.html'
+                               title='lua-sys::luaL_optint'>luaL_optint</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_optinteger.html'
+                               title='lua-sys::luaL_optinteger'>luaL_optinteger</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_optlong.html'
+                               title='lua-sys::luaL_optlong'>luaL_optlong</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_optlstring.html'
+                               title='lua-sys::luaL_optlstring'>luaL_optlstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_optnumber.html'
+                               title='lua-sys::luaL_optnumber'>luaL_optnumber</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_optstring.html'
+                               title='lua-sys::luaL_optstring'>luaL_optstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_optunsigned.html'
+                               title='lua-sys::luaL_optunsigned'>luaL_optunsigned</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_prepbuffer.html'
+                               title='lua-sys::luaL_prepbuffer'>luaL_prepbuffer</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_prepbuffsize.html'
+                               title='lua-sys::luaL_prepbuffsize'>luaL_prepbuffsize</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_pushresult.html'
+                               title='lua-sys::luaL_pushresult'>luaL_pushresult</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_pushresultsize.html'
+                               title='lua-sys::luaL_pushresultsize'>luaL_pushresultsize</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_ref.html'
+                               title='lua-sys::luaL_ref'>luaL_ref</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_requiref.html'
+                               title='lua-sys::luaL_requiref'>luaL_requiref</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_setfuncs.html'
+                               title='lua-sys::luaL_setfuncs'>luaL_setfuncs</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_setmetatable.html'
+                               title='lua-sys::luaL_setmetatable'>luaL_setmetatable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_testudata.html'
+                               title='lua-sys::luaL_testudata'>luaL_testudata</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_tolstring.html'
+                               title='lua-sys::luaL_tolstring'>luaL_tolstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_traceback.html'
+                               title='lua-sys::luaL_traceback'>luaL_traceback</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_typename.html'
+                               title='lua-sys::luaL_typename'>luaL_typename</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_unref.html'
+                               title='lua-sys::luaL_unref'>luaL_unref</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.luaL_where.html'
+                               title='lua-sys::luaL_where'>luaL_where</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_absindex.html'
+                               title='lua-sys::lua_absindex'>lua_absindex</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_arith.html'
+                               title='lua-sys::lua_arith'>lua_arith</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_atpanic.html'
+                               title='lua-sys::lua_atpanic'>lua_atpanic</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_call.html'
+                               title='lua-sys::lua_call'>lua_call</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_callk.html'
+                               title='lua-sys::lua_callk'>lua_callk</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_checkstack.html'
+                               title='lua-sys::lua_checkstack'>lua_checkstack</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_close.html'
+                               title='lua-sys::lua_close'>lua_close</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_compare.html'
+                               title='lua-sys::lua_compare'>lua_compare</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_concat.html'
+                               title='lua-sys::lua_concat'>lua_concat</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_copy.html'
+                               title='lua-sys::lua_copy'>lua_copy</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_createtable.html'
+                               title='lua-sys::lua_createtable'>lua_createtable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_dump.html'
+                               title='lua-sys::lua_dump'>lua_dump</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_error.html'
+                               title='lua-sys::lua_error'>lua_error</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_gc.html'
+                               title='lua-sys::lua_gc'>lua_gc</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getallocf.html'
+                               title='lua-sys::lua_getallocf'>lua_getallocf</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getctx.html'
+                               title='lua-sys::lua_getctx'>lua_getctx</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getfield.html'
+                               title='lua-sys::lua_getfield'>lua_getfield</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getglobal.html'
+                               title='lua-sys::lua_getglobal'>lua_getglobal</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_gethook.html'
+                               title='lua-sys::lua_gethook'>lua_gethook</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_gethookcount.html'
+                               title='lua-sys::lua_gethookcount'>lua_gethookcount</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_gethookmask.html'
+                               title='lua-sys::lua_gethookmask'>lua_gethookmask</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getinfo.html'
+                               title='lua-sys::lua_getinfo'>lua_getinfo</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getlocal.html'
+                               title='lua-sys::lua_getlocal'>lua_getlocal</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getmetatable.html'
+                               title='lua-sys::lua_getmetatable'>lua_getmetatable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getstack.html'
+                               title='lua-sys::lua_getstack'>lua_getstack</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_gettable.html'
+                               title='lua-sys::lua_gettable'>lua_gettable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_gettop.html'
+                               title='lua-sys::lua_gettop'>lua_gettop</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getupvalue.html'
+                               title='lua-sys::lua_getupvalue'>lua_getupvalue</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_getuservalue.html'
+                               title='lua-sys::lua_getuservalue'>lua_getuservalue</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_insert.html'
+                               title='lua-sys::lua_insert'>lua_insert</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isboolean.html'
+                               title='lua-sys::lua_isboolean'>lua_isboolean</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_iscfunction.html'
+                               title='lua-sys::lua_iscfunction'>lua_iscfunction</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isfunction.html'
+                               title='lua-sys::lua_isfunction'>lua_isfunction</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_islightuserdata.html'
+                               title='lua-sys::lua_islightuserdata'>lua_islightuserdata</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isnil.html'
+                               title='lua-sys::lua_isnil'>lua_isnil</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isnone.html'
+                               title='lua-sys::lua_isnone'>lua_isnone</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isnoneornil.html'
+                               title='lua-sys::lua_isnoneornil'>lua_isnoneornil</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isnumber.html'
+                               title='lua-sys::lua_isnumber'>lua_isnumber</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isstring.html'
+                               title='lua-sys::lua_isstring'>lua_isstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_istable.html'
+                               title='lua-sys::lua_istable'>lua_istable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isthread.html'
+                               title='lua-sys::lua_isthread'>lua_isthread</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_isuserdata.html'
+                               title='lua-sys::lua_isuserdata'>lua_isuserdata</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_len.html'
+                               title='lua-sys::lua_len'>lua_len</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_load.html'
+                               title='lua-sys::lua_load'>lua_load</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_newstate.html'
+                               title='lua-sys::lua_newstate'>lua_newstate</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_newtable.html'
+                               title='lua-sys::lua_newtable'>lua_newtable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_newthread.html'
+                               title='lua-sys::lua_newthread'>lua_newthread</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_newuserdata.html'
+                               title='lua-sys::lua_newuserdata'>lua_newuserdata</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_next.html'
+                               title='lua-sys::lua_next'>lua_next</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pcall.html'
+                               title='lua-sys::lua_pcall'>lua_pcall</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pcallk.html'
+                               title='lua-sys::lua_pcallk'>lua_pcallk</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pop.html'
+                               title='lua-sys::lua_pop'>lua_pop</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushboolean.html'
+                               title='lua-sys::lua_pushboolean'>lua_pushboolean</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushcclosure.html'
+                               title='lua-sys::lua_pushcclosure'>lua_pushcclosure</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushcfunction.html'
+                               title='lua-sys::lua_pushcfunction'>lua_pushcfunction</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushfstring.html'
+                               title='lua-sys::lua_pushfstring'>lua_pushfstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushglobaltable.html'
+                               title='lua-sys::lua_pushglobaltable'>lua_pushglobaltable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushinteger.html'
+                               title='lua-sys::lua_pushinteger'>lua_pushinteger</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushlightuserdata.html'
+                               title='lua-sys::lua_pushlightuserdata'>lua_pushlightuserdata</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushlstring.html'
+                               title='lua-sys::lua_pushlstring'>lua_pushlstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushnil.html'
+                               title='lua-sys::lua_pushnil'>lua_pushnil</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushnumber.html'
+                               title='lua-sys::lua_pushnumber'>lua_pushnumber</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushstring.html'
+                               title='lua-sys::lua_pushstring'>lua_pushstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushthread.html'
+                               title='lua-sys::lua_pushthread'>lua_pushthread</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushunsigned.html'
+                               title='lua-sys::lua_pushunsigned'>lua_pushunsigned</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_pushvalue.html'
+                               title='lua-sys::lua_pushvalue'>lua_pushvalue</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawequal.html'
+                               title='lua-sys::lua_rawequal'>lua_rawequal</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawget.html'
+                               title='lua-sys::lua_rawget'>lua_rawget</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawgeti.html'
+                               title='lua-sys::lua_rawgeti'>lua_rawgeti</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawgetp.html'
+                               title='lua-sys::lua_rawgetp'>lua_rawgetp</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawlen.html'
+                               title='lua-sys::lua_rawlen'>lua_rawlen</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawset.html'
+                               title='lua-sys::lua_rawset'>lua_rawset</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawseti.html'
+                               title='lua-sys::lua_rawseti'>lua_rawseti</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_rawsetp.html'
+                               title='lua-sys::lua_rawsetp'>lua_rawsetp</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_register.html'
+                               title='lua-sys::lua_register'>lua_register</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_remove.html'
+                               title='lua-sys::lua_remove'>lua_remove</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_replace.html'
+                               title='lua-sys::lua_replace'>lua_replace</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_resume.html'
+                               title='lua-sys::lua_resume'>lua_resume</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_setallocf.html'
+                               title='lua-sys::lua_setallocf'>lua_setallocf</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_setfield.html'
+                               title='lua-sys::lua_setfield'>lua_setfield</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_setglobal.html'
+                               title='lua-sys::lua_setglobal'>lua_setglobal</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_sethook.html'
+                               title='lua-sys::lua_sethook'>lua_sethook</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_setlocal.html'
+                               title='lua-sys::lua_setlocal'>lua_setlocal</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_setmetatable.html'
+                               title='lua-sys::lua_setmetatable'>lua_setmetatable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_settable.html'
+                               title='lua-sys::lua_settable'>lua_settable</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_settop.html'
+                               title='lua-sys::lua_settop'>lua_settop</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_setupvalue.html'
+                               title='lua-sys::lua_setupvalue'>lua_setupvalue</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_setuservalue.html'
+                               title='lua-sys::lua_setuservalue'>lua_setuservalue</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_status.html'
+                               title='lua-sys::lua_status'>lua_status</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_toboolean.html'
+                               title='lua-sys::lua_toboolean'>lua_toboolean</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tocfunction.html'
+                               title='lua-sys::lua_tocfunction'>lua_tocfunction</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tointeger.html'
+                               title='lua-sys::lua_tointeger'>lua_tointeger</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tointegerx.html'
+                               title='lua-sys::lua_tointegerx'>lua_tointegerx</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tolstring.html'
+                               title='lua-sys::lua_tolstring'>lua_tolstring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tonumber.html'
+                               title='lua-sys::lua_tonumber'>lua_tonumber</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tonumberx.html'
+                               title='lua-sys::lua_tonumberx'>lua_tonumberx</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_topointer.html'
+                               title='lua-sys::lua_topointer'>lua_topointer</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tostring.html'
+                               title='lua-sys::lua_tostring'>lua_tostring</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tothread.html'
+                               title='lua-sys::lua_tothread'>lua_tothread</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tounsigned.html'
+                               title='lua-sys::lua_tounsigned'>lua_tounsigned</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_tounsignedx.html'
+                               title='lua-sys::lua_tounsignedx'>lua_tounsignedx</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_touserdata.html'
+                               title='lua-sys::lua_touserdata'>lua_touserdata</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_type.html'
+                               title='lua-sys::lua_type'>lua_type</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_typename.html'
+                               title='lua-sys::lua_typename'>lua_typename</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_upvalueid.html'
+                               title='lua-sys::lua_upvalueid'>lua_upvalueid</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_upvalueindex.html'
+                               title='lua-sys::lua_upvalueindex'>lua_upvalueindex</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_upvaluejoin.html'
+                               title='lua-sys::lua_upvaluejoin'>lua_upvaluejoin</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_version.html'
+                               title='lua-sys::lua_version'>lua_version</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_xmove.html'
+                               title='lua-sys::lua_xmove'>lua_xmove</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_yield.html'
+                               title='lua-sys::lua_yield'>lua_yield</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.lua_yieldk.html'
+                               title='lua-sys::lua_yieldk'>lua_yieldk</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_Alloc.html'
+                               title='lua-sys::lua_Alloc'>lua_Alloc</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_CFunction.html'
+                               title='lua-sys::lua_CFunction'>lua_CFunction</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_Hook.html'
+                               title='lua-sys::lua_Hook'>lua_Hook</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_Integer.html'
+                               title='lua-sys::lua_Integer'>lua_Integer</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_Number.html'
+                               title='lua-sys::lua_Number'>lua_Number</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_Reader.html'
+                               title='lua-sys::lua_Reader'>lua_Reader</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_State.html'
+                               title='lua-sys::lua_State'>lua_State</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_Unsigned.html'
+                               title='lua-sys::lua_Unsigned'>lua_Unsigned</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.lua_Writer.html'
+                               title='lua-sys::lua_Writer'>lua_Writer</a></td>
+                        <td class='docblock short'></td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "lua-sys";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>
