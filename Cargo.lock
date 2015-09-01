@@ -1,0 +1,12 @@
+[root]
+name = "luarc"
+version = "0.1.0"
+dependencies = [
+ "unicode-xid 0.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "unicode-xid"
+version = "0.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
