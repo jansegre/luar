@@ -56,7 +56,8 @@ pub enum DelimToken {
     Bracket, // [ or ]
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+//#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     // expression operators and symbols
     Plus,    // +
@@ -88,7 +89,7 @@ pub enum Token {
     // terminals
     // TODO: hold the data
     Ident(String),
-    Dec(u64, u64),
+    Num(f64),
     Int(u64),
     Str(String),
     Keyword(keywords::Keyword),
@@ -104,9 +105,9 @@ pub enum Token {
 }
 
 impl Token {
-    pub fn is_useful(self) -> bool {
-        match self {
-            Whitespace | Comment | Invalid | Eof => false,
+    pub fn is_useful(&self) -> bool {
+        match *self {
+            Whitespace | Comment | Invalid => false,
             _ => true,
         }
     }

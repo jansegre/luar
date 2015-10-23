@@ -137,6 +137,7 @@
 //       | exp
 // ```
 
+use std::mem;
 pub use self::Stmt::*;
 pub use self::Expr::*;
 pub use self::Call::*;
@@ -150,7 +151,7 @@ pub type P<T> = Box<T>;
 pub type V<T> = Box<[T]>;
 
 #[allow(non_snake_case)]
-fn P<T: 'static>(value: T) -> P<T> {
+pub fn P<T: 'static>(value: T) -> P<T> {
     P::new(value)
 }
 
@@ -188,6 +189,7 @@ pub enum Stmt {
     StmtLocalFunction(Name, V<Name>, bool, P<Block>),
     StmtLocal(V<Name>, Option<V<Expr>>),
     StmtCall(P<Call>),
+    StmtInvalid, // TODO: attach an error
 }
 
 #[derive(Debug)]
@@ -204,6 +206,7 @@ pub enum Expr {
     ExprUnary(UnOp, P<Expr>),
     ExprCall(P<Call>),
     ExprVar(P<Var>),
+    ExprInvalid, // TODO: attach an error
 }
 
 #[derive(Debug)]
@@ -221,7 +224,7 @@ pub enum Args {
 
 #[derive(Debug)]
 pub enum Var {
-    VarVar(Name),
+    VarName(Name),
     VarProperty(P<Expr>, P<Expr>),
     VarMember(P<Expr>, Name),
 }
@@ -256,9 +259,9 @@ pub enum BinOp {
     BinLt,
     /// Less or equal: `<=`
     BinLe,
-    /// Greater than: `<`
+    /// Greater than: `>`
     BinGt,
-    /// Greater or equal: `<=`
+    /// Greater or equal: `>=`
     BinGe,
     /// Equal: `==`
     BinEq,
@@ -272,7 +275,7 @@ pub enum BinOp {
 
 #[derive(Debug)]
 pub enum UnOp {
-    /// Negation: `~`
+    /// Negative: `-`
     UnNeg,
     /// Logic not: `not`
     UnNot,
@@ -283,4 +286,12 @@ pub enum UnOp {
 #[derive(Debug)]
 pub struct Name {
     pub name: P<str>,
+}
+
+impl Name {
+    pub fn new(s: String) -> Name {
+        // XXX: simplify when/if String::into_boxed_slice is stabilized
+        let s = s.as_bytes().to_owned().into_boxed_slice();
+        Name { name: unsafe { mem::transmute(s) } }
+    }
 }

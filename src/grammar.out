@@ -1,0 +1,4531 @@
+State 0:
+          chunk ::= * block
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+
+                         chunk accept
+                         block shift  136
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 1:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= OPENBRACE * CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          tableconstructor ::= OPENBRACE * fieldlist CLOSEBRACE
+          fieldlist ::= * fieldlist_
+          fieldlist ::= * fieldlist_ fieldsep
+          fieldlist_ ::= * field
+          fieldlist_ ::= * fieldlist_ fieldsep field
+          field ::= * exp
+          field ::= * name EQ exp
+          field ::= * OPENBRACKET exp CLOSEBRACKET EQ exp
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                   OPENBRACKET shift  18
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                    CLOSEBRACE shift  169
+                         error shift  181
+                  functioncall shift  179
+                          name shift  121
+                           exp shift  86
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+                     fieldlist shift  120
+                    fieldlist_ shift  60
+                         field shift  165
+
+State 2:
+      (1) block ::= stats_ *
+          block ::= stats_ * retstat
+          stats_ ::= stats_ * stat_
+          stat_ ::= * SEMI
+          stat_ ::= * stat
+          stat ::= * varlist EQ explist
+          stat ::= * functioncall
+          stat ::= * label
+          stat ::= * BREAK
+          stat ::= * GOTO name
+          stat ::= * DO block END
+          stat ::= * WHILE exp DO block END
+          stat ::= * REPEAT block UNTIL exp
+          stat ::= * IF exp THEN block elsifs_ else_ END
+          stat ::= * FOR name EQ exp COMMA exp DO block END
+          stat ::= * FOR name EQ exp COMMA exp COMMA exp DO block END
+          stat ::= * FOR namelist IN explist DO block END
+          stat ::= * FUNCTION funcname funcbody
+          stat ::= * LOCAL FUNCTION name funcbody
+          stat ::= * LOCAL namelist
+          stat ::= * LOCAL namelist EQ explist
+          stat ::= * error
+          retstat ::= * RETURN
+          retstat ::= * RETURN SEMI
+          retstat ::= * RETURN explist
+          retstat ::= * RETURN explist SEMI
+          label ::= * COLONCOLON name COLONCOLON
+          varlist ::= * varlist_
+          varlist_ ::= * var
+          varlist_ ::= * varlist_ COMMA var
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                          SEMI shift  194
+                         BREAK shift  156
+                          GOTO shift  67
+                            DO shift  56
+                         WHILE shift  15
+                        REPEAT shift  54
+                            IF shift  13
+                           FOR shift  44
+                      FUNCTION shift  43
+                         LOCAL shift  42
+                        RETURN shift  3
+                    COLONCOLON shift  61
+                         error shift  140
+                       retstat shift  196
+                         stat_ shift  195
+                          stat shift  193
+                       varlist shift  135
+                  functioncall shift  97
+                         label shift  157
+                          name shift  191
+                      varlist_ shift  103
+                           var shift  100
+                     prefixexp shift  45
+                     {default} reduce 1
+
+State 3:
+     (28) retstat ::= RETURN *
+          retstat ::= RETURN * SEMI
+          retstat ::= RETURN * explist
+          retstat ::= RETURN * explist SEMI
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          explist ::= * explist_
+          explist_ ::= * exp
+          explist_ ::= * explist_ COMMA exp
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                          SEMI shift  139
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                       explist shift  105
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  83
+                           var shift  180
+                     prefixexp shift  46
+                      explist_ shift  118
+                   functiondef shift  183
+              tableconstructor shift  182
+                     {default} reduce 28
+
+State 4:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          explist ::= * explist_
+          explist_ ::= * exp
+          explist_ ::= * explist_ COMMA exp
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          args ::= OPENPAREN * CLOSEPAREN
+          args ::= OPENPAREN * explist CLOSEPAREN
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                    CLOSEPAREN shift  161
+                     OPENBRACE shift  1
+                         error shift  181
+                       explist shift  117
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  83
+                           var shift  180
+                     prefixexp shift  46
+                      explist_ shift  118
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 5:
+          stat ::= LOCAL namelist EQ * explist
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          explist ::= * explist_
+          explist_ ::= * exp
+          explist_ ::= * explist_ COMMA exp
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                       explist shift  141
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  83
+                           var shift  180
+                     prefixexp shift  46
+                      explist_ shift  118
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 6:
+          stat ::= FOR namelist IN * explist DO block END
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          explist ::= * explist_
+          explist_ ::= * exp
+          explist_ ::= * explist_ COMMA exp
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                       explist shift  108
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  83
+                           var shift  180
+                     prefixexp shift  46
+                      explist_ shift  118
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 7:
+          stat ::= varlist EQ * explist
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          explist ::= * explist_
+          explist_ ::= * exp
+          explist_ ::= * explist_ COMMA exp
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                       explist shift  192
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  83
+                           var shift  180
+                     prefixexp shift  46
+                      explist_ shift  118
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 8:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+     (95) fieldlist ::= fieldlist_ fieldsep *
+          fieldlist_ ::= fieldlist_ fieldsep * field
+          field ::= * exp
+          field ::= * name EQ exp
+          field ::= * OPENBRACKET exp CLOSEBRACKET EQ exp
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                   OPENBRACKET shift  18
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  121
+                           exp shift  86
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+                         field shift  167
+                     {default} reduce 95
+
+State 9:
+          stat ::= FOR name EQ exp COMMA exp COMMA * exp DO block END
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  74
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 10:
+          stat ::= FOR name EQ exp COMMA * exp DO block END
+          stat ::= FOR name EQ exp COMMA * exp COMMA exp DO block END
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  73
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 11:
+          stat ::= FOR name EQ * exp COMMA exp DO block END
+          stat ::= FOR name EQ * exp COMMA exp COMMA exp DO block END
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  75
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 12:
+          elsifs_ ::= elsifs_ ELSEIF * exp THEN block
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  76
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 13:
+          stat ::= IF * exp THEN block elsifs_ else_ END
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  77
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 14:
+          stat ::= REPEAT block UNTIL * exp
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  82
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 15:
+          stat ::= WHILE * exp DO block END
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  78
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 16:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          explist_ ::= explist_ COMMA * exp
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  84
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 17:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          field ::= OPENBRACKET exp CLOSEBRACKET EQ * exp
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  85
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 18:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          field ::= OPENBRACKET * exp CLOSEBRACKET EQ exp
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  79
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 19:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          field ::= name EQ * exp
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  87
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 20:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          prefixexp ::= OPENPAREN2 * exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  80
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 21:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= exp CARET * exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  128
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 22:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= exp PERCENT * exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  129
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 23:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= exp SLASH * exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  130
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 24:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= exp STAR * exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  131
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 25:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= exp MINUS * exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  98
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 26:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= exp PLUS * exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  99
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 27:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= exp DOTDOT * exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  91
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 28:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= exp NE * exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  92
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 29:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= exp EQEQ * exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  93
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 30:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= exp GE * exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  94
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 31:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= exp GT * exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  95
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 32:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= exp LE * exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  96
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 33:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= MINUS * exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  132
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 34:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= exp LT * exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  90
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 35:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= POUND * exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  133
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 36:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= exp AND * exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  89
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 37:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= NOT * exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  134
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 38:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= exp OR * exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  88
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 39:
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= prefixexp OPENBRACKET * exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          exp ::= * NIL
+          exp ::= * FALSE
+          exp ::= * TRUE
+          exp ::= * DOTDOTDOT
+          exp ::= * NUMBER
+          exp ::= * STRING
+          exp ::= * functiondef
+          exp ::= * prefixexp
+          exp ::= * tableconstructor
+          exp ::= * NOT exp
+          exp ::= * POUND exp
+          exp ::= * MINUS exp
+          exp ::= * exp OR exp
+          exp ::= * exp AND exp
+          exp ::= * exp LT exp
+          exp ::= * exp LE exp
+          exp ::= * exp GT exp
+          exp ::= * exp GE exp
+          exp ::= * exp EQEQ exp
+          exp ::= * exp NE exp
+          exp ::= * exp DOTDOT exp
+          exp ::= * exp PLUS exp
+          exp ::= * exp MINUS exp
+          exp ::= * exp STAR exp
+          exp ::= * exp SLASH exp
+          exp ::= * exp PERCENT exp
+          exp ::= * exp CARET exp
+          exp ::= * error
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          functiondef ::= * FUNCTION funcbody
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                        NUMBER shift  185
+                        STRING shift  184
+                      FUNCTION shift  71
+                         MINUS shift  33
+                           NOT shift  37
+                         POUND shift  35
+                           NIL shift  189
+                         FALSE shift  188
+                          TRUE shift  187
+                     DOTDOTDOT shift  186
+                     OPENBRACE shift  1
+                         error shift  181
+                  functioncall shift  179
+                          name shift  191
+                           exp shift  81
+                           var shift  180
+                     prefixexp shift  46
+                   functiondef shift  183
+              tableconstructor shift  182
+
+State 40:
+          namelist ::= * namelist_
+          namelist_ ::= * name
+          namelist_ ::= * namelist_ COMMA name
+          funcbody ::= OPENPAREN * CLOSEPAREN block END
+          funcbody ::= OPENPAREN * parlist CLOSEPAREN block END
+          parlist ::= * namelist
+          parlist ::= * DOTDOTDOT
+          parlist ::= * namelist COMMA2 DOTDOTDOT
+          name ::= * NAME
+
+                          NAME shift  175
+                     DOTDOTDOT shift  170
+                    CLOSEPAREN shift  58
+                          name shift  174
+                      namelist shift  123
+                     namelist_ shift  127
+                       parlist shift  125
+
+State 41:
+          varlist_ ::= varlist_ COMMA * var
+          var ::= * name
+          var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
+          var ::= * prefixexp DOT name
+          prefixexp ::= * var
+          prefixexp ::= * functioncall
+          prefixexp ::= * OPENPAREN2 exp CLOSEPAREN
+          functioncall ::= * prefixexp args
+          functioncall ::= * prefixexp COLON name args
+          name ::= * NAME
+
+                    OPENPAREN2 shift  20
+                          NAME shift  175
+                  functioncall shift  179
+                          name shift  191
+                           var shift  101
+                     prefixexp shift  45
+
+State 42:
+          stat ::= LOCAL * FUNCTION name funcbody
+          stat ::= LOCAL * namelist
+          stat ::= LOCAL * namelist EQ explist
+          namelist ::= * namelist_
+          namelist_ ::= * name
+          namelist_ ::= * namelist_ COMMA name
+          name ::= * NAME
+
+                          NAME shift  175
+                      FUNCTION shift  63
+                          name shift  174
+                      namelist shift  106
+                     namelist_ shift  127
+
+State 43:
+          stat ::= FUNCTION * funcname funcbody
+          funcname ::= * dotnames_
+          funcname ::= * dotnames_ COLON name
+          dotnames_ ::= * name
+          dotnames_ ::= * dotnames_ DOT name
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  143
+                      funcname shift  66
+                     dotnames_ shift  102
+
+State 44:
+          stat ::= FOR * name EQ exp COMMA exp DO block END
+          stat ::= FOR * name EQ exp COMMA exp COMMA exp DO block END
+          stat ::= FOR * namelist IN explist DO block END
+          namelist ::= * namelist_
+          namelist_ ::= * name
+          namelist_ ::= * namelist_ COMMA name
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  112
+                      namelist shift  109
+                     namelist_ shift  127
+
+State 45:
+          var ::= prefixexp * OPENBRACKET exp CLOSEBRACKET
+          var ::= prefixexp * DOT name
+          functioncall ::= prefixexp * args
+          functioncall ::= prefixexp * COLON name args
+          args ::= * OPENPAREN CLOSEPAREN
+          args ::= * OPENPAREN explist CLOSEPAREN
+          args ::= * tableconstructor
+          args ::= * STRING
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+
+                     OPENPAREN shift  4
+                        STRING shift  158
+                         COLON shift  68
+                           DOT shift  69
+                   OPENBRACKET shift  39
+                     OPENBRACE shift  1
+              tableconstructor shift  159
+                          args shift  163
+
+State 46:
+          var ::= prefixexp * OPENBRACKET exp CLOSEBRACKET
+          var ::= prefixexp * DOT name
+     (56) exp ::= prefixexp *
+          functioncall ::= prefixexp * args
+          functioncall ::= prefixexp * COLON name args
+          args ::= * OPENPAREN CLOSEPAREN
+          args ::= * OPENPAREN explist CLOSEPAREN
+          args ::= * tableconstructor
+          args ::= * STRING
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+
+                     OPENPAREN shift  4
+                        STRING shift  158
+                         COLON shift  68
+                           DOT shift  69
+                   OPENBRACKET shift  39
+                     OPENBRACE shift  1
+              tableconstructor shift  159
+                          args shift  163
+                     {default} reduce 56
+
+State 47:
+          functioncall ::= prefixexp COLON name * args
+          args ::= * OPENPAREN CLOSEPAREN
+          args ::= * OPENPAREN explist CLOSEPAREN
+          args ::= * tableconstructor
+          args ::= * STRING
+          tableconstructor ::= * OPENBRACE CLOSEBRACE
+          tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
+
+                     OPENPAREN shift  4
+                        STRING shift  158
+                     OPENBRACE shift  1
+              tableconstructor shift  159
+                          args shift  162
+
+State 48:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          stat ::= FOR namelist IN explist DO * block END
+
+                         block shift  107
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 49:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          stat ::= FOR name EQ exp COMMA exp COMMA exp DO * block END
+
+                         block shift  110
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 50:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          stat ::= FOR name EQ exp COMMA exp DO * block END
+
+                         block shift  111
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 51:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          else_ ::= ELSE * block
+
+                         block shift  150
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 52:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          elsifs_ ::= elsifs_ ELSEIF exp THEN * block
+
+                         block shift  151
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 53:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          stat ::= IF exp THEN * block elsifs_ else_ END
+
+                         block shift  72
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 54:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          stat ::= REPEAT * block UNTIL exp
+
+                         block shift  114
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 55:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          stat ::= WHILE exp DO * block END
+
+                         block shift  115
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 56:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          stat ::= DO * block END
+
+                         block shift  116
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 57:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          funcbody ::= OPENPAREN parlist CLOSEPAREN * block END
+
+                         block shift  124
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 58:
+          block ::= * stats_
+          block ::= * stats_ retstat
+      (3) stats_ ::= *
+          stats_ ::= * stats_ stat_
+          funcbody ::= OPENPAREN CLOSEPAREN * block END
+
+                         block shift  126
+                        stats_ shift  2
+                     {default} reduce 3
+
+State 59:
+          stat ::= IF exp THEN block elsifs_ * else_ END
+          elsifs_ ::= elsifs_ * ELSEIF exp THEN block
+     (26) else_ ::= *
+          else_ ::= * ELSE block
+
+                        ELSEIF shift  12
+                          ELSE shift  51
+                         else_ shift  113
+                     {default} reduce 26
+
+State 60:
+     (94) fieldlist ::= fieldlist_ *
+          fieldlist ::= fieldlist_ * fieldsep
+          fieldlist_ ::= fieldlist_ * fieldsep field
+          fieldsep ::= * COMMA|SEMI
+
+                         COMMA shift  166
+                          SEMI shift  166
+                      fieldsep shift  8
+                     {default} reduce 94
+
+State 61:
+          label ::= COLONCOLON * name COLONCOLON
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  104
+
+State 62:
+          stat ::= LOCAL FUNCTION name * funcbody
+          funcbody ::= * OPENPAREN CLOSEPAREN block END
+          funcbody ::= * OPENPAREN parlist CLOSEPAREN block END
+
+                     OPENPAREN shift  40
+                      funcbody shift  142
+
+State 63:
+          stat ::= LOCAL FUNCTION * name funcbody
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  62
+
+State 64:
+          dotnames_ ::= dotnames_ DOT * name
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  144
+
+State 65:
+          funcname ::= dotnames_ COLON * name
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  145
+
+State 66:
+          stat ::= FUNCTION funcname * funcbody
+          funcbody ::= * OPENPAREN CLOSEPAREN block END
+          funcbody ::= * OPENPAREN parlist CLOSEPAREN block END
+
+                     OPENPAREN shift  40
+                      funcbody shift  146
+
+State 67:
+          stat ::= GOTO * name
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  155
+
+State 68:
+          functioncall ::= prefixexp COLON * name args
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  47
+
+State 69:
+          var ::= prefixexp DOT * name
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  164
+
+State 70:
+          namelist_ ::= namelist_ COMMA * name
+          name ::= * NAME
+
+                          NAME shift  175
+                          name shift  176
+
+State 71:
+          functiondef ::= FUNCTION * funcbody
+          funcbody ::= * OPENPAREN CLOSEPAREN block END
+          funcbody ::= * OPENPAREN parlist CLOSEPAREN block END
+
+                     OPENPAREN shift  40
+                      funcbody shift  177
+
+State 72:
+          stat ::= IF exp THEN block * elsifs_ else_ END
+     (24) elsifs_ ::= *
+          elsifs_ ::= * elsifs_ ELSEIF exp THEN block
+
+                       elsifs_ shift  59
+                     {default} reduce 24
+
+State 73:
+          stat ::= FOR name EQ exp COMMA exp * DO block END
+          stat ::= FOR name EQ exp COMMA exp * COMMA exp DO block END
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                         COMMA shift  9
+                            DO shift  50
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 74:
+          stat ::= FOR name EQ exp COMMA exp COMMA exp * DO block END
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                            DO shift  49
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 75:
+          stat ::= FOR name EQ exp * COMMA exp DO block END
+          stat ::= FOR name EQ exp * COMMA exp COMMA exp DO block END
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                         COMMA shift  10
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 76:
+          elsifs_ ::= elsifs_ ELSEIF exp * THEN block
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                          THEN shift  52
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 77:
+          stat ::= IF exp * THEN block elsifs_ else_ END
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                          THEN shift  53
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 78:
+          stat ::= WHILE exp * DO block END
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                            DO shift  55
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 79:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+          field ::= OPENBRACKET exp * CLOSEBRACKET EQ exp
+
+                  CLOSEBRACKET shift  119
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 80:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+          prefixexp ::= OPENPAREN2 exp * CLOSEPAREN
+
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                    CLOSEPAREN shift  178
+
+State 81:
+          var ::= prefixexp OPENBRACKET exp * CLOSEBRACKET
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                  CLOSEBRACKET shift  190
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 82:
+     (14) stat ::= REPEAT block UNTIL exp *
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 14
+
+State 83:
+     (47) explist_ ::= exp *
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 47
+
+State 84:
+     (48) explist_ ::= explist_ COMMA exp *
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 48
+
+State 85:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+    (100) field ::= OPENBRACKET exp CLOSEBRACKET EQ exp *
+
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 100
+
+State 86:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+     (98) field ::= exp *
+
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 98
+
+State 87:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+     (99) field ::= name EQ exp *
+
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 99
+
+State 88:
+          exp ::= exp * OR exp
+     (61) exp ::= exp OR exp *
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 61
+
+State 89:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+     (62) exp ::= exp AND exp *
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 62
+
+State 90:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+     (63) exp ::= exp LT exp *
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 63
+
+State 91:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+     (69) exp ::= exp DOTDOT exp *
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 69
+
+State 92:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+     (68) exp ::= exp NE exp *
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 68
+
+State 93:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+     (67) exp ::= exp EQEQ exp *
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 67
+
+State 94:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+     (66) exp ::= exp GE exp *
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 66
+
+State 95:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+     (65) exp ::= exp GT exp *
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 65
+
+State 96:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+     (64) exp ::= exp LE exp *
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 64
+
+State 97:
+      (8) stat ::= functioncall *
+     (78) prefixexp ::= functioncall *
+
+                     OPENPAREN reduce 78
+                        STRING reduce 78
+                         COLON reduce 78
+                           DOT reduce 78
+                   OPENBRACKET reduce 78
+                     OPENBRACE reduce 78
+                     {default} reduce 8
+
+State 98:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+     (71) exp ::= exp MINUS exp *
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 71
+
+State 99:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+     (70) exp ::= exp PLUS exp *
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+                     {default} reduce 70
+
+State 100:
+     (38) varlist_ ::= var *
+     (77) prefixexp ::= var *
+
+                         COMMA reduce 38
+                            EQ reduce 38
+                     {default} reduce 77
+
+State 101:
+     (39) varlist_ ::= varlist_ COMMA var *
+     (77) prefixexp ::= var *
+
+                         COMMA reduce 39
+                            EQ reduce 39
+                     {default} reduce 77
+
+State 102:
+     (33) funcname ::= dotnames_ *
+          funcname ::= dotnames_ * COLON name
+          dotnames_ ::= dotnames_ * DOT name
+
+                         COLON shift  65
+                           DOT shift  64
+                     {default} reduce 33
+
+State 103:
+     (37) varlist ::= varlist_ *
+          varlist_ ::= varlist_ * COMMA var
+
+                         COMMA shift  41
+                     {default} reduce 37
+
+State 104:
+          label ::= COLONCOLON name * COLONCOLON
+
+                    COLONCOLON shift  137
+
+State 105:
+     (30) retstat ::= RETURN explist *
+          retstat ::= RETURN explist * SEMI
+
+                          SEMI shift  138
+                     {default} reduce 30
+
+State 106:
+     (21) stat ::= LOCAL namelist *
+          stat ::= LOCAL namelist * EQ explist
+
+                            EQ shift  5
+                     {default} reduce 21
+
+State 107:
+          stat ::= FOR namelist IN explist DO block * END
+
+                           END shift  147
+
+State 108:
+          stat ::= FOR namelist IN explist * DO block END
+
+                            DO shift  48
+
+State 109:
+          stat ::= FOR namelist * IN explist DO block END
+
+                            IN shift  6
+
+State 110:
+          stat ::= FOR name EQ exp COMMA exp COMMA exp DO block * END
+
+                           END shift  148
+
+State 111:
+          stat ::= FOR name EQ exp COMMA exp DO block * END
+
+                           END shift  149
+
+State 112:
+          stat ::= FOR name * EQ exp COMMA exp DO block END
+          stat ::= FOR name * EQ exp COMMA exp COMMA exp DO block END
+     (44) namelist_ ::= name *
+
+                            EQ shift  11
+                     {default} reduce 44
+
+State 113:
+          stat ::= IF exp THEN block elsifs_ else_ * END
+
+                           END shift  152
+
+State 114:
+          stat ::= REPEAT block * UNTIL exp
+
+                         UNTIL shift  14
+
+State 115:
+          stat ::= WHILE exp DO block * END
+
+                           END shift  153
+
+State 116:
+          stat ::= DO block * END
+
+                           END shift  154
+
+State 117:
+          args ::= OPENPAREN explist * CLOSEPAREN
+
+                    CLOSEPAREN shift  160
+
+State 118:
+     (46) explist ::= explist_ *
+          explist_ ::= explist_ * COMMA exp
+
+                         COMMA shift  16
+                     {default} reduce 46
+
+State 119:
+          field ::= OPENBRACKET exp CLOSEBRACKET * EQ exp
+
+                            EQ shift  17
+
+State 120:
+          tableconstructor ::= OPENBRACE fieldlist * CLOSEBRACE
+
+                    CLOSEBRACE shift  168
+
+State 121:
+     (40) var ::= name *
+          field ::= name * EQ exp
+
+                            EQ shift  19
+                     {default} reduce 40
+
+State 122:
+          parlist ::= namelist COMMA2 * DOTDOTDOT
+
+                     DOTDOTDOT shift  171
+
+State 123:
+     (89) parlist ::= namelist *
+          parlist ::= namelist * COMMA2 DOTDOTDOT
+
+                        COMMA2 shift  122
+                     {default} reduce 89
+
+State 124:
+          funcbody ::= OPENPAREN parlist CLOSEPAREN block * END
+
+                           END shift  172
+
+State 125:
+          funcbody ::= OPENPAREN parlist * CLOSEPAREN block END
+
+                    CLOSEPAREN shift  57
+
+State 126:
+          funcbody ::= OPENPAREN CLOSEPAREN block * END
+
+                           END shift  173
+
+State 127:
+     (43) namelist ::= namelist_ *
+          namelist_ ::= namelist_ * COMMA name
+
+                         COMMA shift  70
+                     {default} reduce 43
+
+State 128:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+     (75) exp ::= exp CARET exp *
+
+                         CARET shift  21
+                     {default} reduce 75
+
+State 129:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+     (74) exp ::= exp PERCENT exp *
+          exp ::= exp * CARET exp
+
+                         CARET shift  21
+                     {default} reduce 74
+
+State 130:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+     (73) exp ::= exp SLASH exp *
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                         CARET shift  21
+                     {default} reduce 73
+
+State 131:
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+     (72) exp ::= exp STAR exp *
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                         CARET shift  21
+                     {default} reduce 72
+
+State 132:
+     (60) exp ::= MINUS exp *
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                         CARET shift  21
+                     {default} reduce 60
+
+State 133:
+     (59) exp ::= POUND exp *
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                         CARET shift  21
+                     {default} reduce 59
+
+State 134:
+     (58) exp ::= NOT exp *
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                         CARET shift  21
+                     {default} reduce 58
+
+State 135:
+          stat ::= varlist * EQ explist
+
+                            EQ shift  7
+
+State 136:
+      (0) chunk ::= block *
+
+                             $ reduce 0
+
+State 137:
+     (32) label ::= COLONCOLON name COLONCOLON *
+
+                     {default} reduce 32
+
+State 138:
+     (31) retstat ::= RETURN explist SEMI *
+
+                     {default} reduce 31
+
+State 139:
+     (29) retstat ::= RETURN SEMI *
+
+                     {default} reduce 29
+
+State 140:
+     (23) stat ::= error *
+
+                     {default} reduce 23
+
+State 141:
+     (22) stat ::= LOCAL namelist EQ explist *
+
+                     {default} reduce 22
+
+State 142:
+     (20) stat ::= LOCAL FUNCTION name funcbody *
+
+                     {default} reduce 20
+
+State 143:
+     (35) dotnames_ ::= name *
+
+                     {default} reduce 35
+
+State 144:
+     (36) dotnames_ ::= dotnames_ DOT name *
+
+                     {default} reduce 36
+
+State 145:
+     (34) funcname ::= dotnames_ COLON name *
+
+                     {default} reduce 34
+
+State 146:
+     (19) stat ::= FUNCTION funcname funcbody *
+
+                     {default} reduce 19
+
+State 147:
+     (18) stat ::= FOR namelist IN explist DO block END *
+
+                     {default} reduce 18
+
+State 148:
+     (17) stat ::= FOR name EQ exp COMMA exp COMMA exp DO block END *
+
+                     {default} reduce 17
+
+State 149:
+     (16) stat ::= FOR name EQ exp COMMA exp DO block END *
+
+                     {default} reduce 16
+
+State 150:
+     (27) else_ ::= ELSE block *
+
+                     {default} reduce 27
+
+State 151:
+     (25) elsifs_ ::= elsifs_ ELSEIF exp THEN block *
+
+                     {default} reduce 25
+
+State 152:
+     (15) stat ::= IF exp THEN block elsifs_ else_ END *
+
+                     {default} reduce 15
+
+State 153:
+     (13) stat ::= WHILE exp DO block END *
+
+                     {default} reduce 13
+
+State 154:
+     (12) stat ::= DO block END *
+
+                     {default} reduce 12
+
+State 155:
+     (11) stat ::= GOTO name *
+
+                     {default} reduce 11
+
+State 156:
+     (10) stat ::= BREAK *
+
+                     {default} reduce 10
+
+State 157:
+      (9) stat ::= label *
+
+                     {default} reduce 9
+
+State 158:
+     (85) args ::= STRING *
+
+                     {default} reduce 85
+
+State 159:
+     (84) args ::= tableconstructor *
+
+                     {default} reduce 84
+
+State 160:
+     (83) args ::= OPENPAREN explist CLOSEPAREN *
+
+                     {default} reduce 83
+
+State 161:
+     (82) args ::= OPENPAREN CLOSEPAREN *
+
+                     {default} reduce 82
+
+State 162:
+     (81) functioncall ::= prefixexp COLON name args *
+
+                     {default} reduce 81
+
+State 163:
+     (80) functioncall ::= prefixexp args *
+
+                     {default} reduce 80
+
+State 164:
+     (42) var ::= prefixexp DOT name *
+
+                     {default} reduce 42
+
+State 165:
+     (96) fieldlist_ ::= field *
+
+                     {default} reduce 96
+
+State 166:
+    (101) fieldsep ::= COMMA|SEMI *
+
+                     {default} reduce 101
+
+State 167:
+     (97) fieldlist_ ::= fieldlist_ fieldsep field *
+
+                     {default} reduce 97
+
+State 168:
+     (93) tableconstructor ::= OPENBRACE fieldlist CLOSEBRACE *
+
+                     {default} reduce 93
+
+State 169:
+     (92) tableconstructor ::= OPENBRACE CLOSEBRACE *
+
+                     {default} reduce 92
+
+State 170:
+     (90) parlist ::= DOTDOTDOT *
+
+                     {default} reduce 90
+
+State 171:
+     (91) parlist ::= namelist COMMA2 DOTDOTDOT *
+
+                     {default} reduce 91
+
+State 172:
+     (88) funcbody ::= OPENPAREN parlist CLOSEPAREN block END *
+
+                     {default} reduce 88
+
+State 173:
+     (87) funcbody ::= OPENPAREN CLOSEPAREN block END *
+
+                     {default} reduce 87
+
+State 174:
+     (44) namelist_ ::= name *
+
+                     {default} reduce 44
+
+State 175:
+    (102) name ::= NAME *
+
+                     {default} reduce 102
+
+State 176:
+     (45) namelist_ ::= namelist_ COMMA name *
+
+                     {default} reduce 45
+
+State 177:
+     (86) functiondef ::= FUNCTION funcbody *
+
+                     {default} reduce 86
+
+State 178:
+     (79) prefixexp ::= OPENPAREN2 exp CLOSEPAREN *
+
+                     {default} reduce 79
+
+State 179:
+     (78) prefixexp ::= functioncall *
+
+                     {default} reduce 78
+
+State 180:
+     (77) prefixexp ::= var *
+
+                     {default} reduce 77
+
+State 181:
+     (76) exp ::= error *
+
+                     {default} reduce 76
+
+State 182:
+     (57) exp ::= tableconstructor *
+
+                     {default} reduce 57
+
+State 183:
+     (55) exp ::= functiondef *
+
+                     {default} reduce 55
+
+State 184:
+     (54) exp ::= STRING *
+
+                     {default} reduce 54
+
+State 185:
+     (53) exp ::= NUMBER *
+
+                     {default} reduce 53
+
+State 186:
+     (52) exp ::= DOTDOTDOT *
+
+                     {default} reduce 52
+
+State 187:
+     (51) exp ::= TRUE *
+
+                     {default} reduce 51
+
+State 188:
+     (50) exp ::= FALSE *
+
+                     {default} reduce 50
+
+State 189:
+     (49) exp ::= NIL *
+
+                     {default} reduce 49
+
+State 190:
+     (41) var ::= prefixexp OPENBRACKET exp CLOSEBRACKET *
+
+                     {default} reduce 41
+
+State 191:
+     (40) var ::= name *
+
+                     {default} reduce 40
+
+State 192:
+      (7) stat ::= varlist EQ explist *
+
+                     {default} reduce 7
+
+State 193:
+      (6) stat_ ::= stat *
+
+                     {default} reduce 6
+
+State 194:
+      (5) stat_ ::= SEMI *
+
+                     {default} reduce 5
+
+State 195:
+      (4) stats_ ::= stats_ stat_ *
+
+                     {default} reduce 4
+
+State 196:
+      (2) block ::= stats_ retstat *
+
+                     {default} reduce 2
+
+----------------------------------------------------
+Symbols:
+    0: $:
+    1: OPENPAREN2
+    2: OPENPAREN
+    3: COMMA2
+    4: COMMA
+    5: NAME
+    6: NUMBER
+    7: STRING
+    8: SEMI
+    9: EQ
+   10: BREAK
+   11: GOTO
+   12: DO
+   13: END
+   14: WHILE
+   15: REPEAT
+   16: UNTIL
+   17: IF
+   18: THEN
+   19: FOR
+   20: IN
+   21: FUNCTION
+   22: LOCAL
+   23: ELSEIF
+   24: ELSE
+   25: RETURN
+   26: COLONCOLON
+   27: COLON
+   28: DOT
+   29: OPENBRACKET
+   30: CLOSEBRACKET
+   31: OR
+   32: AND
+   33: LT
+   34: GT
+   35: LE
+   36: GE
+   37: NE
+   38: EQEQ
+   39: DOTDOT
+   40: PLUS
+   41: MINUS
+   42: STAR
+   43: SLASH
+   44: PERCENT
+   45: NOT
+   46: POUND
+   47: CARET
+   48: NIL
+   49: FALSE
+   50: TRUE
+   51: DOTDOTDOT
+   52: CLOSEPAREN
+   53: OPENBRACE
+   54: CLOSEBRACE
+   55: error:
+   56: chunk: <lambda> OPENPAREN2 NAME SEMI BREAK GOTO DO WHILE REPEAT IF FOR FUNCTION LOCAL RETURN COLONCOLON
+   57: block: <lambda> OPENPAREN2 NAME SEMI BREAK GOTO DO WHILE REPEAT IF FOR FUNCTION LOCAL RETURN COLONCOLON
+   58: stats_: <lambda> OPENPAREN2 NAME SEMI BREAK GOTO DO WHILE REPEAT IF FOR FUNCTION LOCAL COLONCOLON
+   59: retstat: RETURN
+   60: stat_: OPENPAREN2 NAME SEMI BREAK GOTO DO WHILE REPEAT IF FOR FUNCTION LOCAL COLONCOLON
+   61: stat: OPENPAREN2 NAME BREAK GOTO DO WHILE REPEAT IF FOR FUNCTION LOCAL COLONCOLON
+   62: varlist: OPENPAREN2 NAME
+   63: explist: OPENPAREN2 NAME NUMBER STRING FUNCTION MINUS NOT POUND NIL FALSE TRUE DOTDOTDOT OPENBRACE
+   64: functioncall: OPENPAREN2 NAME
+   65: label: COLONCOLON
+   66: name: NAME
+   67: exp: OPENPAREN2 NAME NUMBER STRING FUNCTION MINUS NOT POUND NIL FALSE TRUE DOTDOTDOT OPENBRACE
+   68: elsifs_: <lambda> ELSEIF
+   69: else_: <lambda> ELSE
+   70: namelist: NAME
+   71: funcname: NAME
+   72: funcbody: OPENPAREN
+   73: dotnames_: NAME
+   74: varlist_: OPENPAREN2 NAME
+   75: var: OPENPAREN2 NAME
+   76: prefixexp: OPENPAREN2 NAME
+   77: namelist_: NAME
+   78: explist_: OPENPAREN2 NAME NUMBER STRING FUNCTION MINUS NOT POUND NIL FALSE TRUE DOTDOTDOT OPENBRACE
+   79: functiondef: FUNCTION
+   80: tableconstructor: OPENBRACE
+   81: args: OPENPAREN STRING OPENBRACE
+   82: parlist: NAME DOTDOTDOT
+   83: fieldlist: OPENPAREN2 NAME NUMBER STRING FUNCTION OPENBRACKET MINUS NOT POUND NIL FALSE TRUE DOTDOTDOT OPENBRACE
+   84: fieldlist_: OPENPAREN2 NAME NUMBER STRING FUNCTION OPENBRACKET MINUS NOT POUND NIL FALSE TRUE DOTDOTDOT OPENBRACE
+   85: fieldsep: COMMA SEMI
+   86: field: OPENPAREN2 NAME NUMBER STRING FUNCTION OPENBRACKET MINUS NOT POUND NIL FALSE TRUE DOTDOTDOT OPENBRACE
