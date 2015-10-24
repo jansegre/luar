@@ -79,10 +79,12 @@ impl<R: Read> Iterator for Reader<R> {
     }
 }
 
+macro_rules! throw { ($err:expr) => ({ return Some(Err(From::from($err))) }) }
+
 macro_rules! some_try { ($expr:expr) => {
     match $expr {
         Ok(val) => val,
-        Err(err) => { return Some(Err(From::from(err))) },
+        Err(err) => throw!(err),
     }
 }}
 
@@ -90,7 +92,7 @@ fn next_token<R: CharRead>(chars: &mut Peekable<Fuse<Chars<R>>>) -> Option<Resul
     macro_rules! try_next { () => {
         match chars.next() {
             Some(Ok(val)) => val,
-            Some(Err(err)) => { return Some(Err(From::from(err))) },
+            Some(Err(err)) => throw!(err),
             None => { return Some(Ok(token::Eof)) },
         }
     }}
@@ -105,18 +107,70 @@ fn next_token<R: CharRead>(chars: &mut Peekable<Fuse<Chars<R>>>) -> Option<Resul
         };
         match tmp {
             Tmp::Aight(t) => t,
-            Tmp::Nope => { return Some(Err(From::from(chars.next().unwrap().err().unwrap()))) }
+            // this unwrapping is safe because there is a next (guaranteed by peekable) and there
+            // is an error (guaruanteed by Tmp::Nope above).
+            Tmp::Nope => throw!(chars.next().unwrap().err().unwrap()),
         }
+    }}}
+    macro_rules! read_long_brackets { ($c:ident) => {{
+        let mut s = "".to_string();
+        let mut k = 0;
+
+        // count the long bracket level
+        if $c == '=' {
+            k = 1;
+            try_next!();
+            while try_peek!() == '=' {
+                k = k + 1;
+                try_next!();
+            }
+            if try_peek!() != '[' {
+                throw!(TokenError(format!("Invalid long string delimiter: '{}'", $c)))
+            }
+        }
+
+        // consume the second opening bracket
+        try_next!();
+
+        // search for a closing bracket until a long bracket of the same level is found
+        // XXX: no escaping should done on this kind of literal
+        loop {
+            match try_peek!() {
+                ']' => {
+                    let mut z = "]".to_string();
+                    let mut n = k;
+                    try_next!();
+                    while try_peek!() == '=' && n > 0 {
+                        z.push('=');
+                        n = n - 1;
+                        try_next!();
+                    }
+                    if try_peek!() == ']' && n == 0 {
+                        try_next!();
+                        break;
+                    }
+                    z.push(try_next!());
+                    s.push_str(&z);
+                },
+                _ => s.push(try_next!()),
+            }
+        }
+
+        s
     }}}
     Some(Ok(match try_next!() {
         '+' => token::Plus,
         '-' => match try_peek!() {
             '-' => {
                 try_next!();
-                if try_peek!() == '[' {
-                    // TODO: block comment
-                    unimplemented!();
-                } else {
+                if match try_next!() {
+                    '[' => match try_peek!() {
+                        c @ '[' | c @ '=' => {
+                            token::Str(read_long_brackets!(c));
+                            false
+                        }, _ => true
+                    }, _ => true
+                } {
                     while try_peek!() != '\n' { try_next!(); }
                     // consume the new line
                     try_next!();
@@ -136,7 +190,7 @@ fn next_token<R: CharRead>(chars: &mut Peekable<Fuse<Chars<R>>>) -> Option<Resul
         },
         '~' => match try_peek!() {
             '=' => { try_next!(); token::Ne },
-            _ => { return Some(Err(TokenError("Expected '=' after '~'".to_string()))) }
+            _ => throw!(TokenError("Expected '=' after '~'".to_string())),
         },
         '<' => match try_peek!() {
             '=' => { try_next!(); token::Le },
@@ -172,34 +226,57 @@ fn next_token<R: CharRead>(chars: &mut Peekable<Fuse<Chars<R>>>) -> Option<Resul
         '{' => token::OpenDelim(token::Brace),
         '}' => token::CloseDelim(token::Brace),
         '[' => match try_peek!() {
-            '[' | '=' => {
-                // TODO: bracket string
-                unimplemented!()
-            },
+            c @ '[' | c @ '=' => token::Str(read_long_brackets!(c)),
             _ => token::OpenDelim(token::Bracket),
         },
         ']' => token::CloseDelim(token::Bracket),
         c if c.is_whitespace() => {
-            while try_peek!().is_whitespace() {
-                try_next!();
-            }
+            while try_peek!().is_whitespace() { try_next!(); }
             token::Whitespace
         },
         c @ '"' | c @ '\'' => {
             let mut s = "".to_string();
-            while try_peek!() != c {
-                match try_peek!() {
-                    '\\' => s.push(try_next!()),
-                    '\n' => {
-                        return Some(Err(TokenError("Unterminated literal".to_string())))
+            loop {
+                match try_next!() {
+                    // escape sequences: http://www.lua.org/manual/5.2/manual.html#3.1
+                    '\\' => match try_next!() {
+                        'a' => s.push('\x07'), // audible bell
+                        'b' => s.push('\x08'), // backspace
+                        'f' => s.push('\x0c'), // form feed
+                        'n' | '\n' => s.push('\n'),
+                        'r' => s.push('\r'),
+                        't' => s.push('\t'),
+                        'v' => s.push('\x0b'), // vertical tab
+                        c @ '\\' | c @ '\'' | c @ '"' => s.push(c),
+                        'z' => { while try_peek!().is_whitespace() { try_next!(); } },
+                        'x' => {
+                            //let mut z = "0x".to_string();
+                            let mut z: Vec<char> = vec![];
+                            z.push(try_next!());
+                            z.push(try_next!());
+                            //let n: u8 = some_try!(z.parse());
+                            let n = some_try!(hex_to_int(&z)) as u8;
+                            s.push(n as char);
+                        },
+                        n if n.is_digit(10) => {
+                            let mut z = vec![n];
+                            if try_peek!().is_digit(10) {
+                                z.push(try_next!());
+                                if try_peek!().is_digit(10) {
+                                    z.push(try_next!());
+                                }
+                            }
+                            let n = some_try!(dec_to_int(&z)) as u8;
+                            s.push(n as char);
+                        },
+                        c => throw!(TokenError(format!("Invalid escape sequence: \\{}", c))),
                     },
-                    _ => ()
+                    '\n' => throw!(TokenError("Unfinished string".to_string())),
+                    x if x == c => break,
+                    x => s.push(x)
                 }
-                s.push(try_next!());
             }
-            // consume the closing quote
-            try_next!();
-            token::Str(unescape(s))
+            token::Str(s)
         },
         c if c.is_numeric() => {
             let mut s = c.to_string();
@@ -209,7 +286,7 @@ fn next_token<R: CharRead>(chars: &mut Peekable<Fuse<Chars<R>>>) -> Option<Resul
             token::Num(some_try!(s.parse()))
             //token::Int(some_try!(s.parse()))
         },
-        c if UnicodeXID::is_xid_start(c) => {
+        c if UnicodeXID::is_xid_start(c) || c == '_' => {
             let mut s = c.to_string();
             while UnicodeXID::is_xid_continue(try_peek!()) {
                 s.push(try_next!());
@@ -220,7 +297,7 @@ fn next_token<R: CharRead>(chars: &mut Peekable<Fuse<Chars<R>>>) -> Option<Resul
                 token::Ident(s)
             }
         },
-        c => { return Some(Err(TokenError(format!("Invalid character: {:?}", c)))) }
+        c => throw!(TokenError(format!("Invalid character: {:?}", c))),
     }))
 }
 
@@ -239,7 +316,26 @@ impl MaybeNumeric for char {
     }
 }
 
-fn unescape(s: String) -> String {
-    // TODO
-    s
+fn hex_to_int(from: &[char]) -> Result<u32> {
+    let mut out = 0;
+    for &c in from {
+        match c {
+            '0'...'9' => { out = out * 16 + (c as u32) - ('0' as u32) },
+            'A'...'F' => { out = out * 16 + 10 + (c as u32) - ('A' as u32) },
+            'a'...'f' => { out = out * 16 + 10 + (c as u32) - ('a' as u32) },
+            _ => return Err(TokenError(format!("Invalid hexadecimal character: {:?}", c)))
+        }
+    }
+    Ok(out)
+}
+
+fn dec_to_int(from: &[char]) -> Result<u32> {
+    let mut out = 0;
+    for &c in from {
+        match c {
+            '0'...'9' => { out = out * 10 + (c as u32) - ('0' as u32) },
+            _ => return Err(TokenError(format!("Invalid decimal character: {:?}", c)))
+        }
+    }
+    Ok(out)
 }
