@@ -5,11 +5,14 @@
 %type STRING { String }
 
 chunk ::= block(B). { self.chunk = Some(Chunk { block: B }) }
-//chunk ::= exp(E). { self.chunk = Some(Chunk { block: Block { stmts: P([]), ret: Some([E]) } }). }
 
 %type block { Block }
-block(B) ::= stats_(S). { B = Block { stmts: S.into_boxed_slice(), ret: None }; }
-block(B) ::= stats_(S) retstat(R). { B = Block { stmts: S.into_boxed_slice(), ret: Some(R) }; }
+block(B) ::= block_(A) pop_scope_. { B = A; }
+%type block_ { Block }
+block_(B) ::= stats_(S). { B = Block { stmts: S.into_boxed_slice(), ret: None }; }
+block_(B) ::= stats_(S) retstat(R). { B = Block { stmts: S.into_boxed_slice(), ret: Some(R) }; }
+push_scope_ ::= . { self.push_scope(); }
+pop_scope_ ::= . { self.pop_scope(); }
 
 %type stats_ { Vec<Stmt> }
 stats_(L) ::= . { L = vec![]; }
@@ -25,15 +28,15 @@ stat(S) ::= functioncall(C). { S = StmtCall(P(C)); }
 stat(S) ::= label(N). { S = StmtLabel(N); }
 stat(S) ::= BREAK. { S = StmtBreak; }
 stat(S) ::= GOTO name(N). { S = StmtGoto(N); }
-stat(S) ::= DO block(B) END. { S = StmtDo(P(B)); }
-stat(S) ::= WHILE exp(E) DO block(B) END. { S = StmtWhile(P(E), P(B)); }
-stat(S) ::= REPEAT block(B) UNTIL exp(E). { S = StmtRepeat(P(B), P(E)); }
-stat(S) ::= IF exp(E) THEN block(B) elsifs_(I) else_(J) END. { S = StmtIf(P(E), P(B), I.into_boxed_slice(), J); }
-stat(S) ::= FOR name(N) EQ exp(I) COMMA exp(J) DO block(B) END. { S = StmtForNum(N, P(I), P(J), None, P(B)); }
-stat(S) ::= FOR name(N) EQ exp(I) COMMA exp(J) COMMA exp(K) DO block(B) END. { S = StmtForNum(N, P(I), P(J), Some(P(K)), P(B)); }
-stat(S) ::= FOR namelist(N) IN explist(E) DO block(B) END. { S = StmtForIn(N, E, P(B)); }
-stat(S) ::= FUNCTION funcname(N) funcbody(B). { S = StmtFunction(N.0, N.1, B.0, B.1, B.2); }
-stat(S) ::= LOCAL FUNCTION name(N) funcbody(B). { S = StmtLocalFunction(N, B.0, B.1, B.2); }
+stat(S) ::= DO push_scope_ block(B) END. { S = StmtDo(P(B)); }
+stat(S) ::= WHILE push_scope_ exp(E) DO block(B) END. { S = StmtWhile(P(E), P(B)); }
+stat(S) ::= REPEAT push_scope_ block(B) UNTIL exp(E). { S = StmtRepeat(P(B), P(E)); }
+stat(S) ::= IF exp(E) THEN push_scope_ block(B) elsifs_(I) else_(J) END. { S = StmtIf(P(E), P(B), I.into_boxed_slice(), J); }
+stat(S) ::= FOR push_scope_ declname_(N) EQ exp(I) COMMA exp(J) DO block(B) END. { S = StmtForNum(N, P(I), P(J), None, P(B)); }
+stat(S) ::= FOR push_scope_ declname_(N) EQ exp(I) COMMA exp(J) COMMA exp(K) DO block(B) END. { S = StmtForNum(N, P(I), P(J), Some(P(K)), P(B)); }
+stat(S) ::= FOR push_scope_ namelist(N) IN explist(E) DO block(B) END. { S = StmtForIn(N, E, P(B)); }
+stat(S) ::= FUNCTION push_scope_ funcname(N) funcbody(B). { self.insert_global_name(&N.0[0]); S = StmtFunction(N.0, N.1, B.0, B.1, B.2); }
+stat(S) ::= LOCAL FUNCTION push_scope_ declname_(N) funcbody(B). { S = StmtLocalFunction(N, B.0, B.1, B.2); }
 stat(S) ::= LOCAL namelist(N). { S = StmtLocal(N, None); }
 stat(S) ::= LOCAL namelist(N) EQ explist(E). { S = StmtLocal(N, Some(E)); }
 stat(S) ::= error. { S = StmtInvalid }
@@ -69,12 +72,12 @@ varlist_(L) ::= var(A). { L = vec![A]; }
 varlist_(L) ::= varlist_(V) COMMA var(A). { L = { let mut v = V; v.push(A); v } }
 
 %type var { Var }
-var(V) ::= name(N). { V = VarName(N); }
+var(V) ::= name(N). { self.is_in_scope(&N); V = VarName(N); }
 var(V) ::= prefixexp(E) OPENBRACKET exp(F) CLOSEBRACKET. { V = VarProperty(P(E), P(F)); }
 var(V) ::= prefixexp(E) DOT name(N). { V = VarMember(P(E), N); }
 
 %type namelist { V<Name> }
-namelist(A) ::= namelist_(B). { A = B.into_boxed_slice(); }
+namelist(A) ::= namelist_(B). { for n in B.iter() { self.insert_local_name(n); }; A = B.into_boxed_slice(); }
 %type namelist_ { Vec<Name> }
 namelist_(L) ::= name(N). { L = vec![N]; }
 namelist_(L) ::= namelist_(V) COMMA name(N). { L = { let mut v = V; v.push(N); v } }
@@ -171,18 +174,15 @@ fieldsep ::= COMMA|SEMI.
 
 %type name { Name }
 name(N) ::= NAME(S). { N = Name::new(S); }
+%type declname_ { Name }
+declname_(A) ::= name(N). { self.insert_local_name(&N); A = N; }
 
 // binop and unop are integrated into exp
 
 %derive_token { Clone }
-%include {
-    use ::ast::*;
-}
-%parse_accept { println!("accepted!"); }
-%parse_failure { println!("giving up... failed!"); }
-%syntax_error {
-    let token: ::token::Token = token.clone().into();
-    println!("syntax error, unexpected token {:?}", token);
-}
+%include { use ::ast::*; }
+%parse_accept { self.accepted = true; }
+%parse_failure { self.recoverable = false; }
+%syntax_error { self.last_error_count = self.last_error_count + 1; self.last_error = Some(token.clone()); }
 
 // vim: et sw=4 ts=4 sts=4

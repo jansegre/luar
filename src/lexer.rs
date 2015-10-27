@@ -216,8 +216,8 @@ fn next_token<R: CharRead>(chars: &mut Peekable<Fuse<Chars<R>>>) -> Option<Resul
                 while try_peek!().maybe_numeric() {
                     s.push(try_next!());
                 }
-                //token::Float(some_try!(s.parse()))
-                token::Int(some_try!(s.parse()))
+                //token::Int(some_try!(s.parse()))
+                token::Num(some_try!(s.parse()))
             },
             _ => token::Dot,
         },

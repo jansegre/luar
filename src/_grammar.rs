@@ -2,6 +2,7 @@
 #![allow(unused_variables)]
 /* TMPL: %include */
 %%
+use std::collections::HashSet;
 /* TMPL: makeheader cruft */
 
 %%
@@ -54,26 +55,118 @@ pub struct Parser {
     yyerrcnt: i32, /* Shifts left before out of the error */
     yystack: Vec<YYStackEntry>,
     chunk: Option<Chunk>,
+    last_error: Option<Token>,
+    last_error_count: u8,
+    soft_error_count: u8,
+    recoverable: bool,
+    accepted: bool,
+    scopes: Vec<HashSet<Box<str>>>,
 %%
 }
 
 impl Parser {
 
+    #[inline]
     pub fn new(
 %%
         ) -> Parser {
-        //let mut p = Parser { yyerrcnt: -1, yystack: Vec::new(), extra: extra};
-        let mut p = Parser { yyerrcnt: -1, yystack: Vec::new(), chunk: None};
+        let mut p = Parser {
+            yyerrcnt: -1,
+            yystack: Vec::new(),
+            //extra: extra,
+            chunk: None,
+            last_error: None,
+            last_error_count: 0,
+            soft_error_count: 0,
+            recoverable: true,
+            accepted: false,
+            scopes: vec![HashSet::new()],
+        };
         p.yystack.push(YYStackEntry{stateno: 0, major: 0, minor: YYMinorType::YY0});
         p
     }
 
 %%
 
+    #[inline]
     pub fn into_chunk(self) -> Option<Chunk> {
         self.chunk
     }
 
+    #[inline]
+    pub fn is_recoverable(&self) -> bool {
+        self.recoverable
+    }
+
+    #[inline]
+    pub fn is_accepted(&self) -> bool {
+        self.accepted
+    }
+
+    #[inline]
+    pub fn last_token_error(&self) -> Option<Token> {
+        self.last_error.clone()
+    }
+
+    #[inline]
+    pub fn error_count(&self) -> u8 {
+        self.last_error_count
+    }
+
+    #[inline]
+    pub fn error_count_soft(&self) -> u8 {
+        self.soft_error_count
+    }
+
+    fn current_scope(&mut self) -> &mut HashSet<Box<str>> {
+        self.scopes.last_mut().unwrap()
+    }
+
+    fn top_scope(&mut self) -> &mut HashSet<Box<str>> {
+        self.scopes.first_mut().unwrap()
+    }
+
+    fn insert_local_name(&mut self, name: &::ast::Name) -> bool {
+        let n = name.name.clone();
+        {
+            let scope = self.current_scope();
+            if !scope.contains(&n) { return scope.insert(n) }
+            println!("Redeclaration of variable `{}`", n);
+        }
+        self.soft_error_count += 1;
+        false
+    }
+
+    fn insert_global_name(&mut self, name: &::ast::Name) -> bool {
+        let n = name.name.clone();
+        {
+            let scope = self.top_scope();
+            if !scope.contains(&n) { return scope.insert(n) }
+            println!("Redeclaration of variable `{}`", n);
+        }
+        self.soft_error_count += 1;
+        false
+    }
+
+    fn push_scope(&mut self) {
+        self.scopes.push(HashSet::new());
+    }
+
+    fn pop_scope(&mut self) {
+        self.scopes.pop();
+    }
+
+    fn is_in_scope(&mut self, name: &::ast::Name) -> bool {
+        let n = name.name.clone();
+        for scope in self.scopes.iter() {
+            if scope.contains(&n) { return true }
+        }
+        println!("Use of undeclared variable `{}`", n);
+        self.soft_error_count += 1;
+        false
+    }
+
+    #[inline]
     pub fn parse(&mut self, token: Token) {
 
         let yymajor = token_major(&token);

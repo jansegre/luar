@@ -1,12 +1,91 @@
 use ::grammar;
 use ::grammar::Token::*;
-use ::token;
+use ::token::Token;
 use ::token::Token::*;
 use ::token::DelimToken::*;
 use ::token::keywords::Keyword::*;
+use ::ast;
+pub use self::ErrorType::*;
 
-impl From<token::Token> for grammar::Token {
-    fn from(t: token::Token) -> Self {
+#[derive(Debug)]
+pub struct ParserError {
+    pub error_type: ErrorType,
+    pub recoverable: bool,
+}
+
+#[derive(Debug)]
+pub enum ErrorType {
+    UnexpectedToken(Token),
+    PreviousError,
+    NotReady,
+    NotAccepted,
+    UnexpectedError,
+}
+
+
+pub struct Parser {
+    inner: grammar::Parser,
+    error_count: u8,
+}
+
+impl Parser {
+    pub fn new() -> Parser {
+        Parser {
+            inner: grammar::Parser::new(),
+            error_count: 0,
+        }
+    }
+
+    pub fn push(&mut self, token: Token) -> Result<(), ParserError> {
+        self.inner.parse(token.into());
+        if !self.inner.is_recoverable() && self.inner.error_count() <= self.error_count {
+            return Err(ParserError {
+                error_type: PreviousError,
+                recoverable: false,
+            })
+        }
+        if let Some(t) = self.inner.last_token_error() {
+            let count = self.inner.error_count();
+            if count == self.error_count {
+                // already reported
+                Ok(())
+            } else {
+                self.error_count = count;
+                Err(ParserError {
+                    error_type: UnexpectedToken(t.into()),
+                    recoverable: self.inner.is_recoverable(),
+                })
+            }
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn into_chunk(self) -> Result<ast::Chunk, ParserError> {
+        let recoverable = self.inner.is_recoverable();
+        if !self.inner.is_accepted() {
+            Err(ParserError {
+                error_type: NotAccepted,
+                recoverable: recoverable,
+            })
+        } else {
+            match self.inner.into_chunk() {
+                Some(chunk) => Ok(chunk),
+                None => Err(ParserError {
+                    error_type: UnexpectedError,
+                    recoverable: recoverable,
+                }),
+            }
+        }
+    }
+
+    pub fn has_errors(&self) -> bool {
+        self.error_count > 0 || self.inner.error_count_soft() > 0
+    }
+}
+
+impl From<Token> for grammar::Token {
+    fn from(t: Token) -> Self {
         match t {
             Plus => PLUS,
             Minus => MINUS,
@@ -72,7 +151,7 @@ impl From<token::Token> for grammar::Token {
     }
 }
 
-impl From<grammar::Token> for token::Token {
+impl From<grammar::Token> for Token {
     fn from(t: grammar::Token) -> Self {
         match t {
             PLUS => Plus,

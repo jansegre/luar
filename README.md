@@ -1,63 +1,58 @@
 luarc
 =====
 
-Experimental Lua compiler written in Rust.
+Lua compiler written in Rust.
 
-This is an experimental sub-project of Luar (Lua bindings for Rust) which
-focuses on compiling Lua source code to Lua byte-code.
+Requirements
+------------
+
+- [rust](https://www.rust-lang.org)
+
+For developing use [git](https://git-scm.com) to clone the project:
+
+    git clone -b luarc https://github.com/jansegre/luar.git luarc
+
+### Tips for Windows
+
+Temporarily add Rust to the PATH.
+
+On the cmd:
+
+    set PATH=%PATH%;"C:\Program Files\Rust stable 1.3\bin"
+
+If on a BASH terminal (Git Bash):
+
+    export PATH=$PATH:"/c/Program Files/Rust stable 1.3/bin"
+
+Then enter the project dir, usually:
+
+    cd luarc
+
 
 Current status
 --------------
 
-- Lexer: implemented
-- Parser: on-going recursive parser experiments, will settle on a LR(1) or LALR(1) parser.
+- Lexer: implemented manually
+- Parser: implemented LALR(1) parser
+- Scope Analysis: implemented for local variables and global functions
 
 Compiling and Testing
 ---------------------
 
 Rust and Cargo (comes with all Rust installers) are the only requirements.
 
-To run the current demo:
+To run the current program:
 
-    cargo run
+    cargo build
 
-These are some exemples (note that whitespace/comment are not real tokens: they
-are not passed to the parser):
+    ./target/release/luarc < examples/1_err.lua
+    ./target/release/luarc < examples/1_fix.lua
 
+    ./target/release/luarc < examples/2_err.lua
+    ./target/release/luarc < examples/2_fix.lua
 
-    a + b -- comment
-    Ok(Ident("a"))
-    Ok(Whitespace)
-    Ok(Plus)
-    Ok(Whitespace)
-    Ok(Ident("b"))
-    Ok(Whitespace)
-    Ok(Comment)
-    Ok(Eof)
+    ./target/release/luarc < examples/3_err.lua
+    ./target/release/luarc < examples/3_fix.lua
 
-    a+b--comment
-    Ok(Ident("a"))
-    Ok(Plus)
-    Ok(Ident("b"))
-    Ok(Comment)
-    Ok(Eof)
-
-    a1 5 0b
-    Ok(Ident("a1"))
-    Ok(Whitespace)
-    Ok(Int(5))
-    Ok(Whitespace)
-    Err(TokenIntError(ParseIntError { kind: InvalidDigit }))
-    Ok(Whitespace)
-    Ok(Eof)
-
-    abcd 123 "asdf\"asdf"
-    Ok(Ident("abcd"))
-    Ok(Whitespace)
-    Ok(Int(123))
-    Ok(Whitespace)
-    Ok(Str("asdf\\\"asdf"))
-    Ok(Whitespace)
-    Ok(Eof)
-
-Each example is terminated with `^D` (EOF, which too is not a real token).
+On the `_err.lua` examples, the compiler will complain and exit with error (1),
+correct inputs will be silent and will exist with success (0).

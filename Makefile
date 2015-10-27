@@ -9,4 +9,6 @@ all: src/grammar.rs
 	cargo build
 
 %.rs: %.y $(TEMPLATE)
+	rm -f $@
 	$(LEMON_RUST) -s -T$(TEMPLATE) $<
+	chmod a-w $@
