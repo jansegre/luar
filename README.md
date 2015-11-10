@@ -43,7 +43,7 @@ Rust and Cargo (comes with all Rust installers) are the only requirements.
 
 To run the current program:
 
-    cargo build
+    cargo build --release
 
     ./target/release/luarc < examples/1_err.lua
     ./target/release/luarc < examples/1_fix.lua
@@ -55,4 +55,6 @@ To run the current program:
     ./target/release/luarc < examples/3_fix.lua
 
 On the `_err.lua` examples, the compiler will complain and exit with error (1),
-correct inputs will be silent and will exist with success (0).
+correct inputs will be output pseudo assembly code and will exit with success (0).
+
+Check out the example outputs at `examples/*_out`.

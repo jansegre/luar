@@ -2,30 +2,39 @@
 
 local a, b, c
 
--- variáveis extras do lado esquerdo são válidas, recebem nil
-a, b, c = true, false
+a, b = 1, 2
+b, c = a + b, a - b
 
--- expressões extras do lado direito são ignoradas
-a, b = 10.0, -.2, 3
+function foo(a)
+  return a + 1
+end
 
 -- chamadas de função são statements
-c(a)
+foo(a)
 
 -- mas também expressões
-a = c(b)
+a = foo(b)
 
 do
   local x, y
-  c = a * x ^ b + y
+  c = a * x / b + y
 end
 
 -- escopo já terminou
 --x = c
 
 if c then
-  local w, x
-  w = x + c
+  local w, z
+  w = z + c
+elseif a then
+  foo(c)
+else
+  b = "foobar"
 end
 
 -- outros erros de escopo também são detectado
 --a = w
+
+while c ~= 0 do
+  c = c / 2
+end

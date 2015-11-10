@@ -9,7 +9,7 @@ use self::Value::*;
 #[derive(Debug)]
 pub enum Error {
     FnNameError,
-    VarNameError,
+    VarNameError(Name),
     ArgNameError,
     SetMismatchError,
     MultipleConstError,
@@ -136,13 +136,22 @@ impl Block {
                                 *count += 1;
                             }
                             Occupied(..) => {
-                                return Err(Error::VarNameError)
+                                return Err(Error::VarNameError(name.clone()))
                             }
                         }
                     }
                 }
                 StmtDo(ref block) | StmtWhile(_, ref block) | StmtRepeat(ref block, _) | StmtForNum(_, _, _, _, ref block) | StmtForIn(_, _, ref block) => {
                     try!(block.partial_local_var_map(map, count));
+                }
+                StmtIf(_, ref pblock, ref velseif, ref opblock) => {
+                    try!(pblock.partial_local_var_map(map, count));
+                    for &(_, ref block) in velseif.iter() {
+                        try!(block.partial_local_var_map(map, count));
+                    }
+                    if let &Some(ref block) = opblock {
+                        try!(block.partial_local_var_map(map, count));
+                    }
                 }
                 _ => {}
             }
@@ -226,8 +235,11 @@ impl Stmt {
                 for var in vvar.iter() {
                     match *var {
                         VarName(ref name) => {
-                            let id = *var_map.get(name).unwrap();
-                            ids.push(id);
+                            if let Some(&id) = var_map.get(name) {
+                                ids.push(id);
+                            } else {
+                                return Err(Error::VarNameError(name.clone()));
+                            }
                         }
                         VarProperty(..) | VarMember(..) => {
                             return Err(Error::NotSupported);
@@ -252,8 +264,11 @@ impl Stmt {
 
                     let mut ids = vec![];
                     for name in vname.iter() {
-                        let id = *var_map.get(name).unwrap();
-                        ids.push(id);
+                        if let Some(&id) = var_map.get(name) {
+                            ids.push(id);
+                        } else {
+                            return Err(Error::VarNameError(name.clone()));
+                        }
                     }
 
                     for expr in vexpr.iter() {
@@ -265,6 +280,9 @@ impl Stmt {
                         try!(writeln!(cg.out, "    STORE_VAR {}", id));
                     }
                 }
+            }
+            StmtDo(ref pblock) => {
+                try!(pblock.gen_to(cg, var_map));
             }
             StmtLabel(ref name) => {
                 let id = {
@@ -388,8 +406,11 @@ impl Expr {
             ExprVar(ref var) => {
                 match **var {
                     VarName(ref name) => {
-                        let id = *var_map.get(name).unwrap();
-                        try!(writeln!(cg.out, "    LOAD_VAR {}", id));
+                        if let Some(&id) = var_map.get(name) {
+                            try!(writeln!(cg.out, "    LOAD_VAR {}", id));
+                        } else {
+                            return Err(Error::VarNameError(name.clone()));
+                        }
                     }
                     _ => {
                         return Err(Error::NotSupported);
