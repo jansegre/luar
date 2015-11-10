@@ -4,6 +4,7 @@ pub mod token;
 pub mod lexer;
 pub mod parser;
 pub mod ast;
+pub mod codegen;
 mod grammar;
 mod charread;
 
@@ -13,6 +14,7 @@ use parser::Parser;
 
 fn main() {
     let stdin = io::stdin();
+    let mut stdout = io::stdout();
     let lexer = lexer::Reader::new(stdin);
     let mut parser = Parser::new();
     for token in lexer.filter(|t| match *t { Ok(ref k) => k.is_useful(), Err(..) => true }) {
@@ -32,8 +34,15 @@ fn main() {
         }
     }
     if parser.has_errors() {
-        println!("has errors");
+        println!("Exiting due to previous errors");
         exit(1);
     }
-    //println!("{:#?}", parser.into_chunk());
+    if let Ok(chunk) = parser.into_chunk() {
+        let mut cg = codegen::Codegen::new(&mut stdout);
+        // FIXME: proper message for unwrap
+        if let Err(err) = cg.gen_from(chunk) {
+            println!("An error occurred: {:#?}", err);
+            exit(2);
+        }
+    }
 }

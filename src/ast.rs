@@ -16,7 +16,8 @@
 //!      | 'do' block 'end'
 //!      | 'while' exp 'do' block 'end'
 //!      | 'repeat' block 'until' exp
-//!      | 'if' exp 'then' block {'elseif' exp 'then' block} ['else' block] 'end'
+//!      | 'if' exp 'then' block {'elseif' exp 'then' block}
+//!        ['else' block] 'end'
 //!      | 'for' Name '=' exp ',' exp [',' exp] 'do' block 'end'
 //!      | 'for' namelist 'in' explist 'do' block 'end'
 //!      | 'function' funcname funcbody
@@ -155,11 +156,6 @@ pub fn P<T: 'static>(value: T) -> P<T> {
     P::new(value)
 }
 
-//#[allow(non_snake_case)]
-//fn V<T>(values: T) -> Box<[T]> {
-//    Box::new(values)
-//}
-
 #[derive(Debug)]
 pub struct Chunk {
     pub block: Block,
@@ -283,7 +279,7 @@ pub enum UnOp {
     UnLen,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Name {
     pub name: P<str>,
 }

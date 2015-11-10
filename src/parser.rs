@@ -1,10 +1,10 @@
-use ::grammar;
+use grammar;
 use ::grammar::Token::*;
-use ::token::Token;
+use token::Token;
 use ::token::Token::*;
 use ::token::DelimToken::*;
 use ::token::keywords::Keyword::*;
-use ::ast;
+use ast;
 pub use self::ErrorType::*;
 
 #[derive(Debug)]
@@ -42,7 +42,7 @@ impl Parser {
             return Err(ParserError {
                 error_type: PreviousError,
                 recoverable: false,
-            })
+            });
         }
         if let Some(t) = self.inner.last_token_error() {
             let count = self.inner.error_count();

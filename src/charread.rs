@@ -1,11 +1,11 @@
-//use std::str::{Chars};
+// use std::str::{Chars};
 use std::io::{BufRead, BufReader, Read, Result};
 
 pub struct Chars<R> {
     inner: R,
 }
 
-pub trait CharRead {
+pub trait CharRead : Sized {
     fn read_char(&mut self, chr: &mut char) -> Result<usize>;
     fn chars(self) -> Chars<Self>;
 }
@@ -23,18 +23,18 @@ impl<R: Read> CharReader<R> {
         }
     }
 
-    ///// This methods checks if it starts with the given string slice
-    ///// it will pull the next line if the current is too short
-    //pub fn starts_with(&mut self, start: &str) -> Result<bool> {
-    //    if start.len() > self.line.len() {
-    //        let mut new_line = "".to_string();
-    //        if try!(self.stream.read_line(&mut new_line)) == 0 {
-    //            return Ok(false);
-    //        }
-    //        self.line.push_str(&new_line);
-    //    }
-    //    Ok(self.line.starts_with(start))
-    //}
+// /// This methods checks if it starts with the given string slice
+// /// it will pull the next line if the current is too short
+// pub fn starts_with(&mut self, start: &str) -> Result<bool> {
+//    if start.len() > self.line.len() {
+//        let mut new_line = "".to_string();
+//        if try!(self.stream.read_line(&mut new_line)) == 0 {
+//            return Ok(false);
+//        }
+//        self.line.push_str(&new_line);
+//    }
+//    Ok(self.line.starts_with(start))
+// }
 }
 
 impl<R: Read> CharRead for CharReader<R> {

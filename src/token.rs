@@ -51,39 +51,39 @@ pub mod keywords {
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum DelimToken {
-    Paren,   // ( or )
-    Brace,   // { or }
+    Paren, // ( or )
+    Brace, // { or }
     Bracket, // [ or ]
 }
 
-//#[derive(Debug, PartialEq, Eq, Clone)]
+// #[derive(Debug, PartialEq, Eq, Clone)]
 #[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     // expression operators and symbols
-    Plus,    // +
-    Minus,   // -
-    Star,    // *
-    Slash,   // /
+    Plus, // +
+    Minus, // -
+    Star, // *
+    Slash, // /
     Percent, // %
-    Caret,   // ^
-    Pound,   // #
-    EqEq,    // ==
-    Ne,      // ~=
-    Le,      // <=
-    Ge,      // >=
-    Lt,      // <
-    Gt,      // >
-    Eq,      // =
+    Caret, // ^
+    Pound, // #
+    EqEq, // ==
+    Ne, // ~=
+    Le, // <=
+    Ge, // >=
+    Lt, // <
+    Gt, // >
+    Eq, // =
 
     // structural symbols
-    Semi,       // ;
-    Colon,      // :
+    Semi, // ;
+    Colon, // :
     ColonColon, // ::
-    Comma,      // ,
-    Dot,        // .
-    DotDot,     // ..
-    DotDotDot,  // ...
-    OpenDelim(DelimToken),  // ( { [
+    Comma, // ,
+    Dot, // .
+    DotDot, // ..
+    DotDotDot, // ...
+    OpenDelim(DelimToken), // ( { [
     CloseDelim(DelimToken), // ) } ]
 
     // terminals
@@ -98,7 +98,7 @@ pub enum Token {
     Whitespace,
     /// Comments begin with --
     Comment,
-    //Shebang,
+    // Shebang,
     Invalid,
 
     Eof,

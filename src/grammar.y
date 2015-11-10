@@ -35,18 +35,18 @@ stat(S) ::= IF exp(E) THEN push_scope_ block(B) elsifs_(I) else_(J) END. { S = S
 stat(S) ::= FOR push_scope_ declname_(N) EQ exp(I) COMMA exp(J) DO block(B) END. { S = StmtForNum(N, P(I), P(J), None, P(B)); }
 stat(S) ::= FOR push_scope_ declname_(N) EQ exp(I) COMMA exp(J) COMMA exp(K) DO block(B) END. { S = StmtForNum(N, P(I), P(J), Some(P(K)), P(B)); }
 stat(S) ::= FOR push_scope_ namelist(N) IN explist(E) DO block(B) END. { S = StmtForIn(N, E, P(B)); }
-stat(S) ::= FUNCTION push_scope_ funcname(N) funcbody(B). { self.insert_global_name(&N.0[0]); S = StmtFunction(N.0, N.1, B.0, B.1, B.2); }
-stat(S) ::= LOCAL FUNCTION push_scope_ declname_(N) funcbody(B). { S = StmtLocalFunction(N, B.0, B.1, B.2); }
+stat(S) ::= FUNCTION funcname(N) push_scope_ funcbody(B). { self.insert_global_name(&N.0[0]); S = StmtFunction(N.0, N.1, B.0, B.1, B.2); }
+stat(S) ::= LOCAL FUNCTION declname_(N) push_scope_ funcbody(B). { S = StmtLocalFunction(N, B.0, B.1, B.2); }
 stat(S) ::= LOCAL namelist(N). { S = StmtLocal(N, None); }
 stat(S) ::= LOCAL namelist(N) EQ explist(E). { S = StmtLocal(N, Some(E)); }
 stat(S) ::= error. { S = StmtInvalid }
 
 %type elsifs_ { Vec<(Expr, Block)> }
 elsifs_(L) ::= . { L = vec![]; }
-elsifs_(L) ::= elsifs_(V) ELSEIF exp(E) THEN block(B). { L = { let mut v = V; v.push((E, B)); v }; }
+elsifs_(L) ::= elsifs_(V) ELSEIF exp(E) THEN push_scope_ block(B). { L = { let mut v = V; v.push((E, B)); v }; }
 %type else_ { Option<P<Block>> }
 else_(E) ::= . { E = None; }
-else_(E) ::= ELSE block(B). { E = Some(P(B)); }
+else_(E) ::= ELSE push_scope_ block(B). { E = Some(P(B)); }
 
 %type retstat { V<Expr> }
 retstat(R) ::= RETURN. { R = P([]); }

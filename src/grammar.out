@@ -7,8 +7,8 @@ State 0:
           stats_ ::= * stats_ stat_
 
                          chunk accept
-                         block shift  145
-                        block_ shift  80
+                         block shift  147
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -64,31 +64,31 @@ State 1:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                    OPENBRACKET shift  18
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                    CLOSEBRACE shift  179
-                         error shift  191
-                  functioncall shift  189
-                          name shift  130
-                           exp shift  94
-                           var shift  190
+                    CLOSEBRACE shift  181
+                         error shift  193
+                  functioncall shift  191
+                          name shift  132
+                           exp shift  96
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
-                     fieldlist shift  129
+                   functiondef shift  195
+              tableconstructor shift  194
+                     fieldlist shift  131
                     fieldlist_ shift  61
-                         field shift  175
+                         field shift  177
 
 State 2:
       (2) block_ ::= stats_ *
@@ -108,8 +108,8 @@ State 2:
           stat ::= * FOR push_scope_ declname_ EQ exp COMMA exp DO block END
           stat ::= * FOR push_scope_ declname_ EQ exp COMMA exp COMMA exp DO block END
           stat ::= * FOR push_scope_ namelist IN explist DO block END
-          stat ::= * FUNCTION push_scope_ funcname funcbody
-          stat ::= * LOCAL FUNCTION push_scope_ declname_ funcbody
+          stat ::= * FUNCTION funcname push_scope_ funcbody
+          stat ::= * LOCAL FUNCTION declname_ push_scope_ funcbody
           stat ::= * LOCAL namelist
           stat ::= * LOCAL namelist EQ explist
           stat ::= * error
@@ -132,29 +132,29 @@ State 2:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                          SEMI shift  204
-                         BREAK shift  166
+                          NAME shift  187
+                          SEMI shift  206
+                         BREAK shift  168
                           GOTO shift  67
-                            DO shift  79
-                         WHILE shift  78
-                        REPEAT shift  77
+                            DO shift  81
+                         WHILE shift  80
+                        REPEAT shift  79
                             IF shift  13
                            FOR shift  74
-                      FUNCTION shift  73
+                      FUNCTION shift  44
                          LOCAL shift  43
                         RETURN shift  3
                     COLONCOLON shift  62
-                         error shift  149
-                       retstat shift  206
-                         stat_ shift  205
-                          stat shift  203
-                       varlist shift  144
-                  functioncall shift  105
-                         label shift  167
-                          name shift  201
-                      varlist_ shift  111
-                           var shift  108
+                         error shift  151
+                       retstat shift  208
+                         stat_ shift  207
+                          stat shift  205
+                       varlist shift  146
+                  functioncall shift  107
+                         label shift  169
+                          name shift  203
+                      varlist_ shift  113
+                           var shift  110
                      prefixexp shift  56
                      {default} reduce 2
 
@@ -208,29 +208,29 @@ State 3:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
-                          SEMI shift  148
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
+                          SEMI shift  150
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                       explist shift  113
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  91
-                           var shift  190
+                         error shift  193
+                       explist shift  115
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  93
+                           var shift  192
                      prefixexp shift  57
-                      explist_ shift  127
-                   functiondef shift  193
-              tableconstructor shift  192
+                      explist_ shift  129
+                   functiondef shift  195
+              tableconstructor shift  194
                      {default} reduce 31
 
 State 4:
@@ -281,29 +281,29 @@ State 4:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
-                    CLOSEPAREN shift  171
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
+                    CLOSEPAREN shift  173
                      OPENBRACE shift  1
-                         error shift  191
-                       explist shift  126
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  91
-                           var shift  190
+                         error shift  193
+                       explist shift  128
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  93
+                           var shift  192
                      prefixexp shift  57
-                      explist_ shift  127
-                   functiondef shift  193
-              tableconstructor shift  192
+                      explist_ shift  129
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 5:
           stat ::= LOCAL namelist EQ * explist
@@ -352,28 +352,28 @@ State 5:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                       explist shift  150
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  91
-                           var shift  190
+                         error shift  193
+                       explist shift  152
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  93
+                           var shift  192
                      prefixexp shift  57
-                      explist_ shift  127
-                   functiondef shift  193
-              tableconstructor shift  192
+                      explist_ shift  129
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 6:
           stat ::= FOR push_scope_ namelist IN * explist DO block END
@@ -422,28 +422,28 @@ State 6:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                       explist shift  117
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  91
-                           var shift  190
+                         error shift  193
+                       explist shift  119
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  93
+                           var shift  192
                      prefixexp shift  57
-                      explist_ shift  127
-                   functiondef shift  193
-              tableconstructor shift  192
+                      explist_ shift  129
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 7:
           stat ::= varlist EQ * explist
@@ -492,28 +492,28 @@ State 7:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                       explist shift  202
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  91
-                           var shift  190
+                         error shift  193
+                       explist shift  204
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  93
+                           var shift  192
                      prefixexp shift  57
-                      explist_ shift  127
-                   functiondef shift  193
-              tableconstructor shift  192
+                      explist_ shift  129
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 8:
           var ::= * name
@@ -563,28 +563,28 @@ State 8:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                    OPENBRACKET shift  18
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  130
-                           exp shift  94
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  132
+                           exp shift  96
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
-                         field shift  177
+                   functiondef shift  195
+              tableconstructor shift  194
+                         field shift  179
                      {default} reduce 98
 
 State 9:
@@ -631,26 +631,26 @@ State 9:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  82
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  84
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 10:
           stat ::= FOR push_scope_ declname_ EQ exp COMMA * exp DO block END
@@ -697,26 +697,26 @@ State 10:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  81
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  83
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 11:
           stat ::= FOR push_scope_ declname_ EQ * exp COMMA exp DO block END
@@ -763,29 +763,29 @@ State 11:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  83
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  85
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 12:
-          elsifs_ ::= elsifs_ ELSEIF * exp THEN block
+          elsifs_ ::= elsifs_ ELSEIF * exp THEN push_scope_ block
           var ::= * name
           var ::= * prefixexp OPENBRACKET exp CLOSEBRACKET
           var ::= * prefixexp DOT name
@@ -828,26 +828,26 @@ State 12:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  84
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  86
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 13:
           stat ::= IF * exp THEN push_scope_ block elsifs_ else_ END
@@ -893,26 +893,26 @@ State 13:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  85
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  87
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 14:
           stat ::= REPEAT push_scope_ block UNTIL * exp
@@ -958,26 +958,26 @@ State 14:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  90
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  92
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 15:
           stat ::= WHILE push_scope_ * exp DO block END
@@ -1023,26 +1023,26 @@ State 15:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  86
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  88
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 16:
           var ::= * name
@@ -1088,26 +1088,26 @@ State 16:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  92
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  94
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 17:
           var ::= * name
@@ -1153,26 +1153,26 @@ State 17:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  93
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  95
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 18:
           var ::= * name
@@ -1218,26 +1218,26 @@ State 18:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  87
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  89
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 19:
           var ::= * name
@@ -1283,26 +1283,26 @@ State 19:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  95
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  97
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 20:
           var ::= * name
@@ -1348,26 +1348,26 @@ State 20:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  88
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  90
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 21:
           var ::= * name
@@ -1413,26 +1413,26 @@ State 21:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  137
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  139
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 22:
           var ::= * name
@@ -1478,26 +1478,26 @@ State 22:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  138
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  140
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 23:
           var ::= * name
@@ -1543,26 +1543,26 @@ State 23:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  139
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  141
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 24:
           var ::= * name
@@ -1608,26 +1608,26 @@ State 24:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  140
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  142
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 25:
           var ::= * name
@@ -1673,26 +1673,26 @@ State 25:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  106
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  108
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 26:
           var ::= * name
@@ -1738,26 +1738,26 @@ State 26:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  107
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  109
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 27:
           var ::= * name
@@ -1803,26 +1803,26 @@ State 27:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  99
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  101
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 28:
           var ::= * name
@@ -1868,26 +1868,26 @@ State 28:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  100
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  102
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 29:
           var ::= * name
@@ -1933,26 +1933,26 @@ State 29:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  101
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  103
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 30:
           var ::= * name
@@ -1998,26 +1998,26 @@ State 30:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  102
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  104
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 31:
           var ::= * name
@@ -2063,26 +2063,26 @@ State 31:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  103
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  105
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 32:
           var ::= * name
@@ -2128,26 +2128,26 @@ State 32:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  104
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  106
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 33:
           var ::= * name
@@ -2193,26 +2193,26 @@ State 33:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  141
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  143
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 34:
           var ::= * name
@@ -2258,26 +2258,26 @@ State 34:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  98
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  100
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 35:
           var ::= * name
@@ -2323,26 +2323,26 @@ State 35:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  142
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  144
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 36:
           var ::= * name
@@ -2388,26 +2388,26 @@ State 36:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  97
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  99
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 37:
           var ::= * name
@@ -2453,26 +2453,26 @@ State 37:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  143
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  145
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 38:
           var ::= * name
@@ -2518,26 +2518,26 @@ State 38:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  96
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  98
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 39:
           var ::= * name
@@ -2583,26 +2583,26 @@ State 39:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                        NUMBER shift  195
-                        STRING shift  194
+                          NAME shift  187
+                        NUMBER shift  197
+                        STRING shift  196
                       FUNCTION shift  71
                          MINUS shift  33
                            NOT shift  37
                          POUND shift  35
-                           NIL shift  199
-                         FALSE shift  198
-                          TRUE shift  197
-                     DOTDOTDOT shift  196
+                           NIL shift  201
+                         FALSE shift  200
+                          TRUE shift  199
+                     DOTDOTDOT shift  198
                      OPENBRACE shift  1
-                         error shift  191
-                  functioncall shift  189
-                          name shift  201
-                           exp shift  89
-                           var shift  190
+                         error shift  193
+                  functioncall shift  191
+                          name shift  203
+                           exp shift  91
+                           var shift  192
                      prefixexp shift  57
-                   functiondef shift  193
-              tableconstructor shift  192
+                   functiondef shift  195
+              tableconstructor shift  194
 
 State 40:
           namelist ::= * namelist_
@@ -2615,13 +2615,13 @@ State 40:
           parlist ::= * namelist COMMA2 DOTDOTDOT
           name ::= * NAME
 
-                          NAME shift  185
-                     DOTDOTDOT shift  180
+                          NAME shift  187
+                     DOTDOTDOT shift  182
                     CLOSEPAREN shift  55
-                          name shift  184
-                      namelist shift  132
-                     namelist_ shift  136
-                       parlist shift  134
+                          name shift  186
+                      namelist shift  134
+                     namelist_ shift  138
+                       parlist shift  136
 
 State 41:
           varlist_ ::= varlist_ COMMA * var
@@ -2636,10 +2636,10 @@ State 41:
           name ::= * NAME
 
                     OPENPAREN2 shift  20
-                          NAME shift  185
-                  functioncall shift  189
-                          name shift  201
-                           var shift  109
+                          NAME shift  187
+                  functioncall shift  191
+                          name shift  203
+                           var shift  111
                      prefixexp shift  56
 
 State 42:
@@ -2652,14 +2652,14 @@ State 42:
           name ::= * NAME
           declname_ ::= * name
 
-                          NAME shift  185
-                          name shift  115
-                     declname_ shift  121
-                      namelist shift  118
-                     namelist_ shift  136
+                          NAME shift  187
+                          name shift  117
+                     declname_ shift  123
+                      namelist shift  120
+                     namelist_ shift  138
 
 State 43:
-          stat ::= LOCAL * FUNCTION push_scope_ declname_ funcbody
+          stat ::= LOCAL * FUNCTION declname_ push_scope_ funcbody
           stat ::= LOCAL * namelist
           stat ::= LOCAL * namelist EQ explist
           namelist ::= * namelist_
@@ -2667,24 +2667,24 @@ State 43:
           namelist_ ::= * namelist_ COMMA name
           name ::= * NAME
 
-                          NAME shift  185
-                      FUNCTION shift  72
-                          name shift  184
-                      namelist shift  114
-                     namelist_ shift  136
+                          NAME shift  187
+                      FUNCTION shift  59
+                          name shift  186
+                      namelist shift  116
+                     namelist_ shift  138
 
 State 44:
-          stat ::= FUNCTION push_scope_ * funcname funcbody
+          stat ::= FUNCTION * funcname push_scope_ funcbody
           funcname ::= * dotnames_
           funcname ::= * dotnames_ COLON name
           dotnames_ ::= * name
           dotnames_ ::= * dotnames_ DOT name
           name ::= * NAME
 
-                          NAME shift  185
-                          name shift  153
-                      funcname shift  66
-                     dotnames_ shift  110
+                          NAME shift  187
+                          name shift  155
+                      funcname shift  73
+                     dotnames_ shift  112
 
 State 45:
           block ::= * block_ pop_scope_
@@ -2694,8 +2694,8 @@ State 45:
           stats_ ::= * stats_ stat_
           stat ::= FOR push_scope_ namelist IN explist DO * block END
 
-                         block shift  116
-                        block_ shift  80
+                         block shift  118
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2707,8 +2707,8 @@ State 46:
           stats_ ::= * stats_ stat_
           stat ::= FOR push_scope_ declname_ EQ exp COMMA exp COMMA exp DO * block END
 
-                         block shift  119
-                        block_ shift  80
+                         block shift  121
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2720,8 +2720,8 @@ State 47:
           stats_ ::= * stats_ stat_
           stat ::= FOR push_scope_ declname_ EQ exp COMMA exp DO * block END
 
-                         block shift  120
-                        block_ shift  80
+                         block shift  122
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2731,10 +2731,10 @@ State 48:
           block_ ::= * stats_ retstat
       (6) stats_ ::= *
           stats_ ::= * stats_ stat_
-          else_ ::= ELSE * block
+          else_ ::= ELSE push_scope_ * block
 
-                         block shift  160
-                        block_ shift  80
+                         block shift  162
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2744,10 +2744,10 @@ State 49:
           block_ ::= * stats_ retstat
       (6) stats_ ::= *
           stats_ ::= * stats_ stat_
-          elsifs_ ::= elsifs_ ELSEIF exp THEN * block
+          elsifs_ ::= elsifs_ ELSEIF exp THEN push_scope_ * block
 
-                         block shift  161
-                        block_ shift  80
+                         block shift  163
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2759,8 +2759,8 @@ State 50:
           stats_ ::= * stats_ stat_
           stat ::= IF exp THEN push_scope_ * block elsifs_ else_ END
 
-                         block shift  75
-                        block_ shift  80
+                         block shift  77
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2772,8 +2772,8 @@ State 51:
           stats_ ::= * stats_ stat_
           stat ::= REPEAT push_scope_ * block UNTIL exp
 
-                         block shift  123
-                        block_ shift  80
+                         block shift  125
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2785,8 +2785,8 @@ State 52:
           stats_ ::= * stats_ stat_
           stat ::= WHILE push_scope_ exp DO * block END
 
-                         block shift  124
-                        block_ shift  80
+                         block shift  126
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2798,8 +2798,8 @@ State 53:
           stats_ ::= * stats_ stat_
           stat ::= DO push_scope_ * block END
 
-                         block shift  125
-                        block_ shift  80
+                         block shift  127
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2811,8 +2811,8 @@ State 54:
           stats_ ::= * stats_ stat_
           funcbody ::= OPENPAREN parlist CLOSEPAREN * block END
 
-                         block shift  133
-                        block_ shift  80
+                         block shift  135
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2824,8 +2824,8 @@ State 55:
           stats_ ::= * stats_ stat_
           funcbody ::= OPENPAREN CLOSEPAREN * block END
 
-                         block shift  135
-                        block_ shift  80
+                         block shift  137
+                        block_ shift  82
                         stats_ shift  2
                      {default} reduce 6
 
@@ -2842,13 +2842,13 @@ State 56:
           tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
 
                      OPENPAREN shift  4
-                        STRING shift  168
+                        STRING shift  170
                          COLON shift  68
                            DOT shift  69
                    OPENBRACKET shift  39
                      OPENBRACE shift  1
-              tableconstructor shift  169
-                          args shift  173
+              tableconstructor shift  171
+                          args shift  175
 
 State 57:
           var ::= prefixexp * OPENBRACKET exp CLOSEBRACKET
@@ -2864,13 +2864,13 @@ State 57:
           tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
 
                      OPENPAREN shift  4
-                        STRING shift  168
+                        STRING shift  170
                          COLON shift  68
                            DOT shift  69
                    OPENBRACKET shift  39
                      OPENBRACE shift  1
-              tableconstructor shift  169
-                          args shift  173
+              tableconstructor shift  171
+                          args shift  175
                      {default} reduce 59
 
 State 58:
@@ -2883,29 +2883,29 @@ State 58:
           tableconstructor ::= * OPENBRACE fieldlist CLOSEBRACE
 
                      OPENPAREN shift  4
-                        STRING shift  168
+                        STRING shift  170
                      OPENBRACE shift  1
-              tableconstructor shift  169
-                          args shift  172
+              tableconstructor shift  171
+                          args shift  174
 
 State 59:
-          stat ::= LOCAL FUNCTION push_scope_ * declname_ funcbody
+          stat ::= LOCAL FUNCTION * declname_ push_scope_ funcbody
           name ::= * NAME
           declname_ ::= * name
 
-                          NAME shift  185
-                          name shift  151
-                     declname_ shift  63
+                          NAME shift  187
+                          name shift  153
+                     declname_ shift  72
 
 State 60:
           stat ::= IF exp THEN push_scope_ block elsifs_ * else_ END
-          elsifs_ ::= elsifs_ * ELSEIF exp THEN block
+          elsifs_ ::= elsifs_ * ELSEIF exp THEN push_scope_ block
      (29) else_ ::= *
-          else_ ::= * ELSE block
+          else_ ::= * ELSE push_scope_ block
 
                         ELSEIF shift  12
-                          ELSE shift  48
-                         else_ shift  122
+                          ELSE shift  75
+                         else_ shift  124
                      {default} reduce 29
 
 State 61:
@@ -2914,8 +2914,8 @@ State 61:
           fieldlist_ ::= fieldlist_ * fieldsep field
           fieldsep ::= * COMMA|SEMI
 
-                         COMMA shift  176
-                          SEMI shift  176
+                         COMMA shift  178
+                          SEMI shift  178
                       fieldsep shift  8
                      {default} reduce 97
 
@@ -2923,66 +2923,66 @@ State 62:
           label ::= COLONCOLON * name COLONCOLON
           name ::= * NAME
 
-                          NAME shift  185
-                          name shift  112
+                          NAME shift  187
+                          name shift  114
 
 State 63:
-          stat ::= LOCAL FUNCTION push_scope_ declname_ * funcbody
+          stat ::= LOCAL FUNCTION declname_ push_scope_ * funcbody
           funcbody ::= * OPENPAREN CLOSEPAREN block END
           funcbody ::= * OPENPAREN parlist CLOSEPAREN block END
 
                      OPENPAREN shift  40
-                      funcbody shift  152
+                      funcbody shift  154
 
 State 64:
           dotnames_ ::= dotnames_ DOT * name
           name ::= * NAME
 
-                          NAME shift  185
-                          name shift  154
+                          NAME shift  187
+                          name shift  156
 
 State 65:
           funcname ::= dotnames_ COLON * name
           name ::= * NAME
 
-                          NAME shift  185
-                          name shift  155
+                          NAME shift  187
+                          name shift  157
 
 State 66:
-          stat ::= FUNCTION push_scope_ funcname * funcbody
+          stat ::= FUNCTION funcname push_scope_ * funcbody
           funcbody ::= * OPENPAREN CLOSEPAREN block END
           funcbody ::= * OPENPAREN parlist CLOSEPAREN block END
 
                      OPENPAREN shift  40
-                      funcbody shift  156
+                      funcbody shift  158
 
 State 67:
           stat ::= GOTO * name
           name ::= * NAME
 
-                          NAME shift  185
-                          name shift  165
+                          NAME shift  187
+                          name shift  167
 
 State 68:
           functioncall ::= prefixexp COLON * name args
           name ::= * NAME
 
-                          NAME shift  185
+                          NAME shift  187
                           name shift  58
 
 State 69:
           var ::= prefixexp DOT * name
           name ::= * NAME
 
-                          NAME shift  185
-                          name shift  174
+                          NAME shift  187
+                          name shift  176
 
 State 70:
           namelist_ ::= namelist_ COMMA * name
           name ::= * NAME
 
-                          NAME shift  185
-                          name shift  186
+                          NAME shift  187
+                          name shift  188
 
 State 71:
           functiondef ::= FUNCTION * funcbody
@@ -2990,20 +2990,20 @@ State 71:
           funcbody ::= * OPENPAREN parlist CLOSEPAREN block END
 
                      OPENPAREN shift  40
-                      funcbody shift  187
+                      funcbody shift  189
 
 State 72:
       (4) push_scope_ ::= *
-          stat ::= LOCAL FUNCTION * push_scope_ declname_ funcbody
+          stat ::= LOCAL FUNCTION declname_ * push_scope_ funcbody
 
-                   push_scope_ shift  59
+                   push_scope_ shift  63
                      {default} reduce 4
 
 State 73:
       (4) push_scope_ ::= *
-          stat ::= FUNCTION * push_scope_ funcname funcbody
+          stat ::= FUNCTION funcname * push_scope_ funcbody
 
-                   push_scope_ shift  44
+                   push_scope_ shift  66
                      {default} reduce 4
 
 State 74:
@@ -3016,49 +3016,63 @@ State 74:
                      {default} reduce 4
 
 State 75:
+      (4) push_scope_ ::= *
+          else_ ::= ELSE * push_scope_ block
+
+                   push_scope_ shift  48
+                     {default} reduce 4
+
+State 76:
+      (4) push_scope_ ::= *
+          elsifs_ ::= elsifs_ ELSEIF exp THEN * push_scope_ block
+
+                   push_scope_ shift  49
+                     {default} reduce 4
+
+State 77:
           stat ::= IF exp THEN push_scope_ block * elsifs_ else_ END
      (27) elsifs_ ::= *
-          elsifs_ ::= * elsifs_ ELSEIF exp THEN block
+          elsifs_ ::= * elsifs_ ELSEIF exp THEN push_scope_ block
 
                        elsifs_ shift  60
                      {default} reduce 27
 
-State 76:
+State 78:
       (4) push_scope_ ::= *
           stat ::= IF exp THEN * push_scope_ block elsifs_ else_ END
 
                    push_scope_ shift  50
                      {default} reduce 4
 
-State 77:
+State 79:
       (4) push_scope_ ::= *
           stat ::= REPEAT * push_scope_ block UNTIL exp
 
                    push_scope_ shift  51
                      {default} reduce 4
 
-State 78:
+State 80:
       (4) push_scope_ ::= *
           stat ::= WHILE * push_scope_ exp DO block END
 
                    push_scope_ shift  15
                      {default} reduce 4
 
-State 79:
+State 81:
       (4) push_scope_ ::= *
           stat ::= DO * push_scope_ block END
 
                    push_scope_ shift  53
                      {default} reduce 4
 
-State 80:
+State 82:
           block ::= block_ * pop_scope_
       (5) pop_scope_ ::= *
 
-                    pop_scope_ shift  207
+                    pop_scope_ shift  209
                      {default} reduce 5
 
-State 81:
+State 83:
           stat ::= FOR push_scope_ declname_ EQ exp COMMA exp * DO block END
           stat ::= FOR push_scope_ declname_ EQ exp COMMA exp * COMMA exp DO block END
           exp ::= exp * OR exp
@@ -3095,7 +3109,7 @@ State 81:
                        PERCENT shift  22
                          CARET shift  21
 
-State 82:
+State 84:
           stat ::= FOR push_scope_ declname_ EQ exp COMMA exp COMMA exp * DO block END
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -3130,7 +3144,7 @@ State 82:
                        PERCENT shift  22
                          CARET shift  21
 
-State 83:
+State 85:
           stat ::= FOR push_scope_ declname_ EQ exp * COMMA exp DO block END
           stat ::= FOR push_scope_ declname_ EQ exp * COMMA exp COMMA exp DO block END
           exp ::= exp * OR exp
@@ -3166,43 +3180,8 @@ State 83:
                        PERCENT shift  22
                          CARET shift  21
 
-State 84:
-          elsifs_ ::= elsifs_ ELSEIF exp * THEN block
-          exp ::= exp * OR exp
-          exp ::= exp * AND exp
-          exp ::= exp * LT exp
-          exp ::= exp * LE exp
-          exp ::= exp * GT exp
-          exp ::= exp * GE exp
-          exp ::= exp * EQEQ exp
-          exp ::= exp * NE exp
-          exp ::= exp * DOTDOT exp
-          exp ::= exp * PLUS exp
-          exp ::= exp * MINUS exp
-          exp ::= exp * STAR exp
-          exp ::= exp * SLASH exp
-          exp ::= exp * PERCENT exp
-          exp ::= exp * CARET exp
-
-                          THEN shift  49
-                            OR shift  38
-                           AND shift  36
-                            LT shift  34
-                            GT shift  31
-                            LE shift  32
-                            GE shift  30
-                            NE shift  28
-                          EQEQ shift  29
-                        DOTDOT shift  27
-                          PLUS shift  26
-                         MINUS shift  25
-                          STAR shift  24
-                         SLASH shift  23
-                       PERCENT shift  22
-                         CARET shift  21
-
-State 85:
-          stat ::= IF exp * THEN push_scope_ block elsifs_ else_ END
+State 86:
+          elsifs_ ::= elsifs_ ELSEIF exp * THEN push_scope_ block
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3236,7 +3215,42 @@ State 85:
                        PERCENT shift  22
                          CARET shift  21
 
-State 86:
+State 87:
+          stat ::= IF exp * THEN push_scope_ block elsifs_ else_ END
+          exp ::= exp * OR exp
+          exp ::= exp * AND exp
+          exp ::= exp * LT exp
+          exp ::= exp * LE exp
+          exp ::= exp * GT exp
+          exp ::= exp * GE exp
+          exp ::= exp * EQEQ exp
+          exp ::= exp * NE exp
+          exp ::= exp * DOTDOT exp
+          exp ::= exp * PLUS exp
+          exp ::= exp * MINUS exp
+          exp ::= exp * STAR exp
+          exp ::= exp * SLASH exp
+          exp ::= exp * PERCENT exp
+          exp ::= exp * CARET exp
+
+                          THEN shift  78
+                            OR shift  38
+                           AND shift  36
+                            LT shift  34
+                            GT shift  31
+                            LE shift  32
+                            GE shift  30
+                            NE shift  28
+                          EQEQ shift  29
+                        DOTDOT shift  27
+                          PLUS shift  26
+                         MINUS shift  25
+                          STAR shift  24
+                         SLASH shift  23
+                       PERCENT shift  22
+                         CARET shift  21
+
+State 88:
           stat ::= WHILE push_scope_ exp * DO block END
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -3271,7 +3285,7 @@ State 86:
                        PERCENT shift  22
                          CARET shift  21
 
-State 87:
+State 89:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3289,7 +3303,7 @@ State 87:
           exp ::= exp * CARET exp
           field ::= OPENBRACKET exp * CLOSEBRACKET EQ exp
 
-                  CLOSEBRACKET shift  128
+                  CLOSEBRACKET shift  130
                             OR shift  38
                            AND shift  36
                             LT shift  34
@@ -3306,7 +3320,7 @@ State 87:
                        PERCENT shift  22
                          CARET shift  21
 
-State 88:
+State 90:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3339,9 +3353,9 @@ State 88:
                          SLASH shift  23
                        PERCENT shift  22
                          CARET shift  21
-                    CLOSEPAREN shift  188
+                    CLOSEPAREN shift  190
 
-State 89:
+State 91:
           var ::= prefixexp OPENBRACKET exp * CLOSEBRACKET
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -3359,7 +3373,7 @@ State 89:
           exp ::= exp * PERCENT exp
           exp ::= exp * CARET exp
 
-                  CLOSEBRACKET shift  200
+                  CLOSEBRACKET shift  202
                             OR shift  38
                            AND shift  36
                             LT shift  34
@@ -3376,7 +3390,7 @@ State 89:
                        PERCENT shift  22
                          CARET shift  21
 
-State 90:
+State 92:
      (17) stat ::= REPEAT push_scope_ block UNTIL exp *
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -3411,7 +3425,7 @@ State 90:
                          CARET shift  21
                      {default} reduce 17
 
-State 91:
+State 93:
      (50) explist_ ::= exp *
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -3446,7 +3460,7 @@ State 91:
                          CARET shift  21
                      {default} reduce 50
 
-State 92:
+State 94:
      (51) explist_ ::= explist_ COMMA exp *
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -3481,7 +3495,7 @@ State 92:
                          CARET shift  21
                      {default} reduce 51
 
-State 93:
+State 95:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3516,7 +3530,7 @@ State 93:
                          CARET shift  21
                      {default} reduce 103
 
-State 94:
+State 96:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3551,7 +3565,7 @@ State 94:
                          CARET shift  21
                      {default} reduce 101
 
-State 95:
+State 97:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3586,7 +3600,7 @@ State 95:
                          CARET shift  21
                      {default} reduce 102
 
-State 96:
+State 98:
           exp ::= exp * OR exp
      (64) exp ::= exp OR exp *
           exp ::= exp * AND exp
@@ -3620,7 +3634,7 @@ State 96:
                          CARET shift  21
                      {default} reduce 64
 
-State 97:
+State 99:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
      (65) exp ::= exp AND exp *
@@ -3653,7 +3667,7 @@ State 97:
                          CARET shift  21
                      {default} reduce 65
 
-State 98:
+State 100:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3680,7 +3694,7 @@ State 98:
                          CARET shift  21
                      {default} reduce 66
 
-State 99:
+State 101:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3707,7 +3721,7 @@ State 99:
                          CARET shift  21
                      {default} reduce 72
 
-State 100:
+State 102:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3734,7 +3748,7 @@ State 100:
                          CARET shift  21
                      {default} reduce 71
 
-State 101:
+State 103:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3761,7 +3775,7 @@ State 101:
                          CARET shift  21
                      {default} reduce 70
 
-State 102:
+State 104:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3788,7 +3802,7 @@ State 102:
                          CARET shift  21
                      {default} reduce 69
 
-State 103:
+State 105:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3815,7 +3829,7 @@ State 103:
                          CARET shift  21
                      {default} reduce 68
 
-State 104:
+State 106:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3842,7 +3856,7 @@ State 104:
                          CARET shift  21
                      {default} reduce 67
 
-State 105:
+State 107:
      (11) stat ::= functioncall *
      (81) prefixexp ::= functioncall *
 
@@ -3854,7 +3868,7 @@ State 105:
                      OPENBRACE reduce 81
                      {default} reduce 11
 
-State 106:
+State 108:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3878,7 +3892,7 @@ State 106:
                          CARET shift  21
                      {default} reduce 74
 
-State 107:
+State 109:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -3902,7 +3916,7 @@ State 107:
                          CARET shift  21
                      {default} reduce 73
 
-State 108:
+State 110:
      (41) varlist_ ::= var *
      (80) prefixexp ::= var *
 
@@ -3910,7 +3924,7 @@ State 108:
                             EQ reduce 41
                      {default} reduce 80
 
-State 109:
+State 111:
      (42) varlist_ ::= varlist_ COMMA var *
      (80) prefixexp ::= var *
 
@@ -3918,7 +3932,7 @@ State 109:
                             EQ reduce 42
                      {default} reduce 80
 
-State 110:
+State 112:
      (36) funcname ::= dotnames_ *
           funcname ::= dotnames_ * COLON name
           dotnames_ ::= dotnames_ * DOT name
@@ -3927,154 +3941,154 @@ State 110:
                            DOT shift  64
                      {default} reduce 36
 
-State 111:
+State 113:
      (40) varlist ::= varlist_ *
           varlist_ ::= varlist_ * COMMA var
 
                          COMMA shift  41
                      {default} reduce 40
 
-State 112:
+State 114:
           label ::= COLONCOLON name * COLONCOLON
 
-                    COLONCOLON shift  146
+                    COLONCOLON shift  148
 
-State 113:
+State 115:
      (33) retstat ::= RETURN explist *
           retstat ::= RETURN explist * SEMI
 
-                          SEMI shift  147
+                          SEMI shift  149
                      {default} reduce 33
 
-State 114:
+State 116:
      (24) stat ::= LOCAL namelist *
           stat ::= LOCAL namelist * EQ explist
 
                             EQ shift  5
                      {default} reduce 24
 
-State 115:
+State 117:
      (47) namelist_ ::= name *
     (106) declname_ ::= name *
 
                             EQ reduce 106
                      {default} reduce 47
 
-State 116:
+State 118:
           stat ::= FOR push_scope_ namelist IN explist DO block * END
 
-                           END shift  157
+                           END shift  159
 
-State 117:
+State 119:
           stat ::= FOR push_scope_ namelist IN explist * DO block END
 
                             DO shift  45
 
-State 118:
+State 120:
           stat ::= FOR push_scope_ namelist * IN explist DO block END
 
                             IN shift  6
 
-State 119:
+State 121:
           stat ::= FOR push_scope_ declname_ EQ exp COMMA exp COMMA exp DO block * END
 
-                           END shift  158
+                           END shift  160
 
-State 120:
+State 122:
           stat ::= FOR push_scope_ declname_ EQ exp COMMA exp DO block * END
 
-                           END shift  159
+                           END shift  161
 
-State 121:
+State 123:
           stat ::= FOR push_scope_ declname_ * EQ exp COMMA exp DO block END
           stat ::= FOR push_scope_ declname_ * EQ exp COMMA exp COMMA exp DO block END
 
                             EQ shift  11
 
-State 122:
+State 124:
           stat ::= IF exp THEN push_scope_ block elsifs_ else_ * END
 
-                           END shift  162
+                           END shift  164
 
-State 123:
+State 125:
           stat ::= REPEAT push_scope_ block * UNTIL exp
 
                          UNTIL shift  14
 
-State 124:
+State 126:
           stat ::= WHILE push_scope_ exp DO block * END
 
-                           END shift  163
-
-State 125:
-          stat ::= DO push_scope_ block * END
-
-                           END shift  164
-
-State 126:
-          args ::= OPENPAREN explist * CLOSEPAREN
-
-                    CLOSEPAREN shift  170
+                           END shift  165
 
 State 127:
+          stat ::= DO push_scope_ block * END
+
+                           END shift  166
+
+State 128:
+          args ::= OPENPAREN explist * CLOSEPAREN
+
+                    CLOSEPAREN shift  172
+
+State 129:
      (49) explist ::= explist_ *
           explist_ ::= explist_ * COMMA exp
 
                          COMMA shift  16
                      {default} reduce 49
 
-State 128:
+State 130:
           field ::= OPENBRACKET exp CLOSEBRACKET * EQ exp
 
                             EQ shift  17
 
-State 129:
+State 131:
           tableconstructor ::= OPENBRACE fieldlist * CLOSEBRACE
 
-                    CLOSEBRACE shift  178
+                    CLOSEBRACE shift  180
 
-State 130:
+State 132:
      (43) var ::= name *
           field ::= name * EQ exp
 
                             EQ shift  19
                      {default} reduce 43
 
-State 131:
+State 133:
           parlist ::= namelist COMMA2 * DOTDOTDOT
 
-                     DOTDOTDOT shift  181
+                     DOTDOTDOT shift  183
 
-State 132:
+State 134:
      (92) parlist ::= namelist *
           parlist ::= namelist * COMMA2 DOTDOTDOT
 
-                        COMMA2 shift  131
+                        COMMA2 shift  133
                      {default} reduce 92
 
-State 133:
+State 135:
           funcbody ::= OPENPAREN parlist CLOSEPAREN block * END
 
-                           END shift  182
+                           END shift  184
 
-State 134:
+State 136:
           funcbody ::= OPENPAREN parlist * CLOSEPAREN block END
 
                     CLOSEPAREN shift  54
 
-State 135:
+State 137:
           funcbody ::= OPENPAREN CLOSEPAREN block * END
 
-                           END shift  183
+                           END shift  185
 
-State 136:
+State 138:
      (46) namelist ::= namelist_ *
           namelist_ ::= namelist_ * COMMA name
 
                          COMMA shift  70
                      {default} reduce 46
 
-State 137:
+State 139:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -4095,7 +4109,7 @@ State 137:
                          CARET shift  21
                      {default} reduce 78
 
-State 138:
+State 140:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -4116,7 +4130,7 @@ State 138:
                          CARET shift  21
                      {default} reduce 77
 
-State 139:
+State 141:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -4137,7 +4151,7 @@ State 139:
                          CARET shift  21
                      {default} reduce 76
 
-State 140:
+State 142:
           exp ::= exp * OR exp
           exp ::= exp * AND exp
           exp ::= exp * LT exp
@@ -4158,7 +4172,7 @@ State 140:
                          CARET shift  21
                      {default} reduce 75
 
-State 141:
+State 143:
      (63) exp ::= MINUS exp *
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -4179,7 +4193,7 @@ State 141:
                          CARET shift  21
                      {default} reduce 63
 
-State 142:
+State 144:
      (62) exp ::= POUND exp *
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -4200,7 +4214,7 @@ State 142:
                          CARET shift  21
                      {default} reduce 62
 
-State 143:
+State 145:
      (61) exp ::= NOT exp *
           exp ::= exp * OR exp
           exp ::= exp * AND exp
@@ -4221,322 +4235,322 @@ State 143:
                          CARET shift  21
                      {default} reduce 61
 
-State 144:
+State 146:
           stat ::= varlist * EQ explist
 
                             EQ shift  7
 
-State 145:
+State 147:
       (0) chunk ::= block *
 
                              $ reduce 0
 
-State 146:
+State 148:
      (35) label ::= COLONCOLON name COLONCOLON *
 
                      {default} reduce 35
 
-State 147:
+State 149:
      (34) retstat ::= RETURN explist SEMI *
 
                      {default} reduce 34
 
-State 148:
+State 150:
      (32) retstat ::= RETURN SEMI *
 
                      {default} reduce 32
 
-State 149:
+State 151:
      (26) stat ::= error *
 
                      {default} reduce 26
 
-State 150:
+State 152:
      (25) stat ::= LOCAL namelist EQ explist *
 
                      {default} reduce 25
 
-State 151:
+State 153:
     (106) declname_ ::= name *
 
                      {default} reduce 106
 
-State 152:
-     (23) stat ::= LOCAL FUNCTION push_scope_ declname_ funcbody *
+State 154:
+     (23) stat ::= LOCAL FUNCTION declname_ push_scope_ funcbody *
 
                      {default} reduce 23
 
-State 153:
+State 155:
      (38) dotnames_ ::= name *
 
                      {default} reduce 38
 
-State 154:
+State 156:
      (39) dotnames_ ::= dotnames_ DOT name *
 
                      {default} reduce 39
 
-State 155:
+State 157:
      (37) funcname ::= dotnames_ COLON name *
 
                      {default} reduce 37
 
-State 156:
-     (22) stat ::= FUNCTION push_scope_ funcname funcbody *
+State 158:
+     (22) stat ::= FUNCTION funcname push_scope_ funcbody *
 
                      {default} reduce 22
 
-State 157:
+State 159:
      (21) stat ::= FOR push_scope_ namelist IN explist DO block END *
 
                      {default} reduce 21
 
-State 158:
+State 160:
      (20) stat ::= FOR push_scope_ declname_ EQ exp COMMA exp COMMA exp DO block END *
 
                      {default} reduce 20
 
-State 159:
+State 161:
      (19) stat ::= FOR push_scope_ declname_ EQ exp COMMA exp DO block END *
 
                      {default} reduce 19
 
-State 160:
-     (30) else_ ::= ELSE block *
+State 162:
+     (30) else_ ::= ELSE push_scope_ block *
 
                      {default} reduce 30
 
-State 161:
-     (28) elsifs_ ::= elsifs_ ELSEIF exp THEN block *
+State 163:
+     (28) elsifs_ ::= elsifs_ ELSEIF exp THEN push_scope_ block *
 
                      {default} reduce 28
 
-State 162:
+State 164:
      (18) stat ::= IF exp THEN push_scope_ block elsifs_ else_ END *
 
                      {default} reduce 18
 
-State 163:
+State 165:
      (16) stat ::= WHILE push_scope_ exp DO block END *
 
                      {default} reduce 16
 
-State 164:
+State 166:
      (15) stat ::= DO push_scope_ block END *
 
                      {default} reduce 15
 
-State 165:
+State 167:
      (14) stat ::= GOTO name *
 
                      {default} reduce 14
 
-State 166:
+State 168:
      (13) stat ::= BREAK *
 
                      {default} reduce 13
 
-State 167:
+State 169:
      (12) stat ::= label *
 
                      {default} reduce 12
 
-State 168:
+State 170:
      (88) args ::= STRING *
 
                      {default} reduce 88
 
-State 169:
+State 171:
      (87) args ::= tableconstructor *
 
                      {default} reduce 87
 
-State 170:
+State 172:
      (86) args ::= OPENPAREN explist CLOSEPAREN *
 
                      {default} reduce 86
 
-State 171:
+State 173:
      (85) args ::= OPENPAREN CLOSEPAREN *
 
                      {default} reduce 85
 
-State 172:
+State 174:
      (84) functioncall ::= prefixexp COLON name args *
 
                      {default} reduce 84
 
-State 173:
+State 175:
      (83) functioncall ::= prefixexp args *
 
                      {default} reduce 83
 
-State 174:
+State 176:
      (45) var ::= prefixexp DOT name *
 
                      {default} reduce 45
 
-State 175:
+State 177:
      (99) fieldlist_ ::= field *
 
                      {default} reduce 99
 
-State 176:
+State 178:
     (104) fieldsep ::= COMMA|SEMI *
 
                      {default} reduce 104
 
-State 177:
+State 179:
     (100) fieldlist_ ::= fieldlist_ fieldsep field *
 
                      {default} reduce 100
 
-State 178:
+State 180:
      (96) tableconstructor ::= OPENBRACE fieldlist CLOSEBRACE *
 
                      {default} reduce 96
 
-State 179:
+State 181:
      (95) tableconstructor ::= OPENBRACE CLOSEBRACE *
 
                      {default} reduce 95
 
-State 180:
+State 182:
      (93) parlist ::= DOTDOTDOT *
 
                      {default} reduce 93
 
-State 181:
+State 183:
      (94) parlist ::= namelist COMMA2 DOTDOTDOT *
 
                      {default} reduce 94
 
-State 182:
+State 184:
      (91) funcbody ::= OPENPAREN parlist CLOSEPAREN block END *
 
                      {default} reduce 91
 
-State 183:
+State 185:
      (90) funcbody ::= OPENPAREN CLOSEPAREN block END *
 
                      {default} reduce 90
 
-State 184:
+State 186:
      (47) namelist_ ::= name *
 
                      {default} reduce 47
 
-State 185:
+State 187:
     (105) name ::= NAME *
 
                      {default} reduce 105
 
-State 186:
+State 188:
      (48) namelist_ ::= namelist_ COMMA name *
 
                      {default} reduce 48
 
-State 187:
+State 189:
      (89) functiondef ::= FUNCTION funcbody *
 
                      {default} reduce 89
 
-State 188:
+State 190:
      (82) prefixexp ::= OPENPAREN2 exp CLOSEPAREN *
 
                      {default} reduce 82
 
-State 189:
+State 191:
      (81) prefixexp ::= functioncall *
 
                      {default} reduce 81
 
-State 190:
+State 192:
      (80) prefixexp ::= var *
 
                      {default} reduce 80
 
-State 191:
+State 193:
      (79) exp ::= error *
 
                      {default} reduce 79
 
-State 192:
+State 194:
      (60) exp ::= tableconstructor *
 
                      {default} reduce 60
 
-State 193:
+State 195:
      (58) exp ::= functiondef *
 
                      {default} reduce 58
 
-State 194:
+State 196:
      (57) exp ::= STRING *
 
                      {default} reduce 57
 
-State 195:
+State 197:
      (56) exp ::= NUMBER *
 
                      {default} reduce 56
 
-State 196:
+State 198:
      (55) exp ::= DOTDOTDOT *
 
                      {default} reduce 55
 
-State 197:
+State 199:
      (54) exp ::= TRUE *
 
                      {default} reduce 54
 
-State 198:
+State 200:
      (53) exp ::= FALSE *
 
                      {default} reduce 53
 
-State 199:
+State 201:
      (52) exp ::= NIL *
 
                      {default} reduce 52
 
-State 200:
+State 202:
      (44) var ::= prefixexp OPENBRACKET exp CLOSEBRACKET *
 
                      {default} reduce 44
 
-State 201:
+State 203:
      (43) var ::= name *
 
                      {default} reduce 43
 
-State 202:
+State 204:
      (10) stat ::= varlist EQ explist *
 
                      {default} reduce 10
 
-State 203:
+State 205:
       (9) stat_ ::= stat *
 
                      {default} reduce 9
 
-State 204:
+State 206:
       (8) stat_ ::= SEMI *
 
                      {default} reduce 8
 
-State 205:
+State 207:
       (7) stats_ ::= stats_ stat_ *
 
                      {default} reduce 7
 
-State 206:
+State 208:
       (3) block_ ::= stats_ retstat *
 
                      {default} reduce 3
 
-State 207:
+State 209:
       (1) block ::= block_ pop_scope_ *
 
                      {default} reduce 1
