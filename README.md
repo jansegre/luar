@@ -35,6 +35,7 @@ Current status
 - Lexer: implemented manually
 - Parser: implemented LALR(1) parser
 - Scope Analysis: implemented for local variables and global functions
+- Code Generation: implemented for pseudo-WMLscript assembly
 
 Compiling and Testing
 ---------------------
