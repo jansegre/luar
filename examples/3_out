@@ -1,0 +1,70 @@
+     Running `target/debug/luarc`
+BEGIN_FUNC 0 0 7
+    LOAD_CONST 0
+    LOAD_CONST 1
+    STORE_VAR 1
+    STORE_VAR 0
+    LOAD_VAR 0
+    LOAD_VAR 1
+    ADD
+    LOAD_VAR 0
+    LOAD_VAR 1
+    SUB
+    STORE_VAR 2
+    STORE_VAR 1
+    LOAD_VAR 0
+    CALL 1
+    POP
+    LOAD_VAR 1
+    CALL 1
+    STORE_VAR 0
+    LOAD_VAR 0
+    LOAD_VAR 3
+    MUL
+    LOAD_VAR 1
+    DIV
+    LOAD_VAR 4
+    ADD
+    STORE_VAR 2
+    LOAD_VAR 2
+    TJMP_FW L1
+    LOAD_VAR 6
+    LOAD_VAR 2
+    ADD
+    STORE_VAR 5
+    JMP_FW L0
+  L1:
+    LOAD_VAR 0
+    TJMP_FW L2
+    LOAD_VAR 2
+    CALL 1
+    POP
+    JMP_FW L0
+  L2:
+    LOAD_CONST 2
+    STORE_VAR 1
+  L0:
+  L3:
+    LOAD_VAR 2
+    LOAD_CONST 3
+    NEQ
+    TJMP_FW L4
+    LOAD_VAR 2
+    LOAD_CONST 1
+    DIV
+    STORE_VAR 2
+    JMP_BW L3
+  L4:
+END_FUNC
+BEGIN_FUNC 1 1 0
+    LOAD_VAR 0
+    LOAD_CONST 0
+    ADD
+    RET
+END_FUNC
+CONST_MAP_BEGIN
+0 -> 1
+3 -> 0
+1 -> 2
+2 -> "foobar"
+CONST_MAP_END

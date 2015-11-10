@@ -1,0 +1,33 @@
+     Running `target/debug/luarc`
+BEGIN_FUNC 0 0 3
+    LOAD_CONST 0
+    LOAD_CONST 1
+    STORE_VAR 1
+    STORE_VAR 0
+  L0:
+    LOAD_VAR 1
+    LOAD_CONST 2
+    LT
+    TJMP_FW L1
+    LOAD_VAR 0
+    LOAD_VAR 1
+    LOAD_CONST 0
+    ADD
+    MUL
+    STORE_VAR 2
+    LOAD_VAR 0
+    LOAD_VAR 2
+    MUL
+    STORE_VAR 0
+    LOAD_VAR 1
+    LOAD_CONST 0
+    ADD
+    STORE_VAR 1
+    JMP_BW L0
+  L1:
+END_FUNC
+CONST_MAP_BEGIN
+2 -> 10
+1 -> 0
+0 -> 1
+CONST_MAP_END

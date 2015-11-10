@@ -1,0 +1,8 @@
+     Running `target/debug/luarc`
+BEGIN_FUNC 0 0 1
+    LOAD_CONST 0
+    STORE_VAR 0
+END_FUNC
+CONST_MAP_BEGIN
+0 -> 1
+CONST_MAP_END
